@@ -1,0 +1,47 @@
+need a jdk
+
+sudo apt-get update
+sudo apt-get install tomcat7
+
+-- Service Option 1 --
+May need to compile jsvc? or install the commons-daemon package?
+see http://tomcat.apache.org/tomcat-7.0-doc/setup.html
+
+set necessary environment variables and/or define in setenv.sh in $CATALINA_HOME/bin
+CATALINA_HOME=/usr/share/tomcat7
+CATALINA_OUT=/var/log/tomcat7/catalina.out
+CATALINA_TMPDIR=/var/tmp/tomcat7
+JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+
+jsvc -cp ./bin/bootstrap.jar:./bin/tomcat-juli.jar -outfile /var/log/tomcat7/catalina.out -errfile /var/log/tomcat7/catalina.err org.apache.catalina.startup.Bootstrap
+
+-- Service Option 2 --
+or use "sudo service tomcat7 start/stop" to control the System V service
+reads/executes the service descriptor in /etc/init.d/tomcat7 (init.d is the directory)
+
+-- end service options --
+
+webapps dir is /var/lib/tomcat7/webapps
+
+port to run on
+stackoverflow.com/questions/4756039/how-to-change-the-port-of-tomcat-from-8080-to-80
+
+
+Directories related to tomcat7 when installed with apt-get
+
+From http://www.coderanch.com/t/522890/java-Web-Component-SCWCD/certification/Location-Tomcat-HOME-directory,
+http://manpages.ubuntu.com/manpages/gutsy/man7/hier.7.html
+
+/etc/tomcat7 - configuration files, local to the machine
+/usr/share/tomcat7 - stuff that can be shared between different architectures of OS
+/usr/share/doc/tomcat7 - dido
+/var/cache/tomcat7 - caching data
+/var/lib/tomcat7 - variable state information
+/var/log/tomcat7 - miscellaneous log files
+
+Or use command like:
+
+find /usr -regex '.*tomcat7' -print > tomcat7.usr.find
+
+to find all occurances of tomcat7 at the end of a path name in or under /usr and redirect it to a file name "tomcat7.usr.find"
+
