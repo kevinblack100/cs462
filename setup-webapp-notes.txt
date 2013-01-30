@@ -11,3 +11,5 @@ following notes on LDS Stack training set up spring mvc project
 had to change the Eclipse project properties in order to run a tomcat server for the eclipse project
 see http://stackoverflow.com/questions/10046654/maven-spring-dynamic-web-module-eclipse-java-lang-classnotfoundexcepti/12600686#12600686
 particularly Project > Properties > Deployment Assembly > Add then select "Java Build Path Entries" and select the maven dependencies
+
+swapped out the mvc:view-controller mapping for a HelloController without problems
