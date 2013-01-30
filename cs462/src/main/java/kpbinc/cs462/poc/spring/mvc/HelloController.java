@@ -19,4 +19,10 @@ public class HelloController {
 		return "goodbye";
 	}
 	
+	@RequestMapping(value = "/goodbye", params = "temporary=true")
+	public String seeyou() {
+		// return the name of the view to render
+		return "seeyou";
+	}
+	
 }
