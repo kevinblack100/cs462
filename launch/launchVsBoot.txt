@@ -1,0 +1,5 @@
+See these discussions about init scripts running at launch or boot
+
+https://forums.aws.amazon.com/message.jspa?messageID=330063
+
+http://stackoverflow.com/questions/6475374/how-do-i-make-cloud-init-startup-scripts-run-every-time-my-ec2-instance-boots
