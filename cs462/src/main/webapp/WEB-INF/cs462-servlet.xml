@@ -18,13 +18,18 @@
 	<!-- If using DispatcherServlet and is mapped to the default servlet ("/") -->
 	<mvc:default-servlet-handler />
 	
+	<!-- If beans are annotation driven -->
+	<mvc:annotation-driven />
+
+	<!-- Controller scan -->
+	<context:component-scan base-package="kpbinc.cs462" use-default-filters="false">
+    	<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation" />
+	</context:component-scan>
+	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
-	
-	<!-- Maps the url /<context-root>/<path> to the view with name <view-name> -->
-	<mvc:view-controller path="/hello" view-name="hello" />
 
 </beans>
