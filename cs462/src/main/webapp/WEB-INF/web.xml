@@ -8,7 +8,8 @@
 
 	<servlet>
 		<servlet-name>cs462</servlet-name>
-		<jsp-file>/index.jsp</jsp-file>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    	<load-on-startup>2</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>

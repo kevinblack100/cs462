@@ -1,0 +1,1 @@
+Hello World from JSP page served with Spring MVC.
