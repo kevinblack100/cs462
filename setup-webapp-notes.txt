@@ -1,0 +1,13 @@
+got maven for Eclipse (m2e)
+created a maven webapp project in Eclipse
+couldn't create a server with the war
+experimented with packaging the war
+still couldn't create a server
+had to make the Eclipse project faceted, and mark it as being/having a Dynamic Web Module
+updated the web.xml to have a jsp-file in the servlet spec for index.jsp, all /cs462/* pages go to the index page (the cs462 context is set in the server properties, not in the war, need to figure out how this is controlled via cmd ln tools)
+the Deployment Assembly property has to include /src/main/webapp/ going to / so that Tomcat can find the content where maven puts it
+
+following notes on LDS Stack training set up spring mvc project
+had to change the Eclipse project properties in order to run a tomcat server for the eclipse project
+see http://stackoverflow.com/questions/10046654/maven-spring-dynamic-web-module-eclipse-java-lang-classnotfoundexcepti/12600686#12600686
+particularly Project > Properties > Deployment Assembly > Add then select "Java Build Path Entries" and select the maven dependencies
