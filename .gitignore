@@ -1,2 +1,3 @@
 *.pem
 *~
+cs462/target/*
