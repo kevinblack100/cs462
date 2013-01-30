@@ -13,4 +13,10 @@ public class HelloController {
 		return "hello";
 	}
 	
+	@RequestMapping("/goodbye")
+	public String goodbye() {
+		// return the name of the view to render
+		return "goodbye";
+	}
+	
 }
