@@ -15,9 +15,6 @@
 	                        http://code.lds.org/schema/spring/web/stack-web-3.0.xsd"
 	default-lazy-init="true">
 	
-	<!-- If using DispatcherServlet and is mapped to the default servlet ("/") -->
-	<mvc:default-servlet-handler />
-	
 	<!-- If beans are annotation driven -->
 	<mvc:annotation-driven />
 
