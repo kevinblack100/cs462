@@ -1,1 +1,1 @@
-Registering for an event.
+Registering for ${eventID}.
