@@ -1,4 +1,4 @@
-package kpbinc.cs462.poc.spring.mvc;
+package kpbinc.cs462.sandbox.spring.mvc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

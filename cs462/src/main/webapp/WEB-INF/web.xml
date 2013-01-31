@@ -9,14 +9,14 @@
 	<display-name>Kevin Black's CS 462 Webapp</display-name>
 
 	<servlet>
-		<servlet-name>cs462</servlet-name>
+		<servlet-name>sandbox</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     	<load-on-startup>2</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>cs462</servlet-name>
-		<url-pattern>/</url-pattern>
+		<servlet-name>sandbox</servlet-name>
+		<url-pattern>/sandbox/*</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

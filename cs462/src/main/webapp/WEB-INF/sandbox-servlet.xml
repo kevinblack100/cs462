@@ -22,7 +22,7 @@
 	<mvc:annotation-driven />
 
 	<!-- Controller scan -->
-	<context:component-scan base-package="kpbinc.cs462" use-default-filters="false">
+	<context:component-scan base-package="kpbinc.cs462.sandbox" use-default-filters="false">
     	<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation" />
 	</context:component-scan>
 	
