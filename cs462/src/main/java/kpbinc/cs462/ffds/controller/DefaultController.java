@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds;
+package kpbinc.cs462.ffds.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
