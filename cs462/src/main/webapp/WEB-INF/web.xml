@@ -14,9 +14,20 @@
     	<load-on-startup>2</load-on-startup>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>ffds</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    	<load-on-startup>2</load-on-startup>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>sandbox</servlet-name>
 		<url-pattern>/sandbox/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ffds</servlet-name>
+		<url-pattern>/ffds/*</url-pattern>
 	</servlet-mapping>
 	
 </web-app>
