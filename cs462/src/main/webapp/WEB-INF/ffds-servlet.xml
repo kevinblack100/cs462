@@ -19,8 +19,13 @@
 	<mvc:annotation-driven />
 
 	<!-- Controller scan -->
-	<context:component-scan base-package="kpbinc.cs462.ffds" use-default-filters="false">
-    	<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation" />
+	<context:component-scan base-package="kpbinc.cs462.ffds.controller" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- Model scan -->
+	<context:component-scan base-package="kpbinc.cs462.ffds.model" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
 	
 	<!-- View resolution rules -->
