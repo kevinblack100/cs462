@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Based on examples in SpringSource security training video at http://www.springsource.org/node/3670 -->
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- Creates the springSecurityFilterChain -->
+	<security:http use-expressions="true">
+		<!-- URLs to secure and how to secure them -->
+		<!-- pattern is ant regex so ** matches any directory path -->
+		<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+		<!-- Redirect to a form login if not authenticated/authorized? -->
+		<security:form-login />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<!-- In memory user service -->
+				<security:user name="user" password="password" authorities="ROLE_USER" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>

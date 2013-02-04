@@ -59,4 +59,24 @@
 		<url-pattern>/ffds/*</url-pattern>
 	</servlet-mapping>
 	
+	<!-- =========================================================================================================== -->
+	<!-- FILTERS -->
+	
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+			<!-- delegates to the spring bean with name of ${filter-name} -->
+		</filter-class>
+	</filter>
+	
+	<!-- =========================================================================================================== -->
+	<!-- FILTER-MAPPINGS -->
+	<!-- Note: spring security filter mapping is generally first since anything before it would not be secured. -->
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 </web-app>
