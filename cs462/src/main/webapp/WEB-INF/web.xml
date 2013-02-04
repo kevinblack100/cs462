@@ -23,6 +23,7 @@
 	<!-- LISTENERS -->
 	
 	<listener>
+		<!-- Requires context-param contextConfigLocation -->
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
