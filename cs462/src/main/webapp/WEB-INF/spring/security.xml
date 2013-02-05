@@ -12,9 +12,16 @@
 	<http use-expressions="true">
 		<!-- URLs to secure and how to secure them -->
 		<!-- pattern is ant regex so ** matches any directory path -->
+		<intercept-url pattern="/ffds/secure/signin/query" access="permitAll" />
 		<intercept-url pattern="/ffds/secure/**" access="hasRole('ROLE_USER')"/>
 		<!-- Redirect to a form login if not authenticated/authorized? -->
-		<form-login />
+		<form-login
+			login-page="/ffds/secure/signin/query"
+			login-processing-url="/ffds/secure/signin/authenticate"
+			always-use-default-target="true"
+			default-target-url="/ffds/secure/signin/success"
+			password-parameter="password"
+			username-parameter="username" />
 	</http>
 
 	<authentication-manager>

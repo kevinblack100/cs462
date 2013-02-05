@@ -12,6 +12,9 @@
 			<li>
 				<a href="./users">User List</a>
 			</li>
+			<li>
+				<a href="./secure/signin/query">Sign In</a>
+			</li>
 		</ul>
 	</body>
 </html>
