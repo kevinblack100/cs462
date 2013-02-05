@@ -1,6 +1,9 @@
 package kpbinc.cs462.ffds.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -23,8 +26,9 @@ public class SessionController implements Serializable {
 	}
 
 	@RequestMapping(value = "/success")
-	public String doSignin() {
-		return "welcome";
+	public void doSignin(HttpServletResponse response) throws IOException {
+		String location = response.encodeRedirectURL("/cs462/ffds/");
+		response.sendRedirect(location);
 	}
 	
 }
