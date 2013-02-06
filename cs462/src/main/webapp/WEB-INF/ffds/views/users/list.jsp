@@ -1,10 +1,17 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="customtags" tagdir="/WEB-INF/tags/ffds" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <customtags:pagetemplate>
 	<jsp:attribute name="title">User List</jsp:attribute>
 	<jsp:body>
 		<h1>Users</h1>
-		<p>TODO: will list all of the registered users</p>
+		<ul>
+		<c:forEach items="${usernames}" var="username">
+			<li>
+				<a href="${pageContext.request.contextPath}/ffds/users/${username}">${username}</a>
+			</li>
+		</c:forEach>
+		</ul>
 	</jsp:body>
 </customtags:pagetemplate>
