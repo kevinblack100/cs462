@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Scope(value = "session")
 @RequestMapping(value = "/secure/signin")
-public class SessionController implements Serializable {
+public class LoginController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public SessionController() {
+	public LoginController() {
 		int tmpbrkpnt = 1;
 	}
 	
