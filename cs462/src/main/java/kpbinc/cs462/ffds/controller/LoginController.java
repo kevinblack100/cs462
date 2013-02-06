@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller(value = "loginController")
+@Controller
 @Scope(value = "request")
 @RequestMapping(value = "/secure/signin")
 public class LoginController implements Serializable {
