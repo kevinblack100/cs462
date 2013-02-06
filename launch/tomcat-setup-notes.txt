@@ -45,3 +45,7 @@ find /usr -regex '.*tomcat7' -print > tomcat7.usr.find
 
 to find all occurances of tomcat7 at the end of a path name in or under /usr and redirect it to a file name "tomcat7.usr.find"
 
+
+to enable SSL follow the instructions at
+http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html#Prepare_the_Certificate_Keystore
+
