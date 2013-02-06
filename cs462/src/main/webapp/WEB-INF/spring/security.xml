@@ -32,9 +32,7 @@
 
 	<authentication-manager>
 		<authentication-provider>
-			<user-service>
-				<!-- In memory user service -->
-				<user name="user" password="password" authorities="ROLE_USER" />
+			<user-service properties="/WEB-INF/ffds/users.properties">
 			</user-service>
 		</authentication-provider>
 	</authentication-manager>
