@@ -10,7 +10,7 @@
 		<title>${title}</title>
 	</head>
 	<body>
-		<!-- can include a navigation jsp file -->
+		<%@ include file="/WEB-INF/ffds/views/includes/navigation.jsp" %>
 		<div id="main-content-panel">
 			<jsp:doBody />
 		</div>
