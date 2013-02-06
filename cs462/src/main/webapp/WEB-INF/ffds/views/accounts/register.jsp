@@ -4,6 +4,7 @@
 <customtags:pagetemplate>
 	<jsp:attribute name="title">Register</jsp:attribute>
 	<jsp:body>
+		<h1>Register</h1>
 		<form method="POST" action="${pageContext.request.contextPath}/ffds/secure/accounts/register/execute">
 			<fieldset>
 				<label for="username">Username:</label>

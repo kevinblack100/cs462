@@ -11,6 +11,8 @@
 		</c:when>
 		<c:otherwise>
 			<a href="${pageContext.request.contextPath}/ffds/secure/signin/query">Sign In</a>
+			/
+			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/register/query">Register</a>
 		</c:otherwise>
 	</c:choose>
 </div>
