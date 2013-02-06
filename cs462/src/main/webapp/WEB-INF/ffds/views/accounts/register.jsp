@@ -10,9 +10,11 @@
 				<label for="username">Username:</label>
 				<input id="username" name="username" type="text" size="20" />
 				<br />
+				<!-- Disabling password usage for now
 				<label for="password">Password:</label>
 				<input id="password" name="password" type="password" size="20" />
 				<br />
+				 -->
 				<input id="submit" name="submit" type="submit" value="Register" />
 			</fieldset>
 		</form>

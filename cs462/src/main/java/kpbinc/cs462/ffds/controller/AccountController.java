@@ -15,8 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/secure/accounts")
 public class AccountController {
 
+	public static final String DEFAULT_PASSWORD = "password";
+	
 	public AccountController() {
 		int tmpbrkpnt = 1;
+	}
+	
+	public String getDefaultPassword() {
+		return DEFAULT_PASSWORD;
 	}
 	
 	@RequestMapping(value = "/register/query")
@@ -27,9 +33,8 @@ public class AccountController {
 	@RequestMapping(value = "/register/execute")
 	public void registerAccount(
 			@RequestParam(value = "username", required = true) String username,
-			@RequestParam(value = "password", required = true) String password,
 			HttpServletResponse response) throws IOException {
-		System.out.println("registering account with username: " + username + " and password: " + password);
+		System.out.println("registering account with username: " + username + " and default password: " + getDefaultPassword());
 		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/signin/query");
 		response.sendRedirect(redirectLocation);
 	}

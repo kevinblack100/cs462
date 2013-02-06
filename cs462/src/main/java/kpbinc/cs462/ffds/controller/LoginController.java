@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,9 @@ public class LoginController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Autowired
+	private AccountController accountController;
+	
 	public LoginController() {
 		int tmpbrkpnt = 1;
 	}

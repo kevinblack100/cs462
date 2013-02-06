@@ -10,9 +10,12 @@
 				<label for="username">Username:</label>
 				<input id="username" name="username" type="text" size="20" />
 				<br />
+				<!-- Disabling non-blank password usage for now
 				<label for="password">Password:</label>
 				<input id="password" name="password" type="password" size="20" />
 				<br />
+				-->
+				<input type="hidden" id="password" name="password" value="${accountController.defaultPassword}" />
 				<input id="submit" name="submit" type="submit" value="Sign In" />
 			</fieldset>
 		</form>
