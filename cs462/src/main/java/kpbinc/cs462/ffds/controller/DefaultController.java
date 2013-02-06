@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DefaultController {
 
 	@Autowired
+	private LoginController loginController;
+	
+	@Autowired
 	private User subject;
 	
 	public DefaultController() {

@@ -22,6 +22,10 @@
 			default-target-url="/ffds/secure/signin/success"
 			password-parameter="password"
 			username-parameter="username" />
+		<logout
+			logout-url="/ffds/secure/signout/execute" 
+			logout-success-url="/ffds/"
+			invalidate-session="true" />
 	</http>
 
 	<authentication-manager>

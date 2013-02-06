@@ -10,13 +10,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@Scope(value = "session")
+@Controller(value = "loginController")
+@Scope(value = "request")
 @RequestMapping(value = "/secure/signin")
 public class LoginController implements Serializable {
 
@@ -42,7 +41,7 @@ public class LoginController implements Serializable {
 		response.sendRedirect(redirectLocation);
 	}
 	
-	private UserDetails getSignedInUserDetails() {
+	public UserDetails getSignedInUserDetails() {
 		UserDetails signedInUserDetails = null;
 		
 		SecurityContext context = SecurityContextHolder.getContext();
