@@ -13,6 +13,8 @@
 		<!-- URLs to secure and how to secure them -->
 		<!-- pattern is ant regex so ** matches any directory path -->
 		<intercept-url pattern="/ffds/secure/signin/query" access="permitAll" />
+		<intercept-url pattern="/ffds/secure/accounts/register/query" access="permitAll" />
+		<intercept-url pattern="/ffds/secure/accounts/register/execute" access="permitAll" />
 		<intercept-url pattern="/ffds/secure/**" access="hasRole('ROLE_USER')"/>
 		<!-- Redirect to a form login if not authenticated/authorized? -->
 		<form-login
