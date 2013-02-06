@@ -2,6 +2,9 @@
 echo "> cd ~/repos/cs462/"
 cd ~/repos/cs462/
 
+echo "> git branch deploy"
+git branch deploy
+
 echo "> git checkout deploy"
 git checkout deploy
 
