@@ -1,8 +1,9 @@
-<html>
-	<head>
-		<title>Sign In</title>
-	</head>
-	<body>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="customtags" tagdir="/WEB-INF/tags/ffds" %>
+
+<customtags:pagetemplate>
+	<jsp:attribute name="title">Sign In</jsp:attribute>
+	<jsp:body>
 		<h1>Sign In</h1>
 		<form method="POST" action="./authenticate">
 			<fieldset>
@@ -15,5 +16,5 @@
 				<input id="submit" name="submit" type="submit" value="Sign In" />
 			</fieldset>
 		</form>
-	</body>
-</html>
+	</jsp:body>
+</customtags:pagetemplate>
