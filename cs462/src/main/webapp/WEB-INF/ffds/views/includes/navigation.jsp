@@ -4,5 +4,5 @@
 	|
 	<a href="${pageContext.request.contextPath}/ffds/users/">Users</a>
 	|
-	<a href="${pageContext.request.contextPath}/ffds/secure/signin">Sign In</a>
+	<a href="${pageContext.request.contextPath}/ffds/secure/signin/query">Sign In</a>
 </div>
