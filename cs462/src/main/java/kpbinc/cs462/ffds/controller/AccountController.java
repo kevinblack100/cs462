@@ -79,7 +79,7 @@ public class AccountController {
 				File userPropertiesFile = new File(filePath);
 				boolean append = true;
 				FileWriter writer = new FileWriter(userPropertiesFile, append);
-				String accountEntry = String.format("%s=%s,%s,enabled", username, getDefaultPassword(), "ROLE_USER");
+				String accountEntry = String.format("\n%s=%s,%s,enabled", username, getDefaultPassword(), "ROLE_USER");
 				writer.write(accountEntry);
 				writer.close();
 			}
