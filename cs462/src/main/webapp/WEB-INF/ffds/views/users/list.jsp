@@ -1,11 +1,10 @@
-<html>
-	<head>
-		<title>User List</title>
-	</head>
-	<body>
-		<a href="./">Home</a>
-		<a href="./secure/signin/query">Sign In</a>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="customtags" tagdir="/WEB-INF/tags/ffds" %>
+
+<customtags:pagetemplate>
+	<jsp:attribute name="title">Welcome!</jsp:attribute>
+	<jsp:body>
 		<h1>Users</h1>
 		<p>TODO: will list all of the registered users</p>
-	</body>
-</html>
+	</jsp:body>
+</customtags:pagetemplate>
