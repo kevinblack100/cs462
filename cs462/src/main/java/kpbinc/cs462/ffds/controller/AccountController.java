@@ -1,12 +1,17 @@
 package kpbinc.cs462.ffds.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -41,17 +46,26 @@ public class AccountController {
 	public void registerAccount(
 			@RequestParam(value = "username", required = true) String username,
 			HttpServletResponse response) throws IOException {
-		System.out.println("registering account with username: " + username + " and default password: " + getDefaultPassword());
-		
 		String redirectLocation = null;
 		
-		// Does account already exist?
 		try {
+			// Does account already exist?
 			UserDetails currentRegistrantDetails = userDetailsManager.loadUserByUsername(username);
+			
+			System.out.printf("Account with username \"%s\" already exists\n", username);
+			
 			redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/accounts/register/query");
 		}
 		catch (UsernameNotFoundException exception) {
-			//UserDetails newRegistrantDetails = new User(username, getDefaultPassword(), );
+			// Account does not exist
+			System.out.println("Registering account with username: " + username + " and default password: " + getDefaultPassword());
+			
+			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+			
+			UserDetails newRegistrantDetails = new User(username, getDefaultPassword(), authorities);
+			userDetailsManager.createUser(newRegistrantDetails);
+			
 			redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/signin/query");
 		}
 		
