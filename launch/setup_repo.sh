@@ -8,7 +8,7 @@ sudo apt-get -y install git
 echo "> cd ~"
 cd ~
 
-echo "> rm -rf repors/cs462/"
+echo "> rm -rf repos/cs462/"
 rm -rf repos/cs462/
 
 echo "> mkdir repos"
