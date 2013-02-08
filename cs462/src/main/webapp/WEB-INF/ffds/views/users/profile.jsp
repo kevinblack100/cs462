@@ -5,11 +5,7 @@
 <customtags:pagetemplate>
 	<jsp:attribute name="header">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/jquery-1.9.1.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				alert('Hello World!');
-			});
-		</script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/site/ffds/users/profile.js"></script>
 	</jsp:attribute>
 	<jsp:attribute name="title">User Profile</jsp:attribute>
 	<jsp:body>
@@ -17,7 +13,7 @@
 		<p> 
 			<c:choose>
 				<c:when test="${hasFoursquareAuthToken}">
-					<div id="checking-data">${checkins}</div>
+					<div id="checkin-data">${checkins}</div>
 				</c:when>
 				<c:otherwise>
 					<c:choose>
