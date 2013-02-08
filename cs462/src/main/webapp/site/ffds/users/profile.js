@@ -7,7 +7,7 @@ $(document).ready(function() {
 		var checkinsDataRaw = checkinsDataDiv.html();
 		var checkinsData = $.parseJSON(checkinsDataRaw);
 
-		Handlebars.registerHelper('secondsToDate', secondsToDateHelper);
+		Handlebars.registerHelper('secondsToDate', helpers.secondsToDateHelper);
 		
 		var templateSource = $('#checkin-list-template').html();
 		var template = Handlebars.compile(templateSource);
@@ -22,9 +22,11 @@ $(document).ready(function() {
 	}
 });
 
-function secondsToDateHelper(seconds) {
-	var milliseconds = seconds * 1000;
-	var asDate = new Date(milliseconds);
-	var result = asDate.toLocaleString();
-	return new Handlebars.SafeString(result);
-}
+var helpers = {
+	secondsToDateHelper: function(seconds) {
+		var milliseconds = seconds * 1000;
+		var asDate = new Date(milliseconds);
+		var result = asDate.toLocaleString();
+		return new Handlebars.SafeString(result);
+	}
+};
