@@ -73,8 +73,7 @@ public class OAuthController {
 			try {
 				Verifier verifier = new Verifier(code);
 				Token accessToken = service.getAccessToken(null, verifier);
-				String accessTokenString = accessToken.getToken();
-				authorizationTokenManager.createOrUpdateAuthorizationToken(username, api, accessTokenString);
+				authorizationTokenManager.createOrUpdateAuthorizationToken(username, api, accessToken);
 			}
 			catch (OAuthException e) {
 				e.printStackTrace();

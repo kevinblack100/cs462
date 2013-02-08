@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
+import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
@@ -19,24 +20,24 @@ public class AuthorizationTokenManager {
 	@Autowired
 	private ServletContext servletContext;
 	
-	private Map<String, Map<String, String>> authorizationTokensIndex = null;
+	private Map<String, Map<String, Token>> authorizationTokensIndex = null;
 	
 	public AuthorizationTokenManager() {
 		int tmpbrkpnt = 1;
 	}
 	
-	private Map<String, Map<String, String>> getIndex() {
+	private Map<String, Map<String, Token>> getIndex() {
 		if (authorizationTokensIndex == null) {
-			authorizationTokensIndex = new HashMap<String, Map<String, String>>();
+			authorizationTokensIndex = new HashMap<String, Map<String, Token>>();
 			// TODO read in persistent file
 		}
 		return authorizationTokensIndex;
 	}
 	
-	public String getAuthorizationToken(String username, String api) {
-		String authToken = null;
+	public Token getAuthorizationToken(String username, String api) {
+		Token authToken = null;
 		
-		Map<String, String> apiAuthTokenIndex = getIndex().get(username);
+		Map<String, Token> apiAuthTokenIndex = getIndex().get(username);
 		if (apiAuthTokenIndex != null) {
 			authToken = apiAuthTokenIndex.get(api);
 		}
@@ -45,19 +46,19 @@ public class AuthorizationTokenManager {
 	}
 	
 	public boolean hasAuthorizationToken(String username, String api) {
-		String authToken = getAuthorizationToken(username, api);
+		Token authToken = getAuthorizationToken(username, api);
 		boolean result = (authToken != null);
 		return result;
 	}
 	
-	public String createOrUpdateAuthorizationToken(String username, String api, String authToken) {
-		Map<String, String> apiAuthTokenIndex = getIndex().get(username);
+	public Token createOrUpdateAuthorizationToken(String username, String api, Token authToken) {
+		Map<String, Token> apiAuthTokenIndex = getIndex().get(username);
 		if (apiAuthTokenIndex == null) {
-			apiAuthTokenIndex = new HashMap<String, String>();
+			apiAuthTokenIndex = new HashMap<String, Token>();
 			getIndex().put(username, apiAuthTokenIndex);
 		}
 		
-		String formerAuthToken = apiAuthTokenIndex.put(api, authToken);
+		Token formerAuthToken = apiAuthTokenIndex.put(api, authToken);
 		
 		// TODO update persistent file
 		
