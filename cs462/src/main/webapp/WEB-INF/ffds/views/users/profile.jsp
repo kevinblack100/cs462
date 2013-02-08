@@ -4,6 +4,8 @@
 
 <customtags:pagetemplate>
 	<jsp:attribute name="header">
+		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/site/ffds/users/profile.css" />
+	
 		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/jquery-1.9.1.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/handlebars-1.0.rc.2.js"></script>
 		
@@ -26,6 +28,7 @@
 					<br />
 					How: <span class="checkin-means">{{source.name}}</span>
 				</div>
+				<br />
 				{{/each}}
 			</div>
 		</script>
@@ -36,7 +39,7 @@
 		<p> 
 			<c:choose>
 				<c:when test="${hasFoursquareAuthToken}">
-					<div id="checkins-data">${checkins}</div>
+					<div id="checkins-data" class="hidden">${checkins}</div>
 					<div id="checkins-detail">
 					</div>
 				</c:when>
