@@ -15,7 +15,7 @@
 			<div class="checkin-list">
 				<h3>Latest Foursquare Checkin Details</h3>
 				{{#each items}}
-				<div class="checkin-entry">
+				<div class="checkin-entry {{entryClass}}">
 					When: <span class="time">{{secondsToDate createdAt}}</span>
 					<br />
 					<br />
