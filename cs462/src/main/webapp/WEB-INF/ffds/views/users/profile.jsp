@@ -6,16 +6,24 @@
 	<jsp:attribute name="title">User Profile</jsp:attribute>
 	<jsp:body>
 		<h1>${username} Profile</h1>
-		<p>Has foursquare authorization token?: 
+		<p> 
 			<c:choose>
 				<c:when test="${hasFoursquareAuthToken}">
-				Yes
+				TODO display user check in data depending on logged in status
 				</c:when>
 				<c:otherwise>
-				No
+					<c:choose>
+						<c:when test="${userLoggedIn}">
+						<a href="${pageContext.request.contextPath}/ffds/oauth/v2/authorize/${username}/foursquare">
+							Authorize FFDS to use your Foursquare Account
+						</a>
+						</c:when>
+						<c:otherwise>
+						Has not Authorized FFDS to use Foursquare Account
+						</c:otherwise>
+					</c:choose>
 				</c:otherwise>
 			</c:choose>
 		</p>
-		<p>TODO: list the user's login information</p>
 	</jsp:body>
 </customtags:pagetemplate>

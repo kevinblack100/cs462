@@ -9,6 +9,8 @@ import java.util.Collection;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -33,6 +36,7 @@ public class AccountController {
 	
 	@Autowired
 	private ServletContext servletContext;
+
 	
 	public AccountController() {
 		int tmpbrkpnt = 1;

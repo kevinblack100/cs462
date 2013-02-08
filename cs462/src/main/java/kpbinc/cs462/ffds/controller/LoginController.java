@@ -45,6 +45,13 @@ public class LoginController implements Serializable {
 		response.sendRedirect(redirectLocation);
 	}
 	
+	public boolean isUserLoggedIn(String username) {
+		UserDetails loggedInUserDetails = getSignedInUserDetails();
+		boolean result = (   loggedInUserDetails != null
+						  && loggedInUserDetails.getUsername().equals(username));
+		return result;
+	}
+	
 	public UserDetails getSignedInUserDetails() {
 		UserDetails signedInUserDetails = null;
 		

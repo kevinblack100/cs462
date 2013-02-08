@@ -51,6 +51,8 @@ public class UserController {
 		model.addAttribute("username", username);
 		boolean hasFoursquareAuthToken = authTokenManager.hasAuthorizationToken(username, "foursquare");
 		model.addAttribute("hasFoursquareAuthToken", hasFoursquareAuthToken);
+		boolean userLoggedIn = loginController.isUserLoggedIn(username);
+		model.addAttribute("userLoggedIn", userLoggedIn);
 		return "users/profile";
 	}
 	

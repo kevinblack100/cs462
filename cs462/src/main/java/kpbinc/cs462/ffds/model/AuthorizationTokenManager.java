@@ -1,5 +1,6 @@
 package kpbinc.cs462.ffds.model;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Repository;
 @Scope(value = "singleton")
 public class AuthorizationTokenManager {
 
+	private static final String AUTH_TOKEN_STORE_FILEPATH = "/WEB-INF/ffds/logs/authtokens.json";
+	
 	@Autowired
 	private ServletContext servletContext;
 	
