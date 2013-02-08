@@ -65,6 +65,10 @@ public class UserController {
 			String retrieveCheckinsURL = "https://api.foursquare.com/v2/users/self/checkins?oauth_token=";
 			Token accessToken = authorizationTokenManager.getAuthorizationToken(username, "foursquare");
 			retrieveCheckinsURL += accessToken.getToken();
+			retrieveCheckinsURL += "&sort=newestfirst";
+			if (!userLoggedIn) {
+				retrieveCheckinsURL += "&limit=1";
+			}
 			String checkinJsonData = oauthController.getDetailsForUser("foursquare", retrieveCheckinsURL, username);
 			model.addAttribute("checkins", checkinJsonData);
 		}
