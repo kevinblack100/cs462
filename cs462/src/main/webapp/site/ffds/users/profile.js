@@ -7,12 +7,7 @@ $(document).ready(function() {
 		var checkinsDataRaw = checkinsDataDiv.html();
 		var checkinsData = $.parseJSON(checkinsDataRaw);
 
-		Handlebars.registerHelper('secondsToDate', function(seconds) {
-			var milliseconds = seconds * 1000;
-			var asDate = new Date(milliseconds);
-			var result = asDate.toLocaleString();
-			return new Handlebars.SafeString(result);
-		});
+		Handlebars.registerHelper('secondsToDate', secondsToDateHelper);
 		
 		var templateSource = $('#checkin-list-template').html();
 		var template = Handlebars.compile(templateSource);
@@ -23,6 +18,13 @@ $(document).ready(function() {
 		//alert('parsed checkins successfully');
 	}
 	else {
-		alert('no checkins data container');
+		//alert('no checkins data container');
 	}
 });
+
+function secondsToDateHelper(seconds) {
+	var milliseconds = seconds * 1000;
+	var asDate = new Date(milliseconds);
+	var result = asDate.toLocaleString();
+	return new Handlebars.SafeString(result);
+}
