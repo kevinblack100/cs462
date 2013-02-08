@@ -13,7 +13,10 @@ import kpbinc.cs462.ffds.model.OAuthServiceManager;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;
 import org.scribe.exceptions.OAuthException;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
 import org.scribe.model.Token;
+import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +85,22 @@ public class OAuthController {
 
 		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
 		response.sendRedirect(redirectLocation);
+	}
+	
+	public String getDetailsForUser(String api, String requestURL, String username) {
+		String result = null;
+		
+		OAuthService service = oauthServiceManager.getOAuthService(api);
+		Token accessToken = authorizationTokenManager.getAuthorizationToken(username, api);
+		if (   service != null
+			&& accessToken != null) {
+			OAuthRequest request = new OAuthRequest(Verb.GET, requestURL);
+			// TODO implement a signing mechanism to handle foursquare signing
+			Response response = request.send();
+			result = response.getBody();
+		}
+		
+		return result;
 	}
 	
 }

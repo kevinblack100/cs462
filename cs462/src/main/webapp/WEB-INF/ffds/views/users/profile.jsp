@@ -9,7 +9,7 @@
 		<p> 
 			<c:choose>
 				<c:when test="${hasFoursquareAuthToken}">
-				TODO display user check in data depending on logged in status
+					<div id="checking-data">${checkins}</div>
 				</c:when>
 				<c:otherwise>
 					<c:choose>

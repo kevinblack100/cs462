@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 
+import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -28,10 +29,13 @@ public class UserController {
 	private LoginController loginController;
 	
 	@Autowired
+	private OAuthController oauthController;
+	
+	@Autowired
 	private ServletContext servletContext;
 	
 	@Autowired
-	private AuthorizationTokenManager authTokenManager;
+	private AuthorizationTokenManager authorizationTokenManager;
 	
 	public UserController() {
 		int tmpbrkpnt = 1;
@@ -48,11 +52,23 @@ public class UserController {
 	public String viewProfile(
 			ModelMap model,
 			@PathVariable("user-name") String username) {
+		
 		model.addAttribute("username", username);
-		boolean hasFoursquareAuthToken = authTokenManager.hasAuthorizationToken(username, "foursquare");
+		
+		boolean hasFoursquareAuthToken = authorizationTokenManager.hasAuthorizationToken(username, "foursquare");
 		model.addAttribute("hasFoursquareAuthToken", hasFoursquareAuthToken);
+		
 		boolean userLoggedIn = loginController.isUserLoggedIn(username);
 		model.addAttribute("userLoggedIn", userLoggedIn);
+		
+		if (hasFoursquareAuthToken) {
+			String retrieveCheckinsURL = "https://api.foursquare.com/v2/users/self/checkins?oauth_token=";
+			Token accessToken = authorizationTokenManager.getAuthorizationToken(username, "foursquare");
+			retrieveCheckinsURL += accessToken.getToken();
+			String checkinJsonData = oauthController.getDetailsForUser("foursquare", retrieveCheckinsURL, username);
+			model.addAttribute("checkins", checkinJsonData);
+		}
+		
 		return "users/profile";
 	}
 	
