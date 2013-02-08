@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,9 @@ public class UserController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	@Autowired
+	private AuthorizationTokenManager authTokenManager;
+	
 	public UserController() {
 		int tmpbrkpnt = 1;
 	}
@@ -44,6 +49,7 @@ public class UserController {
 			ModelMap model,
 			@PathVariable("user-name") String username) {
 		model.addAttribute("username", username);
+		model.addAttribute("hasFoursquareAuthToken", authTokenManager.hasAuthorizationToken(username, "foursquare"));
 		return "users/profile";
 	}
 	
