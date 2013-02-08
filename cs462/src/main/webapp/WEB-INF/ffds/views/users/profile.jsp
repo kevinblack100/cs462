@@ -3,6 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <customtags:pagetemplate>
+	<jsp:attribute name="header">
+		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/jquery-1.9.1.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				alert('Hello World!');
+			});
+		</script>
+	</jsp:attribute>
 	<jsp:attribute name="title">User Profile</jsp:attribute>
 	<jsp:body>
 		<h1>${username} Profile</h1>
