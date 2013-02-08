@@ -63,15 +63,21 @@ public class OAuthServiceManager {
 	
 	private Map<String, APIClientConfiguration> apiClientConfigurations;
 	
-	private Map<String, OAuthService> apiOAuthServices = new HashMap<String, OAuthService>();
+	private Map<String, Map<String, OAuthService>> apiOAuthServices = new HashMap<String, Map<String, OAuthService>>();
 	
 	public OAuthServiceManager() {
 		int tmpbrkpnt = 1;
 	}
 	
-	public OAuthService getOAuthService(String api) {
-		OAuthService service = apiOAuthServices.get(api);
+	public OAuthService getOAuthService(String api, String username) {
+		Map<String, OAuthService> usernameToService = apiOAuthServices.get(api);
 		
+		if (usernameToService == null) {
+			usernameToService = new HashMap<String, OAuthService>();
+			apiOAuthServices.put(api, usernameToService);
+		}
+		
+		OAuthService service = usernameToService.get(username);
 		if (service == null) {
 			APIClientConfiguration config = getAPIClientConfigurations().get(api);
 			if (config != null) {
@@ -79,14 +85,14 @@ public class OAuthServiceManager {
 				
 					String apiKey = config.getKey();
 					String apiSecret = config.getSecret();
-					String callbackURI = config.getCallbackBase(); // + "/cs462/ffds/oauth/v2/requesttoken/" + api + "/" + username;
+					String callbackURI = config.getCallbackBase() + "?api=" + api + "&username=" + username;
 					service = new ServiceBuilder()
 									.provider(Foursquare2Api.class)
 									.apiKey(apiKey)
 									.apiSecret(apiSecret)
 									.callback(callbackURI)
 									.build();
-					apiOAuthServices.put(api, service);
+					usernameToService.put(username, service);
 				}
 				// else don't know/handle that api
 			}

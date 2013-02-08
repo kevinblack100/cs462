@@ -47,7 +47,7 @@ public class OAuthController {
 			@PathVariable("api") String api,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		OAuthService service = oauthServiceManager.getOAuthService(api);
+		OAuthService service = oauthServiceManager.getOAuthService(api, username);
 		
 		String redirectLocation = null;
 		if (service != null) {
@@ -63,15 +63,15 @@ public class OAuthController {
 		response.sendRedirect(redirectLocation);
 	}
 	
-	@RequestMapping(value = "/v2/requesttoken/{api}/{username}")
+	@RequestMapping(value = "/v2/requesttoken")
 	public void registerOAuthCode(
-			@PathVariable("api") String api,
-			@PathVariable("username") String username,
+			@RequestParam(value = "api", required = true) String api,
+			@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "code", required = true) String code,
 			HttpServletResponse response) throws IOException {
 		System.out.printf("received code for %s at %s: %s\n", username, api, code);
 		
-		OAuthService service = oauthServiceManager.getOAuthService(api);
+		OAuthService service = oauthServiceManager.getOAuthService(api, username);
 		if (service != null) {
 			try {
 				Verifier verifier = new Verifier(code);
@@ -90,7 +90,7 @@ public class OAuthController {
 	public String getDetailsForUser(String api, String requestURL, String username) {
 		String result = null;
 		
-		OAuthService service = oauthServiceManager.getOAuthService(api);
+		OAuthService service = oauthServiceManager.getOAuthService(api, username);
 		Token accessToken = authorizationTokenManager.getAuthorizationToken(username, api);
 		if (   service != null
 			&& accessToken != null) {
