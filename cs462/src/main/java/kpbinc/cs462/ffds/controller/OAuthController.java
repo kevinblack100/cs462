@@ -33,7 +33,8 @@ public class OAuthController {
 	public void authorizeUserAt(
 			@PathVariable("username") String username,
 			@PathVariable("api") String api,
-			HttpServletRequest request) {
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		String apiKey = "HBRKOKDL5BRHA3A5KDKNKKODADRI1EDEDMI2JNIH5U23MES2";
 		String apiSecret = "EPR5PCGICL5GPYJOMGA31BAF1E01MC0V0R1KE0FRZX5U05XW";
 		String callbackURI = "http://requestb.in/1ai0qxl1"; // request.getLocalName() + "/cs462/ffds/oauth/v2/requesttoken/" + api + "/" + username;
@@ -45,6 +46,9 @@ public class OAuthController {
 								.build();
 		String authorizationURL = service.getAuthorizationUrl(null);
 		System.out.println("generated authorization target URL: " + authorizationURL);
+		
+		String redirectLocation = response.encodeRedirectURL(authorizationURL);
+		response.sendRedirect(redirectLocation);
 	}
 	
 	@RequestMapping(value = "/v2/requesttoken/{api}/{username}")
