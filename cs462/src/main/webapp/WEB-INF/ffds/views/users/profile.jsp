@@ -5,7 +5,30 @@
 <customtags:pagetemplate>
 	<jsp:attribute name="header">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/handlebars-1.0.rc.2.js"></script>
+		
 		<script type="text/javascript" src="${pageContext.request.contextPath}/site/ffds/users/profile.js"></script>
+		
+		<script type="text/x-handlebars-template" id="checkin-list-template">
+			<div class="checkin-list">
+				<h3>Latest Foursquare Checkin Details</h3>
+				{{#each items}}
+				<div class="checkin-entry">
+					When: <span class="time">{{secondsToDate createdAt}}</span>
+					<br />
+					<br />
+					Where: <span class="venue-name">{{venue.name}}</span>
+					<br />
+					<span class="venue-city">{{venue.location.city}}</span>, 
+					<span class="venue-state">{{venue.location.state}}</span>,
+					<span class="venue-country">{{venue.location.country}}</span>
+					<br />
+					<br />
+					How: <span class="checkin-means">{{source.name}}</span>
+				</div>
+				{{/each}}
+			</div>
+		</script>
 	</jsp:attribute>
 	<jsp:attribute name="title">User Profile</jsp:attribute>
 	<jsp:body>
@@ -13,7 +36,9 @@
 		<p> 
 			<c:choose>
 				<c:when test="${hasFoursquareAuthToken}">
-					<div id="checkin-data">${checkins}</div>
+					<div id="checkins-data">${checkins}</div>
+					<div id="checkins-detail">
+					</div>
 				</c:when>
 				<c:otherwise>
 					<c:choose>
