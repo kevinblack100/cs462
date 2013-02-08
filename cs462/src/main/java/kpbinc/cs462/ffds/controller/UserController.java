@@ -49,7 +49,8 @@ public class UserController {
 			ModelMap model,
 			@PathVariable("user-name") String username) {
 		model.addAttribute("username", username);
-		model.addAttribute("hasFoursquareAuthToken", authTokenManager.hasAuthorizationToken(username, "foursquare"));
+		boolean hasFoursquareAuthToken = authTokenManager.hasAuthorizationToken(username, "foursquare");
+		model.addAttribute("hasFoursquareAuthToken", hasFoursquareAuthToken);
 		return "users/profile";
 	}
 	
