@@ -12,6 +12,9 @@ import kpbinc.cs462.ffds.model.OAuthServiceManager;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;
+import org.scribe.exceptions.OAuthException;
+import org.scribe.model.Token;
+import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -65,8 +68,19 @@ public class OAuthController {
 			HttpServletResponse response) throws IOException {
 		System.out.printf("received code for %s at %s: %s\n", username, api, code);
 		
-		// TODO retrieve the authorization token with the given code
-		
+		OAuthService service = oauthServiceManager.getOAuthService(api);
+		if (service != null) {
+			try {
+				Verifier verifier = new Verifier(code);
+				Token accessToken = service.getAccessToken(null, verifier);
+				String accessTokenString = accessToken.getToken();
+				authorizationTokenManager.createOrUpdateAuthorizationToken(username, api, accessTokenString);
+			}
+			catch (OAuthException e) {
+				e.printStackTrace();
+			}
+		}
+
 		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
 		response.sendRedirect(redirectLocation);
 	}
