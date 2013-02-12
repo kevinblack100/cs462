@@ -136,7 +136,11 @@ public class AccountController {
 			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
 			HttpServletResponse response) throws IOException {
 		
-		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/profile");
+		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
+		assert(loggedInUserDetails != null);
+		String username = loggedInUserDetails.getUsername();
+		
+		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
 		response.sendRedirect(redirectLocation);
 	}
 	
