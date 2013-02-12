@@ -9,6 +9,8 @@ import java.util.Collection;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +38,7 @@ public class AccountController {
 
 	
 	public AccountController() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	public String getDefaultPassword() {

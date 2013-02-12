@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +28,7 @@ public class LoginController implements Serializable {
 	private AccountController accountController;
 	
 	public LoginController() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	@RequestMapping(value = "/query")

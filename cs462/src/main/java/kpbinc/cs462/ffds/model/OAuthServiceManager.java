@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
+
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;
 import org.scribe.oauth.OAuthService;
@@ -67,7 +69,7 @@ public class OAuthServiceManager {
 	private Map<String, Map<String, OAuthService>> apiOAuthServices = new HashMap<String, Map<String, OAuthService>>();
 	
 	public OAuthServiceManager() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	public OAuthService getOAuthService(String api, String username) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 
 import org.scribe.model.Token;
@@ -38,7 +39,7 @@ public class UserController {
 	private AuthorizationTokenManager authorizationTokenManager;
 	
 	public UserController() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	@RequestMapping

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 import kpbinc.cs462.ffds.model.OAuthServiceManager;
 
@@ -34,7 +35,7 @@ public class OAuthController {
 	private OAuthServiceManager oauthServiceManager;
 	
 	public OAuthController() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	@RequestMapping(value = "/v2/authorize/{username}/{api}")

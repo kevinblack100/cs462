@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
+
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -80,7 +82,7 @@ public class AuthorizationTokenManager {
 	private Map<String, Map<String, TokenWrapper>> authorizationTokensIndex = null;
 	
 	public AuthorizationTokenManager() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	private Map<String, Map<String, TokenWrapper>> getIndex() {
