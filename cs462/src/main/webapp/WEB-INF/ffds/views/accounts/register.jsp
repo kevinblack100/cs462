@@ -8,14 +8,24 @@
 		<form method="POST" action="${pageContext.request.contextPath}/ffds/secure/accounts/register/execute">
 			<fieldset>
 				<label for="username">Username:</label>
-				<input id="username" name="username" type="text" size="20" />
+				<input type="text" id="username" name="username" size="20" />
 				<br />
 				<!-- Disabling password usage for now
 				<label for="password">Password:</label>
 				<input id="password" name="password" type="password" size="20" />
 				<br />
 				 -->
-				<input id="submit" name="submit" type="submit" value="Register" />
+				<br />
+				<span>How will you use the system?</span>
+				<br />
+				<input type="checkbox" id="manager-indicator" name="manager-indicator" />
+				<label for="manager-indicator">Flower store manager</label>
+				<br />
+				<input type="checkbox" id="driver-indicator" name="driver-indicator" />
+				<label for="driver-indicator">Flower delivery driver</label>
+				<br />
+				<br />
+				<input type="submit" id="submit" name="submit" value="Register" />
 			</fieldset>
 		</form>
 	</jsp:body>
