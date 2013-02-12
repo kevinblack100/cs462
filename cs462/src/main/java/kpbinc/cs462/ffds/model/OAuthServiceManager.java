@@ -23,6 +23,7 @@ public class OAuthServiceManager {
 
 	private static final String API_APP_CONFIG_FILEPATH = "/WEB-INF/ffds/config/apiclientconfig.json";
 	
+	@SuppressWarnings("unused")
 	private static class APIClientConfiguration {
 		
 		private String key;

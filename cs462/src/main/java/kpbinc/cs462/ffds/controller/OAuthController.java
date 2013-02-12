@@ -1,8 +1,6 @@
 package kpbinc.cs462.ffds.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 import kpbinc.cs462.ffds.model.OAuthServiceManager;
 
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.Foursquare2Api;
 import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
