@@ -30,7 +30,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/secure/accounts")
 public class AccountController {
 	
+	//==================================================================================================================
+	// Class Data
+	//==================================================================================================================
+	
 	private static final Logger logger = Logger.getLogger(AccountController.class.getName());
+	
+	
+	//==================================================================================================================
+	// Member Data
+	//==================================================================================================================
+	
+	@Autowired
+	private ServletContext servletContext;
 	
 	@Autowired
 	private ApplicationConstants applicationConstants;
@@ -41,13 +53,23 @@ public class AccountController {
 	@Autowired
 	private InMemoryUserDetailsManager userDetailsManager;
 	
-	@Autowired
-	private ServletContext servletContext;
-
+	
+	//==================================================================================================================
+	// Initialization
+	//==================================================================================================================
 	
 	public AccountController() {
 		GlobalLogUtils.logConstruction(this);
 	}
+	
+	
+	//==================================================================================================================
+	// Interface
+	//==================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------------------------
+	// Account Registration
+	//------------------------------------------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/register/query")
 	public String getRegistrationForm() {
@@ -99,6 +121,9 @@ public class AccountController {
 		response.sendRedirect(redirectLocation);
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Account Management
+	//------------------------------------------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String getManagementForm() {
