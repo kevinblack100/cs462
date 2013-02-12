@@ -99,4 +99,20 @@ public class AccountController {
 		response.sendRedirect(redirectLocation);
 	}
 
+	
+	@RequestMapping(value = "/manage", method = RequestMethod.GET)
+	public String getManagementForm() {
+		return "accounts/manage";
+	}
+	
+	@RequestMapping(value = "/manage", method = RequestMethod.POST)
+	public void saveChanges(
+			@RequestParam(value = "manager-indicator", defaultValue = "false") boolean isManager,
+			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
+			HttpServletResponse response) throws IOException {
+		
+		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/profile");
+		response.sendRedirect(redirectLocation);
+	}
+	
 }
