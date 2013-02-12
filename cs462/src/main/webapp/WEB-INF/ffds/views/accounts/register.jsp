@@ -16,15 +16,6 @@
 				<br />
 				 -->
 				<br />
-				<span>How will you use the system?</span>
-				<br />
-				<input type="checkbox" id="manager-indicator" name="manager-indicator" />
-				<label for="manager-indicator">Flower store manager</label>
-				<br />
-				<input type="checkbox" id="driver-indicator" name="driver-indicator" />
-				<label for="driver-indicator">Flower delivery driver</label>
-				<br />
-				<br />
 				<input type="submit" id="submit" name="submit" value="Register" />
 			</fieldset>
 		</form>

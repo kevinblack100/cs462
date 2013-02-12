@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/secure/accounts")
 public class AccountController {
 
+	private static final Logger logger = Logger.getLogger(AccountController.class.getName());
+	
 	public static final String DEFAULT_PASSWORD = "password";
 	
 	@Autowired
@@ -60,13 +63,13 @@ public class AccountController {
 			// Does account already exist?
 			UserDetails currentRegistrantDetails = userDetailsManager.loadUserByUsername(username);
 			
-			System.out.printf("Account with username \"%s\" already exists\n", username);
+			logger.info(String.format("Account with username \"%s\" already exists\n", username));
 			
 			redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/accounts/register/query");
 		}
 		catch (UsernameNotFoundException exception) {
 			// Account does not exist
-			System.out.println("Registering account with username: " + username + " and default password: " + getDefaultPassword());
+			logger.info("Registering account with username: " + username + " and default password: " + getDefaultPassword());
 			
 			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
