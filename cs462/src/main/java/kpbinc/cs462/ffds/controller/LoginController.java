@@ -25,7 +25,7 @@ public class LoginController implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	private AccountController accountController;
+	private ApplicationConstants applicationConstants;
 	
 	public LoginController() {
 		GlobalLogUtils.logConstruction(this);
@@ -35,7 +35,7 @@ public class LoginController implements Serializable {
 	public String presentSignin() {
 		return "signin";
 	}
-
+	
 	@RequestMapping(value = "/success")
 	public void doSignin(HttpServletResponse response) throws IOException {
 		UserDetails signedInUserDetails = getSignedInUserDetails();

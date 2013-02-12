@@ -22,16 +22,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/secure/accounts")
 public class AccountController {
-
+	
 	private static final Logger logger = Logger.getLogger(AccountController.class.getName());
 	
-	public static final String DEFAULT_PASSWORD = "password";
+	@Autowired
+	private ApplicationConstants applicationConstants;
+	
+	@Autowired
+	private LoginController loginController;
 	
 	@Autowired
 	private InMemoryUserDetailsManager userDetailsManager;
@@ -42,10 +47,6 @@ public class AccountController {
 	
 	public AccountController() {
 		GlobalLogUtils.logConstruction(this);
-	}
-	
-	public String getDefaultPassword() {
-		return DEFAULT_PASSWORD;
 	}
 	
 	@RequestMapping(value = "/register/query")
@@ -69,12 +70,13 @@ public class AccountController {
 		}
 		catch (UsernameNotFoundException exception) {
 			// Account does not exist
-			logger.info("Registering account with username: " + username + " and default password: " + getDefaultPassword());
+			String defaultPassword = applicationConstants.getDefaultPassword();
+			logger.info("Registering account with username: " + username + " and default password: " + defaultPassword);
 			
 			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 			
-			UserDetails newRegistrantDetails = new User(username, getDefaultPassword(), authorities);
+			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
 			
 			// write entry to the users.properties file as well
@@ -83,7 +85,7 @@ public class AccountController {
 				File userPropertiesFile = new File(filePath);
 				boolean append = true;
 				FileWriter writer = new FileWriter(userPropertiesFile, append);
-				String accountEntry = String.format("\n%s=%s,%s,enabled", username, getDefaultPassword(), "ROLE_USER");
+				String accountEntry = String.format("\n%s=%s,%s,enabled", username, defaultPassword, "ROLE_USER");
 				writer.write(accountEntry);
 				writer.close();
 			}
@@ -96,5 +98,5 @@ public class AccountController {
 		
 		response.sendRedirect(redirectLocation);
 	}
-	
+
 }
