@@ -132,7 +132,6 @@ public class AccountController {
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.POST)
 	public void saveChanges(
-			@RequestParam(value = "manager-indicator", defaultValue = "false") boolean isManager,
 			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
 			HttpServletResponse response) throws IOException {
 		

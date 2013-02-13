@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 
+import org.scribe.exceptions.OAuthConnectionException;
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Scope(value = "request")
 @RequestMapping("/users")
 public class UserController {
+	
+	private static final Logger logger = Logger.getLogger(UserController.class.getName());
 	
 	@Autowired
 	private LoginController loginController;
@@ -70,8 +74,15 @@ public class UserController {
 			if (!userLoggedIn) {
 				retrieveCheckinsURL += "&limit=1";
 			}
-			String checkinJsonData = oauthController.getDetailsForUser("foursquare", retrieveCheckinsURL, username);
-			model.addAttribute("checkins", checkinJsonData);
+			
+			try {
+				String checkinJsonData = oauthController.getDetailsForUser("foursquare", retrieveCheckinsURL, username);
+				model.addAttribute("checkins", checkinJsonData);
+			}
+			catch (OAuthConnectionException e) {
+				logger.info("Caught exception: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		
 		return "users/profile";

@@ -9,9 +9,6 @@
 			<fieldset>
 				<span>How would you like to use the system?</span>
 				<br />
-				<input type="checkbox" id="manager-indicator" name="manager-indicator" value="true" />
-				<label for="manager-indicator">Flower store manager</label>
-				<br />
 				<input type="checkbox" id="driver-indicator" name="driver-indicator" value="true" />
 				<label for="driver-indicator">Flower delivery driver</label>
 				<br />
