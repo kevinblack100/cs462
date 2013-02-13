@@ -9,13 +9,17 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -131,16 +135,59 @@ public class AccountController {
 	}
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.POST)
-	public void saveChanges(
+	public String saveChanges(
 			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response,
+			HttpSession session) throws IOException {
 		
 		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
 		String username = loggedInUserDetails.getUsername();
 		
-		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
-		response.sendRedirect(redirectLocation);
+		if (isDriver) {
+			if (!loggedInUserDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+				Collection<GrantedAuthority> modifiedAuthorities = new ArrayList<GrantedAuthority>(loggedInUserDetails.getAuthorities());
+				modifiedAuthorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+				
+				updateAuthorities(username, modifiedAuthorities, session);
+			}
+		}
+		else {
+			if (loggedInUserDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+				Collection<GrantedAuthority> modifiedAuthorities = new ArrayList<GrantedAuthority>(loggedInUserDetails.getAuthorities());
+				modifiedAuthorities.remove(new SimpleGrantedAuthority("ROLE_DRIVER"));
+				
+				updateAuthorities(username, modifiedAuthorities, session);
+			}
+		}
+		
+		return "redirect:/ffds/users/" + username;
+		
+//		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
+//		response.sendRedirect(redirectLocation);
 	}
 	
+	private void updateAuthorities(
+			String username,
+			Collection<GrantedAuthority> modifiedAuthorities,
+			HttpSession session) {
+	
+		UserDetails fullLoggedInUserDetails = userDetailsManager.loadUserByUsername(username);
+		if (!fullLoggedInUserDetails.getAuthorities().equals(modifiedAuthorities)) {
+			String password = fullLoggedInUserDetails.getPassword();
+			UserDetails updatedDetails = new User(username, password, modifiedAuthorities);
+			userDetailsManager.updateUser(updatedDetails);
+		
+			if (session != null) {
+				UserDetails loggedInDetails = loginController.getSignedInUserDetails();
+				if (loggedInDetails.getUsername().equals(username)) {
+					UsernamePasswordAuthenticationToken authentication = 
+							new UsernamePasswordAuthenticationToken(updatedDetails, modifiedAuthorities);
+					SecurityContext context = SecurityContextHolder.getContext();
+					context.setAuthentication(authentication);
+					session.setAttribute("SPRING_SECURITY_CONTEXT", context);
+				}
+			}
+		}
+	}
 }
