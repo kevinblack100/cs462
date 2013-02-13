@@ -2,12 +2,20 @@ package kpbinc.spring.security;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class GrantedAuthorityTests {
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Instance Equality Tests
+	//------------------------------------------------------------------------------------------------------------------
+	
 	@Test
 	public void testEqualsSelf() {
 		// ARRANGE
@@ -57,4 +65,50 @@ public class GrantedAuthorityTests {
 		// ACT/ASSERT
 		assertNotEquals(authority, object);
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	// Collection Membership Tests
+	//------------------------------------------------------------------------------------------------------------------
+	
+	@Test
+	public void testSelfMembershipInCollection() {
+		// ARRANGE
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER"); 
+		authorities.add(authority);
+		
+		// ACT/ASSERT
+		assertTrue(authorities.contains(authority));
+	}
+	
+	@Test
+	public void testIdenticalMembershipInCollection() {
+		// ARRANGE
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		
+		// ACT/ASSERT
+		assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_USER")));
+	}
+	
+	@Test
+	public void testSelfMembershipInWildcardCollection() {
+		// ARRANGE
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+		Collection<? extends GrantedAuthority> authorities = Arrays.asList(authority);
+		
+		// ACT/ASSERT
+		assertTrue(authorities.contains(authority));
+	}
+	
+	@Test
+	public void testIdenticalMembershipInWildcardCollection() {
+		// ARRANGE
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+		Collection<? extends GrantedAuthority> authorities = Arrays.asList(authority);
+		
+		// ACT/ASSERT
+		assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_USER")));
+	}
+	
 }
