@@ -14,7 +14,7 @@ public class FileIOTestContext {
 	// Class Data
 	//==================================================================================================================
 	
-	public static final String DEFAULT_BASE_DIRECTORY = "/tmp";
+	public static final String DEFAULT_BASE_DIRECTORY = "/tmp/cs462";
 	
 	
 	//==================================================================================================================
@@ -40,7 +40,7 @@ public class FileIOTestContext {
 	}
 
 	public FileIOTestContext(Class<?> testClazz, String extension) {
-		this(DEFAULT_BASE_DIRECTORY + "/" + testClazz.getSimpleName());
+		this(DEFAULT_BASE_DIRECTORY + "/" + testClazz.getSimpleName(), extension);
 	}
 	
 	//==================================================================================================================
