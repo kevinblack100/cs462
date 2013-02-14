@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kpbinc.test.io.util.FileIOTestContext;
+import kpbinc.util.Wrapper;
 
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 // TODO make a test template class
 public class JsonFileStorePersistentMapTests {
@@ -138,6 +141,36 @@ public class JsonFileStorePersistentMapTests {
 		// ASSERT
 		Map<String, String> persistedMap = fileStore.read();
 		assertEquals(jfspMap, persistedMap);
+	}
+	
+	@Test
+	public void testCommit() {
+		// ARRANGE
+		Map<String, Wrapper<String>> map = new HashMap<String, Wrapper<String>>();
+		map.put("A", new Wrapper<String>("first letter"));
+		Wrapper<String> zValueWrapper = new Wrapper<String>("last letter");
+		map.put("Z", zValueWrapper);
+		
+		File output = fileIOContext.getPathAssuredFileHandle("commit");
+		JsonFileStore<Map<String, Wrapper<String>>> fileStore = new JsonFileStore<Map<String, Wrapper<String>>>(output);
+		
+		JsonFileStorePersistentMap<String, Wrapper<String>> jfspMap = 
+				new JsonFileStorePersistentMap<String, Wrapper<String>>(map, output);
+		
+		// ACT (1)
+		zValueWrapper.setWrappedObject("really, the last letter");
+		
+		// ASSERT (1)
+		TypeReference<Map<String, Wrapper<String>>> typeRef = new TypeReference<Map<String, Wrapper<String>>>() {};
+		Map<String, Wrapper<String>> persistedMap1 = fileStore.readAlt(typeRef);
+		assertNotEquals(jfspMap, persistedMap1);
+		
+		// ACT (2)
+		jfspMap.commit();
+		
+		// ASSERT (2)
+		Map<String, Wrapper<String>> persistedMap2 = fileStore.readAlt(typeRef);
+		assertEquals(jfspMap, persistedMap2);
 	}
 	
 }

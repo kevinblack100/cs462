@@ -64,6 +64,16 @@ public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
 	// Interface
 	//==================================================================================================================
 	
+	/**
+	 * Commits the map to the file store.
+	 * 
+	 * @return true if the commit was successful, false otherwise.
+	 */
+	public boolean commit() {
+		boolean result = fileStore.commit(delegate);
+		return result;
+	}
+	
 	@Override
 	public boolean equals(Object object) {
 		// compare map contents
@@ -72,13 +82,9 @@ public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
 		return result;
 	}
 	
-	/**
-	 * Commits the map to the file store.
-	 * 
-	 * @return true if the commit was successful, false otherwise.
-	 */
-	public boolean commit() {
-		boolean result = fileStore.commit(delegate);
+	@Override
+	public String toString() {
+		String result = delegate.toString();
 		return result;
 	}
 	
