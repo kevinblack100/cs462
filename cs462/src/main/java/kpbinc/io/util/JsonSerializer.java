@@ -1,5 +1,6 @@
 package kpbinc.io.util;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -30,6 +31,10 @@ public class JsonSerializer {
 		return jsonSerialization;
 	}
 	
+	public static void serialize(Object object, File file) throws IOException {
+		mapper.writeValue(file, object);
+	}
+	
 	public static <T> T deserialize(String jsonSerialization, Class<T> clazz) throws IOException {
 		T deserializedObject = mapper.readValue(jsonSerialization, clazz);
 		return deserializedObject;
@@ -37,6 +42,16 @@ public class JsonSerializer {
 	
 	public static <T> T deserialize(String jsonSerialization, TypeReference<T> typeRef) throws IOException {
 		T deserializedObject = mapper.readValue(jsonSerialization, typeRef);
+		return deserializedObject;
+	}
+	
+	public static <T> T deserialize(File file, Class<T> clazz) throws IOException {
+		T deserializedObject = mapper.readValue(file, clazz);
+		return deserializedObject;
+	}
+	
+	public static <T> T deserialize(File file, TypeReference<T> typeRef) throws IOException {
+		T deserializedObject = mapper.readValue(file, typeRef);
 		return deserializedObject;
 	}
 	
