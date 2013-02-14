@@ -29,7 +29,7 @@ public class AuthorizationTokenManager {
 		// usually delegate to this
 		private Token wrappedToken;
 		
-		// store these when reading in the file and then will contruct a token with them
+		// store these when reading in the file and then will construct a token with them
 		private String token;
 		private String secret;
 		
