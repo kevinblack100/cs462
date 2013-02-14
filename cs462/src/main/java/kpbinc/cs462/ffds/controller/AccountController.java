@@ -184,7 +184,9 @@ public class AccountController {
 				Authentication loggedInAuthentication = context.getAuthentication();
 				if (   loggedInAuthentication != null
 					&& username.equals(loggedInAuthentication.getName())) {
-					// Note, use the old credentials so that the user doesn't have to login again 
+					// Note, use the old credentials so that the user doesn't have to login again
+					// See Rob Winch's response on
+					// http://forum.springsource.org/archive/index.php/t-109288.html?s=38e47057c160c0a03e04ba230627d021
 					Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(
 							updatedDetails, loggedInAuthentication.getCredentials(), modifiedAuthorities);
 					context.setAuthentication(updatedAuthentication);
