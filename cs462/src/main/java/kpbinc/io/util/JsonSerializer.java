@@ -2,6 +2,7 @@ package kpbinc.io.util;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -31,6 +32,11 @@ public class JsonSerializer {
 	
 	public static <T> T deserialize(String jsonSerialization, Class<T> clazz) throws IOException {
 		T deserializedObject = mapper.readValue(jsonSerialization, clazz);
+		return deserializedObject;
+	}
+	
+	public static <T> T deserialize(String jsonSerialization, TypeReference<T> typeRef) throws IOException {
+		T deserializedObject = mapper.readValue(jsonSerialization, typeRef);
 		return deserializedObject;
 	}
 	
