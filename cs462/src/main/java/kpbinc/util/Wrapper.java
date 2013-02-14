@@ -13,11 +13,11 @@ public class Wrapper<T> {
 	
 	
 	public Wrapper() {
-		set(null);
+		setWrappedObject(null);
 	}
 	
 	public Wrapper(T objectToWrap) {
-		set(objectToWrap);
+		setWrappedObject(objectToWrap);
 	}
 	
 	
@@ -43,11 +43,11 @@ public class Wrapper<T> {
 	}
 	
 	
-	public T get() {
+	public T getWrappedObject() {
 		return wrappedObject;
 	}
 	
-	public void set(T wrappedObject) {
+	public void setWrappedObject(T wrappedObject) {
 		this.wrappedObject = wrappedObject;
 	}
 	

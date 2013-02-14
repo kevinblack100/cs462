@@ -1,8 +1,11 @@
 package kpbinc.util;
 
 import static org.junit.Assert.*;
+import kpbinc.io.util.JsonSerializerTests;
 
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class WrapperTests {
 
@@ -12,7 +15,7 @@ public class WrapperTests {
 		Wrapper<String> wrapper = new Wrapper<String>();
 		
 		// ASSERT
-		assertNull(wrapper.get());
+		assertNull(wrapper.getWrappedObject());
 	}
 	
 	@Test
@@ -22,7 +25,7 @@ public class WrapperTests {
 		Wrapper<String> wrapper = new Wrapper<String>(object);
 		
 		// ASSERT
-		assertTrue(object == wrapper.get());
+		assertTrue(object == wrapper.getWrappedObject());
 	}
 	
 	@Test
@@ -101,6 +104,30 @@ public class WrapperTests {
 		// ACT/ASSERT
 		assertNotEquals(numberWrapper, stringWrapper);
 		assertNotEquals(stringWrapper, numberWrapper);
+	}
+	
+	@Test
+	public void testJsonSerialization() {
+		// ARRANGE
+		String object = "somestring";
+		Wrapper<String> wrapper = new Wrapper<String>(object);
+		
+		String expectedJsonSerialization = String.format("{\"wrappedObject\":\"%s\"}", object);
+		
+		// ACT/ASSERT
+		JsonSerializerTests.assertJsonSerialization(wrapper, expectedJsonSerialization);
+	}
+	
+	@Test
+	public void testJsonDeserialization() {
+		// ARRANGE
+		String object = "somestring";
+		String jsonSerialization = String.format("{\"wrappedObject\":\"%s\"}", object);
+		
+		Wrapper<String> expectedWrapper = new Wrapper<String>(object);
+		
+		// ACT/ASSERT
+		JsonSerializerTests.assertJsonDeserialization(jsonSerialization, expectedWrapper, new TypeReference<Wrapper<String>>(){});
 	}
 	
 }

@@ -26,7 +26,7 @@ public class JsonSerializerTests {
 	// Action and Assertion Support
 	//==================================================================================================================
 	
-	private void assertJsonSerialization(Object object, String expectedJsonSerialization) {
+	public static void assertJsonSerialization(Object object, String expectedJsonSerialization) {
 		try {
 			// ACT
 			String actualJsonSerialization = JsonSerializer.serialize(object);
@@ -54,7 +54,7 @@ public class JsonSerializerTests {
 		assertEquals(expectedJsonSerialization, actualJsonSerialization);
 	}
 	
-	private <T> void assertJsonDeserialization(String jsonSerialization, T expectedObject, Class<T> clazz) {
+	public static <T> void assertJsonDeserialization(String jsonSerialization, T expectedObject, Class<T> clazz) {
 		try {
 			// ACT
 			T actualObject = JsonSerializer.deserialize(jsonSerialization, clazz);
@@ -67,7 +67,7 @@ public class JsonSerializerTests {
 		}
 	}
 	
-	private <T> void assertJsonDeserialization(String jsonSerialization, T expectedObject, TypeReference<T> typeRef) {
+	public static <T> void assertJsonDeserialization(String jsonSerialization, T expectedObject, TypeReference<T> typeRef) {
 		try {
 			// ACT
 			T actualObject = JsonSerializer.deserialize(jsonSerialization, typeRef);
