@@ -1,0 +1,62 @@
+KPB Test App
+Download / welcome page url
+http://students.cs.byu.edu/~kpbinc/
+
+Your privacy policy url
+http://students.cs.byu.edu/~kpbinc/
+
+Redirect URI
+http://requestb.in/1ai0qxl1
+
+Client id
+HBRKOKDL5BRHA3A5KDKNKKODADRI1EDEDMI2JNIH5U23MES2
+
+Client secret
+EPR5PCGICL5GPYJOMGA31BAF1E01MC0V0R1KE0FRZX5U05XW
+
+changing the redirect uri doesn't change the client id and client secret
+
+
+Connecting
+
+request
+https://foursquare.com/oauth2/authenticate?client_id=HBRKOKDL5BRHA3A5KDKNKKODADRI1EDEDMI2JNIH5U23MES2&response_type=code&redirect_uri=http://requestb.in/1ai0qxl1
+
+response @ the redirect uri
+code	5IUCRMV41V1TPJR2GI2NY0TEYPZAKVIFX51UMF3TIYYPBKAF
+
+ALT request the redirect uri is not the same as registered one
+https://foursquare.com/oauth2/authenticate?client_id=HBRKOKDL5BRHA3A5KDKNKKODADRI1EDEDMI2JNIH5U23MES2&response_type=code&redirect_uri=http://requestb.in/1392em11
+
+failed because of a redirect uri mismatch
+
+
+request
+https://foursquare.com/oauth2/access_token?client_id=HBRKOKDL5BRHA3A5KDKNKKODADRI1EDEDMI2JNIH5U23MES2&client_secret=EPR5PCGICL5GPYJOMGA31BAF1E01MC0V0R1KE0FRZX5U05XW&grant_type=authorization_code&redirect_uri=http://requestb.in/1ai0qxl1&code=5IUCRMV41V1TPJR2GI2NY0TEYPZAKVIFX51UMF3TIYYPBKAF
+
+response to requester
+{"access_token":"SSIYRWLKQYF04NQBZVFUKS04RYEG43O35U3VTPS10GNWGCYQ"}
+
+
+
+
+Using API End points
+
+request
+wget -Ofsq_users_self_checkings.txt https://api.foursquare.com/v2/users/self/checkins?oauth_token=SSIYRWLKQYF04NQBZVFUKS04RYEG43O35U3VTPS10GNWGCYQ
+
+response to requester
+{"meta":{"code":200,"errorType":"deprecated","errorDetail":"Please provide an API version to avoid future errors.See http:\/\/bit.ly\/vywCav"},"notifications":[{"type":"notificationTray","item":{"unreadCount":0}}],"response":{"checkins":{"count":0,"items":[]}}}
+
+response to requester once checked in
+{"meta":{"code":200,"errorType":"deprecated","errorDetail":"Please provide an API version to avoid future errors.See http:\/\/bit.ly\/vywCav"},"notifications":[{"type":"notificationTray","item":{"unreadCount":0}}],"response":{"checkins":{"count":1,"items":[{"id":"511469e37ab4779202204303","createdAt":1360292323,"type":"checkin","timeZone":"America\/Denver","timeZoneOffset":-420,"venue":{"id":"506fc92ee4b0a462f9c22f66","name":"Wymount Terrace","contact":{},"location":{"lat":40.26003865568264,"lng":-111.63949623855265,"postalCode":"84604","city":"Provo","state":"UT","country":"United States","cc":"US"},"canonicalUrl":"https:\/\/foursquare.com\/v\/wymount-terrace\/506fc92ee4b0a462f9c22f66","categories":[{"id":"4d954b06a243a5684965b473","name":"Residential Building (Apartment \/ Condo)","pluralName":"Residential Buildings (Apartments \/ Condos)","shortName":"Apartment Building","icon":"https:\/\/foursquare.com\/img\/categories\/building\/default.png","parents":["Residence"],"primary":true}],"verified":false,"stats":{"checkinsCount":16,"usersCount":6,"tipCount":0},"likes":{"count":0,"groups":[]},"like":false,"beenHere":{"count":1,"marked":false}},"likes":{"count":0,"groups":[]},"like":false,"photos":{"count":0,"items":[]},"posts":{"count":0,"textCount":0},"comments":{"count":0,"items":[]},"source":{"name":"foursquare Mobile Web","url":"https:\/\/foursquare.com\/mobile\/"}}]}}}
+
+
+
+request
+wget -Ofsq_users_self.txt https://api.foursquare.com/v2/users/self?oauth_token=SSIYRWLKQYF04NQBZVFUKS04RYEG43O35U3VTPS10GNWGCYQ
+
+response to requester
+{"meta":{"code":200,"errorType":"deprecated","errorDetail":"Please provide an API version to avoid future errors.See http:\/\/bit.ly\/vywCav"},"notifications":[{"type":"notificationTray","item":{"unreadCount":0}}],"response":{"user":{"id":"47635703","firstName":"Kevin","lastName":"Black","gender":"male","relationship":"self","photo":"https:\/\/foursquare.com\/img\/blank_boy.png","friends":{"count":0,"groups":[{"type":"friends","name":"Mutual friends","count":0,"items":[]},{"type":"others","name":"Other friends","count":0,"items":[]}]},"tips":{"count":0},"lists":{"groups":[{"type":"created","count":1,"items":[]}]},"homeCity":"Pleasant Grove, UT","bio":"","contact":{"email":"kevinblack100@gmail.com","facebook":"100000739400282"},"checkinPings":"off","pings":false,"type":"user","badges":{"count":0,"items":[]},"mayorships":{"count":0,"items":[]},"checkins":{"count":0},"following":{"count":0},"requests":{"count":0},"todos":{"count":0},"photos":{"count":0,"items":[]},"scores":{"recent":0,"max":0,"goal":50,"checkinsCount":0},"referralId":"u-47635703"}}}
+
+

@@ -6,5 +6,6 @@
 	<jsp:body>
 		<h1>Fast Flower Delivery Service</h1>
 		<p>Welcome to the Fast Flower Delivery Service site.</p>
+		<a href="https://github.com/windley/CS462-Event-Edition/tree/master/project">Project Specifications</a>
 	</jsp:body>
 </customtags:pagetemplate>

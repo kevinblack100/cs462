@@ -1,5 +1,7 @@
 package kpbinc.cs462.ffds.model;
 
+import kpbinc.common.util.logging.GlobalLogUtils;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +12,7 @@ public class User {
 	private String username;
 	
 	public User() {
-		int tmpbrkpnt = 1;
+		GlobalLogUtils.logConstruction(this);
 	}
 	
 	public String getUsername() {
