@@ -138,8 +138,7 @@ public class AccountController {
 	@RequestMapping(value = "/manage", method = RequestMethod.POST)
 	public String saveChanges(
 			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
-			HttpServletResponse response,
-			HttpSession session) throws IOException {
+			HttpServletResponse response) throws IOException {
 		
 		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
@@ -150,7 +149,7 @@ public class AccountController {
 				Collection<GrantedAuthority> modifiedAuthorities = new ArrayList<GrantedAuthority>(loggedInUserDetails.getAuthorities());
 				modifiedAuthorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
 				
-				updateAuthorities(username, modifiedAuthorities, session);
+				updateAuthorities(username, modifiedAuthorities);
 			}
 		}
 		else {
@@ -158,7 +157,7 @@ public class AccountController {
 				Collection<GrantedAuthority> modifiedAuthorities = new ArrayList<GrantedAuthority>(loggedInUserDetails.getAuthorities());
 				modifiedAuthorities.remove(new SimpleGrantedAuthority("ROLE_DRIVER"));
 				
-				updateAuthorities(username, modifiedAuthorities, session);
+				updateAuthorities(username, modifiedAuthorities);
 			}
 		}
 		
@@ -168,10 +167,17 @@ public class AccountController {
 //		response.sendRedirect(redirectLocation);
 	}
 	
+	/**
+	 * Sets the user's authorities to the given ones. If the given username matches the logged-in user's then the
+	 * authentication token is updated with the new authorities but former credentials so that the logged-in user does
+	 * not have to log in again.
+	 *  
+	 * @param username name of the user whose authorities should be updated
+	 * @param modifiedAuthorities desired set of authorities for the user
+	 */
 	private void updateAuthorities(
 			String username,
-			Collection<GrantedAuthority> modifiedAuthorities,
-			HttpSession session) {
+			Collection<GrantedAuthority> modifiedAuthorities) {
 	
 		UserDetails fullLoggedInUserDetails = userDetailsManager.loadUserByUsername(username);
 		if (!fullLoggedInUserDetails.getAuthorities().equals(modifiedAuthorities)) {
@@ -179,18 +185,16 @@ public class AccountController {
 			UserDetails updatedDetails = new User(username, password, modifiedAuthorities);
 			userDetailsManager.updateUser(updatedDetails);
 		
-			if (session != null) {
-				SecurityContext context = SecurityContextHolder.getContext();
-				Authentication loggedInAuthentication = context.getAuthentication();
-				if (   loggedInAuthentication != null
-					&& username.equals(loggedInAuthentication.getName())) {
-					// Note, use the old credentials so that the user doesn't have to login again
-					// See Rob Winch's response on
-					// http://forum.springsource.org/archive/index.php/t-109288.html?s=38e47057c160c0a03e04ba230627d021
-					Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(
-							updatedDetails, loggedInAuthentication.getCredentials(), modifiedAuthorities);
-					context.setAuthentication(updatedAuthentication);
-				}
+			SecurityContext context = SecurityContextHolder.getContext();
+			Authentication loggedInAuthentication = context.getAuthentication();
+			if (   loggedInAuthentication != null
+				&& username.equals(loggedInAuthentication.getName())) {
+				// Note, use the old credentials so that the user doesn't have to login again
+				// See Rob Winch's response on
+				// http://forum.springsource.org/archive/index.php/t-109288.html?s=38e47057c160c0a03e04ba230627d021
+				Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(
+						updatedDetails, loggedInAuthentication.getCredentials(), modifiedAuthorities);
+				context.setAuthentication(updatedAuthentication);
 			}
 		}
 	}
