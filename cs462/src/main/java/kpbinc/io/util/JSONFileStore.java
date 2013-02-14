@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.io.util;
+package kpbinc.io.util;
 
 import java.io.File;
 import java.io.IOException;
