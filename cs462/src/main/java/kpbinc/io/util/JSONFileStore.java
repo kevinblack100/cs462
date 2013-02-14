@@ -22,19 +22,19 @@ public class JSONFileStore<T> {
 	}
 	
 	/**
+	 * Commits (serializes) the given object to the filestore. 
+	 */
+	public void commit(T object) throws IOException {
+		
+	}
+	
+	/**
 	 * Reads (deserializes) the contents of the filestore and returns the deserialized object.
 	 * 
 	 * @return deserialized object
 	 */
 	public T read() throws IOException {
 		return null;
-	}
-	
-	/**
-	 * Commits (serializes) the given object to the filestore. 
-	 */
-	public void commit(T object) throws IOException {
-		
 	}
 	
 }
