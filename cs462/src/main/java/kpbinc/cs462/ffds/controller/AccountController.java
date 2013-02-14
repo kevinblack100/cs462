@@ -16,6 +16,7 @@ import kpbinc.common.util.logging.GlobalLogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -179,13 +180,14 @@ public class AccountController {
 			userDetailsManager.updateUser(updatedDetails);
 		
 			if (session != null) {
-				UserDetails loggedInDetails = loginController.getSignedInUserDetails();
-				if (loggedInDetails.getUsername().equals(username)) {
-					UsernamePasswordAuthenticationToken authentication = 
-							new UsernamePasswordAuthenticationToken(updatedDetails, modifiedAuthorities);
-					SecurityContext context = SecurityContextHolder.getContext();
-					context.setAuthentication(authentication);
-					session.setAttribute("SPRING_SECURITY_CONTEXT", context);
+				SecurityContext context = SecurityContextHolder.getContext();
+				Authentication loggedInAuthentication = context.getAuthentication();
+				if (   loggedInAuthentication != null
+					&& username.equals(loggedInAuthentication.getName())) {
+					// Note, use the old credentials so that the user doesn't have to login again 
+					Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(
+							updatedDetails, loggedInAuthentication.getCredentials(), modifiedAuthorities);
+					context.setAuthentication(updatedAuthentication);
 				}
 			}
 		}
