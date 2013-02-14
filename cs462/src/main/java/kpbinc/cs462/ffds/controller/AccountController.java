@@ -137,8 +137,7 @@ public class AccountController {
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.POST)
 	public String saveChanges(
-			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
-			HttpServletResponse response) throws IOException {
+			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver) {
 		
 		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
@@ -162,9 +161,6 @@ public class AccountController {
 		}
 		
 		return "redirect:/ffds/users/" + username;
-		
-//		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
-//		response.sendRedirect(redirectLocation);
 	}
 	
 	/**
