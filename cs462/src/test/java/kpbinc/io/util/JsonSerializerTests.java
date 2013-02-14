@@ -2,13 +2,12 @@ package kpbinc.io.util;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import kpbinc.test.io.util.FileIOTestContext;
 
 import org.junit.Test;
 
@@ -16,6 +15,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 public class JsonSerializerTests {
 
+	//==================================================================================================================
+	// Member Data
+	//==================================================================================================================
+	
+	private FileIOTestContext fileIOContext = new FileIOTestContext(JsonSerializerTests.class, "json");
+	
+	
 	//==================================================================================================================
 	// Action and Assertion Support
 	//==================================================================================================================
@@ -36,7 +42,7 @@ public class JsonSerializerTests {
 	private void assertJsonFileSerialization(Object object, String filename, String expectedJsonSerialization) {
 		// ACT
 		try {
-			File destination = getPathAssuredFileHandle(filename);
+			File destination = fileIOContext.getPathAssuredFileHandle(filename);
 			JsonSerializer.serialize(object, destination);
 		}
 		catch (IOException e) {
@@ -44,7 +50,7 @@ public class JsonSerializerTests {
 		}
 		
 		// ASSERT
-		String actualJsonSerialization = readFile(filename);
+		String actualJsonSerialization = fileIOContext.readFile(filename);
 		assertEquals(expectedJsonSerialization, actualJsonSerialization);
 	}
 	
@@ -77,7 +83,7 @@ public class JsonSerializerTests {
 	private <T> void assertJsonFileDeserialization(String filename, T expectedObject, Class<T> clazz) {
 		try {
 			// ACT
-			File source = getFileHandle(filename);
+			File source = fileIOContext.getFileHandle(filename);
 			T actualObject = JsonSerializer.deserialize(source, clazz);
 			
 			// ASSERT
@@ -133,7 +139,7 @@ public class JsonSerializerTests {
 		String expectedValue = "somestring";
 		String jsonSerialization = String.format("\"%s\"", expectedValue);
 		String filename = "string-deserialization";
-		writeFile(filename, jsonSerialization);
+		fileIOContext.writeFile(filename, jsonSerialization);
 		
 		// ACT/ASSERT
 		assertJsonFileDeserialization(filename, expectedValue, String.class);
@@ -166,73 +172,6 @@ public class JsonSerializerTests {
 		
 		// ACT/ASSERT
 		assertJsonDeserialization(jsonSerialization, expectedList, new TypeReference<List<String>>() {});
-	}
-	
-	
-	//==================================================================================================================
-	// File IO Support
-	//==================================================================================================================
-	
-	private static final String BASE_DIRECTORY = "/tmp/" + JsonSerializerTests.class.getSimpleName();
-	
-	private File getFileHandle(String filename) {
-		File file = new File(BASE_DIRECTORY + "/" + filename + ".json");
-		return file;
-	}
-	
-	private File getPathAssuredFileHandle(String filename) {
-		File file = getFileHandle(filename);
-		file.getParentFile().mkdirs();
-		return file;
-	}
-	
-	private void writeFile(String filename, String content) {
-		try {
-			File destination = getPathAssuredFileHandle(filename);
-			
-			FileWriter fw = new FileWriter(destination);
-			
-			fw.write(content);
-			
-			fw.close();
-		}
-		catch (IOException e) {
-			fail(e.getMessage());
-		}
-	}
-	
-	private String readFile(String filename) {
-		String result = null;
-		
-		try {
-			File source = getFileHandle(filename);
-			FileReader fr = new FileReader(source);
-			BufferedReader br = new BufferedReader(fr);
-			
-			StringBuilder builder = new StringBuilder();
-			String line = br.readLine();
-			while (line != null) {
-				builder.append(line);
-				line = br.readLine();
-			}
-			
-			br.close();
-			
-			result = builder.toString();
-		}
-		catch (IOException e) {
-			fail(e.getMessage());
-		}
-		
-		return result;
-	}
-
-	private void deleteFile(String filename) {
-		File file = getFileHandle(filename);
-		boolean deleted = file.delete();
-		if (!deleted) {
-			fail(String.format("Deletion of %s failed.", file.getAbsolutePath()));
-		}
 	}
 	
 }
