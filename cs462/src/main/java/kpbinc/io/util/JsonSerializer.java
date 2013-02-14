@@ -11,10 +11,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * NLP group's CCASH project.
  * 
  * @author Kevin Black
- *
  */
 public class JsonSerializer {
 
+	//==================================================================================================================
+	// Class Data & Initialization
+	//==================================================================================================================
+	
 	private static ObjectMapper mapper = initializeMapper();
 	
 	/**
@@ -26,6 +29,15 @@ public class JsonSerializer {
 		return new ObjectMapper();
 	}
 	
+	
+	//==================================================================================================================
+	// Interface
+	//==================================================================================================================
+	
+	//------------------------------------------------------------------------------------------------------------------
+	// Serialization
+	//------------------------------------------------------------------------------------------------------------------
+	
 	public static String serialize(Object object) throws IOException {
 		String jsonSerialization = mapper.writeValueAsString(object);
 		return jsonSerialization;
@@ -34,6 +46,10 @@ public class JsonSerializer {
 	public static void serialize(Object object, File file) throws IOException {
 		mapper.writeValue(file, object);
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	// Deserialization
+	//------------------------------------------------------------------------------------------------------------------
 	
 	public static <T> T deserialize(String jsonSerialization, Class<T> clazz) throws IOException {
 		T deserializedObject = mapper.readValue(jsonSerialization, clazz);
