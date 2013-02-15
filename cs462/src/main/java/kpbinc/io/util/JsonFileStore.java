@@ -14,17 +14,58 @@ import com.fasterxml.jackson.core.type.TypeReference;
  */
 public class JsonFileStore<T> {
 
+	//==================================================================================================================
+	// Member Data
+	//==================================================================================================================
+	
 	private File fileStore;
 	
+	private TypeReference<T> typeRef;
+	
+	
+	//==================================================================================================================
+	// Initialization
+	//==================================================================================================================
+	
 	/**
-	 * @param fileStore the file to read/write, must exist
+	 * Constructs a JsonFileStore instance. Only use this method if the type is only composed of basic serialization
+	 * types known to Jackson. Use the other constructor if you use custom object types.
+	 * 
+	 * @param fileStore the file to read/write, must be a file
 	 */
 	public JsonFileStore(File fileStore) {
+		setFileStore(fileStore);
+		setTypeReference(new TypeReference<T>() {});
+	}
+	
+	/**
+	 * Constructs a JsonFileStore instance. Specifically intended to facilitate the use of custom types, although it
+	 * will work for the basic serialization types as well.
+	 * 
+	 * @param fileStore the file to read/write, must be a file
+	 * @param typeRef a type reference describing the custom type
+	 */
+	public JsonFileStore(File fileStore, TypeReference<T> typeRef) {
+		setFileStore(fileStore);
+		setTypeReference(typeRef);
+	}
+	
+	private void setFileStore(File fileStore) {
 		assert(fileStore != null);
 		assert(fileStore.isFile());
 		
 		this.fileStore = fileStore;
 	}
+	
+	private void setTypeReference(TypeReference<T> typeRef) {
+		assert(typeRef != null);
+		
+		this.typeRef = typeRef;
+	}
+	
+	//==================================================================================================================
+	// Interface
+	//==================================================================================================================
 	
 	/**
 	 * Commits (serializes) the given object to the filestore. Does not handle IOExceptions that occur while trying to
@@ -61,7 +102,7 @@ public class JsonFileStore<T> {
 	 * @return deserialized object
 	 */
 	public T readRaw() throws IOException {
-		T object = JsonSerializer.deserialize(fileStore, new TypeReference<T>() {});
+		T object = JsonSerializer.deserialize(fileStore, typeRef);
 		return object;
 	}
 	
