@@ -1,13 +1,14 @@
 package kpbinc.cs462.ffds.model;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.io.util.JsonFileStore;
+import kpbinc.io.util.JsonFileStorePersistentMap;
 
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,15 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Scope(value = "singleton")
 public class AuthorizationTokenManager {
 
+	//==================================================================================================================
+	// Class Data
+	//==================================================================================================================
+	
 	private static final String AUTH_TOKEN_STORE_FILEPATH = "/WEB-INF/ffds/logs/authtokens.json";
 	
 	public static class TokenWrapper {
@@ -76,27 +80,38 @@ public class AuthorizationTokenManager {
 		}
 	}
 	
+	//==================================================================================================================
+	// Member Data
+	//==================================================================================================================
+	
 	@Autowired
 	private ServletContext servletContext;
 	
-	private Map<String, Map<String, TokenWrapper>> authorizationTokensIndex = null;
+	private JsonFileStorePersistentMap<String, Map<String, TokenWrapper>> authorizationTokensIndex = null;
+	
+	
+	//==================================================================================================================
+	// Initialization
+	//==================================================================================================================
 	
 	public AuthorizationTokenManager() {
 		GlobalLogUtils.logConstruction(this);
 	}
 	
-	private Map<String, Map<String, TokenWrapper>> getIndex() {
+	
+	//==================================================================================================================
+	// Interface
+	//==================================================================================================================
+	
+	private JsonFileStorePersistentMap<String, Map<String, TokenWrapper>> getIndex() {
 		if (authorizationTokensIndex == null) {
-			try {
-				ObjectMapper mapper = new ObjectMapper();
-				String fullPath = servletContext.getRealPath(AUTH_TOKEN_STORE_FILEPATH);
-				File authTokenStoreFile = new File(fullPath);
-				authorizationTokensIndex = mapper.readValue(authTokenStoreFile, new TypeReference<Map<String, Map<String, TokenWrapper>>>(){});
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-				authorizationTokensIndex = new HashMap<String, Map<String, TokenWrapper>>();
-			}
+			String fullPath = servletContext.getRealPath(AUTH_TOKEN_STORE_FILEPATH);
+			File authTokenStoreFile = new File(fullPath);
+			JsonFileStore<Map<String, Map<String, TokenWrapper>>> fileStore = 
+					new JsonFileStore<Map<String, Map<String, TokenWrapper>>>(authTokenStoreFile, 
+							new TypeReference<Map<String, Map<String, TokenWrapper>>>() {});
+			authorizationTokensIndex = JsonFileStorePersistentMap.
+					<String, Map<String,TokenWrapper>>buildWithDelegateFromFileStore(fileStore);
 		}
 		return authorizationTokensIndex;
 	}
@@ -129,16 +144,8 @@ public class AuthorizationTokenManager {
 		TokenWrapper formerWrappedToken = apiAuthTokenIndex.put(api, newWrappedToken);
 		Token formerAuthToken = (formerWrappedToken != null ? formerWrappedToken.getWrappedToken() : null);
 		
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			String fullPath = servletContext.getRealPath(AUTH_TOKEN_STORE_FILEPATH);
-			File authTokenStoreFile = new File(fullPath);
-			mapper.writeValue(authTokenStoreFile, authorizationTokensIndex);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		getIndex().commit();
+
 		return formerAuthToken;
 	}
 	
