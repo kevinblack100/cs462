@@ -1,12 +1,8 @@
 package kpbinc.io.util;
 
-import java.io.File;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * Map decorator that persists the map to a json file any time the map itself is changed. Does not monitor the contents
@@ -18,60 +14,49 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * @param <K> key type
  * @param <V> value type
  */
-public class JsonFileStorePersistentMap<K, V, T extends Map<K, V>> implements Map<K, V> {
+public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
 
 	//==================================================================================================================
 	// Member Data
 	//==================================================================================================================
 	
-	private T delegate;
+	private Map<K, V> delegate;
 	
-	private JsonFileStore<T> fileStore;
-	
-	private TypeReference<T> typeRef;
+	private JsonFileStore<Map<K, V>> fileStore;
 	
 	
 	//==================================================================================================================
 	// Initialization
 	//==================================================================================================================
-	
+
 	/**
-	 * Creates a new JsonFileStorePersistentMap, reading the delegate map from the given file. If the delegate cannot
-	 * be read then defaults to an empty HashMap.
+	 * Creates a new JsonFileStorePersistentMap, reading the map from the file store or writing the delegate map to the
+	 * given file store.
 	 * 
-	 * @param fileStoreFile file to read the map from and persist the map to
+	 * @param fileStore the json file store, configured to properly read and write the stored map type
+	 * @param readFlag whether to read the initial map from the file store are write the given map to the file store
+	 * @param defaultOrDelegate default map if readFlag == true and reading from the file store fails, initial delegate
+	 * if readFlag == false
 	 */
-	public JsonFileStorePersistentMap(File fileStoreFile) {
-		this.fileStore = new JsonFileStore<T>(fileStoreFile);
-		this.delegate = fileStore.read();
-		assert(this.delegate != null);
-	}
-	
-	/**
-	 * Creates a new JsonFileStorePersistentMap, reading the delegate map from the given file. If the delegate cannot
-	 * be read then defaults to an empty HashMap.
-	 * 
-	 * @param fileStoreFile file to read the map from and persist the map to
-	 */
-	public JsonFileStorePersistentMap(File fileStoreFile, TypeReference<T> typeRef) {
-		this.typeRef = typeRef;
-		this.fileStore = new JsonFileStore<T>(fileStoreFile, typeRef);
-		this.delegate = fileStore.read();
-		assert(this.delegate != null);
-	}
-	
-	/**
-	 * Creates a new JsonFileStorePersistentMap, writing the delegate map to the given file.
-	 * 
-	 * @param fileStoreFile file to persist the map to
-	 */
-	public JsonFileStorePersistentMap(File fileStoreFile, T delegate) {
-		assert(delegate != null);
+	public JsonFileStorePersistentMap(
+			JsonFileStore<Map<K, V>> fileStore,
+			boolean readFlag,
+			Map<K, V> defaultOrDelegate) {
+		assert(fileStore != null);
+		assert(defaultOrDelegate != null);
 		
-		this.delegate = delegate;
-		this.fileStore = new JsonFileStore<T>(fileStoreFile);
+		this.fileStore = fileStore;
 		
-		commit();
+		if (readFlag) {
+			this.delegate = fileStore.read();
+			if (this.delegate == null) {
+				this.delegate = defaultOrDelegate;
+			}
+		}
+		else {
+			this.delegate = defaultOrDelegate;
+			commit();
+		}
 	}
 	
 	
