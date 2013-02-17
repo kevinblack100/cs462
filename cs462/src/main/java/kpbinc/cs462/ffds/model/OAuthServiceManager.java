@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.io.util.JsonFileStore;
+import kpbinc.io.util.JsonFileStorePersistentMap;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;
@@ -23,6 +25,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Scope(value = "singleton")
 public class OAuthServiceManager {
 
+	//==================================================================================================================
+	// Class Data
+	//==================================================================================================================
+	
 	private static final String API_APP_CONFIG_FILEPATH = "/WEB-INF/ffds/config/apiclientconfig.json";
 	
 	@SuppressWarnings("unused")
@@ -61,6 +67,10 @@ public class OAuthServiceManager {
 		
 	}
 	
+	//==================================================================================================================
+	// Member Data
+	//==================================================================================================================
+	
 	@Autowired
 	private ServletContext servletContext;
 	
@@ -68,9 +78,19 @@ public class OAuthServiceManager {
 	
 	private Map<String, Map<String, OAuthService>> apiOAuthServices = new HashMap<String, Map<String, OAuthService>>();
 	
+	
+	//==================================================================================================================
+	// Initialization
+	//==================================================================================================================
+	
 	public OAuthServiceManager() {
 		GlobalLogUtils.logConstruction(this);
 	}
+	
+	
+	//==================================================================================================================
+	// Interface
+	//==================================================================================================================
 	
 	public OAuthService getOAuthService(String api, String username) {
 		Map<String, OAuthService> usernameToService = apiOAuthServices.get(api);
@@ -107,16 +127,13 @@ public class OAuthServiceManager {
 	
 	private Map<String, APIClientConfiguration> getAPIClientConfigurations() {
 		if (apiClientConfigurations == null) {
-			try {
-				ObjectMapper mapper = new ObjectMapper();
-				String fullPath = servletContext.getRealPath(API_APP_CONFIG_FILEPATH);
-				File apiClientConfigFile = new File(fullPath);
-				apiClientConfigurations = mapper.readValue(apiClientConfigFile, new TypeReference<Map<String, APIClientConfiguration>>(){});
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-				apiClientConfigurations = new HashMap<String, APIClientConfiguration>();
-			}
+			String fullPath = servletContext.getRealPath(API_APP_CONFIG_FILEPATH);
+			File apiClientConfigFile = new File(fullPath);
+			JsonFileStore<Map<String, APIClientConfiguration>> fileStore =
+					new JsonFileStore<Map<String, APIClientConfiguration>>(apiClientConfigFile, 
+							new TypeReference<Map<String, APIClientConfiguration>>() {});
+			apiClientConfigurations = JsonFileStorePersistentMap.
+					<String, APIClientConfiguration>buildWithDelegateFromFileStore(fileStore);
 		}
 		return apiClientConfigurations;
 	}
