@@ -123,20 +123,4 @@ public class JsonFileStore<T> {
 		return object;
 	}
 	
-	public T readRawAlt(TypeReference<T> typeRef) throws IOException {
-		T object = JsonSerializer.deserialize(fileStore, typeRef);
-		return object;
-	}
-	
-	public T readAlt(TypeReference<T> typeRef) {
-		T object = null;
-		try {
-			object = readRawAlt(typeRef);
-		}
-		catch (IOException e) {
-			// do nothing
-		}
-		return object;
-	}
-	
 }

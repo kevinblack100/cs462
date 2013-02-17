@@ -152,7 +152,9 @@ public class JsonFileStorePersistentMapTests {
 		map.put("Z", zValueWrapper);
 		
 		File output = fileIOContext.getPathAssuredFileHandle("commit");
-		JsonFileStore<Map<String, Wrapper<String>>> fileStore = new JsonFileStore<Map<String, Wrapper<String>>>(output);
+		TypeReference<Map<String, Wrapper<String>>> typeRef = new TypeReference<Map<String, Wrapper<String>>>() {};
+		JsonFileStore<Map<String, Wrapper<String>>> fileStore = 
+				new JsonFileStore<Map<String, Wrapper<String>>>(output, typeRef);
 		
 		JsonFileStorePersistentMap<String, Wrapper<String>> jfspMap = 
 				new JsonFileStorePersistentMap<String, Wrapper<String>>(map, output);
@@ -161,15 +163,14 @@ public class JsonFileStorePersistentMapTests {
 		zValueWrapper.setWrappedObject("really, the last letter");
 		
 		// ASSERT (1)
-		TypeReference<Map<String, Wrapper<String>>> typeRef = new TypeReference<Map<String, Wrapper<String>>>() {};
-		Map<String, Wrapper<String>> persistedMap1 = fileStore.readAlt(typeRef);
+		Map<String, Wrapper<String>> persistedMap1 = fileStore.read();
 		assertNotEquals(jfspMap, persistedMap1);
 		
 		// ACT (2)
 		jfspMap.commit();
 		
 		// ASSERT (2)
-		Map<String, Wrapper<String>> persistedMap2 = fileStore.readAlt(typeRef);
+		Map<String, Wrapper<String>> persistedMap2 = fileStore.read();
 		assertEquals(jfspMap, persistedMap2);
 	}
 	
