@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 /**
  * Map decorator that persists the map to a json file any time the map itself is changed. Does not monitor the contents
  * of the map, so the client is responsible to call commit() after modifying the contents if they want the contents
@@ -16,15 +18,17 @@ import java.util.Set;
  * @param <K> key type
  * @param <V> value type
  */
-public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
+public class JsonFileStorePersistentMap<K, V, T extends Map<K, V>> implements Map<K, V> {
 
 	//==================================================================================================================
 	// Member Data
 	//==================================================================================================================
 	
-	private Map<K, V> delegate;
+	private T delegate;
 	
-	private JsonFileStore<Map<K, V>> fileStore;
+	private JsonFileStore<T> fileStore;
+	
+	private TypeReference<T> typeRef;
 	
 	
 	//==================================================================================================================
@@ -38,11 +42,22 @@ public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
 	 * @param fileStoreFile file to read the map from and persist the map to
 	 */
 	public JsonFileStorePersistentMap(File fileStoreFile) {
-		this.fileStore = new JsonFileStore<Map<K,V>>(fileStoreFile);
+		this.fileStore = new JsonFileStore<T>(fileStoreFile);
 		this.delegate = fileStore.read();
-		if (this.delegate == null) {
-			this.delegate = new HashMap<K, V>();
-		}
+		assert(this.delegate != null);
+	}
+	
+	/**
+	 * Creates a new JsonFileStorePersistentMap, reading the delegate map from the given file. If the delegate cannot
+	 * be read then defaults to an empty HashMap.
+	 * 
+	 * @param fileStoreFile file to read the map from and persist the map to
+	 */
+	public JsonFileStorePersistentMap(File fileStoreFile, TypeReference<T> typeRef) {
+		this.typeRef = typeRef;
+		this.fileStore = new JsonFileStore<T>(fileStoreFile, typeRef);
+		this.delegate = fileStore.read();
+		assert(this.delegate != null);
 	}
 	
 	/**
@@ -50,11 +65,11 @@ public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
 	 * 
 	 * @param fileStoreFile file to persist the map to
 	 */
-	public JsonFileStorePersistentMap(Map<K, V> delegate, File fileStoreFile) {
+	public JsonFileStorePersistentMap(File fileStoreFile, T delegate) {
 		assert(delegate != null);
 		
 		this.delegate = delegate;
-		this.fileStore = new JsonFileStore<Map<K, V>>(fileStoreFile);
+		this.fileStore = new JsonFileStore<T>(fileStoreFile);
 		
 		commit();
 	}
