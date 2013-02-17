@@ -1,6 +1,7 @@
 package kpbinc.io.util;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,33 +31,61 @@ public class JsonFileStorePersistentMap<K, V> implements Map<K, V> {
 	//==================================================================================================================
 
 	/**
-	 * Creates a new JsonFileStorePersistentMap, reading the map from the file store or writing the delegate map to the
-	 * given file store.
+	 * Creates a new JsonFileStorePersistentMap with the given file store and delegate.
 	 * 
 	 * @param fileStore the json file store, configured to properly read and write the stored map type
-	 * @param readFlag whether to read the initial map from the file store are write the given map to the file store
-	 * @param defaultOrDelegate default map if readFlag == true and reading from the file store fails, initial delegate
-	 * if readFlag == false
+	 * @param delegate map decorated by this JsonFileStorePersistentMap
 	 */
-	public JsonFileStorePersistentMap(
-			JsonFileStore<Map<K, V>> fileStore,
-			boolean readFlag,
-			Map<K, V> defaultOrDelegate) {
+	public JsonFileStorePersistentMap(JsonFileStore<Map<K, V>> fileStore, Map<K, V> delegate) {
 		assert(fileStore != null);
-		assert(defaultOrDelegate != null);
+		assert(delegate != null);
 		
 		this.fileStore = fileStore;
-		
-		if (readFlag) {
-			this.delegate = fileStore.read();
-			if (this.delegate == null) {
-				this.delegate = defaultOrDelegate;
-			}
+		this.delegate = delegate;
+	}
+	
+	/**
+	 * Creates a new JsonFileStorePersistentMap with the given file store and an empty delegate map.
+	 * 
+	 * @param fileStore the json file store, configured to properly read and write the stored map type
+	 * @return the constructed JsonFileStorePersistentMap
+	 */
+	public static <K, V> JsonFileStorePersistentMap<K, V> buildWithEmptyDelegate(JsonFileStore<Map<K, V>> fileStore) {
+		Map<K, V> delegate = new HashMap<K, V>();
+		JsonFileStorePersistentMap<K, V> result = new JsonFileStorePersistentMap<K, V>(fileStore, delegate);
+		return result;
+	}
+
+	/**
+	 * Creates a new JsonFileStorePersistentMap with the given file store, reading the delegate map from the file store.
+	 * Falls back to buildWithEmptyDelegate if reading the initial delegate is unsuccessful.
+	 * 
+	 * @param fileStore the json file store, configured to properly read and write the stored map type
+	 * @return the constructed JsonFileStorePersistentMap
+	 */
+	public static <K, V> JsonFileStorePersistentMap<K, V> buildWithDelegateFromFileStore(JsonFileStore<Map<K, V>> fileStore) {
+		Map<K, V> delegate = fileStore.read();
+		JsonFileStorePersistentMap<K, V> result = null;
+		if (delegate == null) {
+			result = buildWithEmptyDelegate(fileStore);
 		}
 		else {
-			this.delegate = defaultOrDelegate;
-			commit();
+			result = new JsonFileStorePersistentMap<K, V>(fileStore, delegate);
 		}
+		return result;
+	}
+	
+	/**
+	 * Creates a new JsonFileStorePersistentMap with the given file store and delegate and commits the delegate.
+	 * 
+	 * @param fileStore the json file store, configured to properly read and write the stored map type
+	 * @param delegate map decorated by this JsonFileStorePersistentMap
+	 * @return the constructed JsonFileStorePersistentMap
+	 */
+	public static <K, V> JsonFileStorePersistentMap<K, V> buildWithDelegate(JsonFileStore<Map<K, V>> fileStore, Map<K, V> delegate) {
+		JsonFileStorePersistentMap<K, V> result = new JsonFileStorePersistentMap<K, V>(fileStore, delegate);
+		result.commit();
+		return result;
 	}
 	
 	

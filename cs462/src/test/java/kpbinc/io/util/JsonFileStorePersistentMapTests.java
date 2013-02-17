@@ -39,8 +39,7 @@ public class JsonFileStorePersistentMapTests {
 		fileStore.commit(map);
 		
 		// ACT
-		boolean readFlag = false;
-		Map<String, String> jfspMap = new JsonFileStorePersistentMap<String, String>(fileStore, readFlag, map);
+		Map<String, String> jfspMap = JsonFileStorePersistentMap.<String, String>buildWithDelegate(fileStore, map);
 		
 		// ASSERT
 		assertEquals(map, jfspMap);
@@ -57,8 +56,7 @@ public class JsonFileStorePersistentMapTests {
 		JsonFileStore<Map<String, String>> fileStore = new JsonFileStore<Map<String,String>>(output);
 		
 		// ACT
-		boolean readFlag = false;
-		Map<String, String> jfspMap = new JsonFileStorePersistentMap<String, String>(fileStore, readFlag, map);
+		Map<String, String> jfspMap = JsonFileStorePersistentMap.<String, String>buildWithDelegate(fileStore, map);
 		
 		// ASSERT
 		Map<String, String> persistedMap = fileStore.read();
@@ -75,8 +73,7 @@ public class JsonFileStorePersistentMapTests {
 		File output = fileIOContext.getPathAssuredFileHandle("clear");
 		JsonFileStore<Map<String, String>> fileStore = new JsonFileStore<Map<String,String>>(output);
 		
-		boolean readFlag = true;
-		Map<String, String> jfspMap = new JsonFileStorePersistentMap<String, String>(fileStore, readFlag, map);
+		Map<String, String> jfspMap = JsonFileStorePersistentMap.<String, String>buildWithDelegate(fileStore, map);
 		
 		// ACT
 		jfspMap.clear();
@@ -96,8 +93,7 @@ public class JsonFileStorePersistentMapTests {
 		File output = fileIOContext.getPathAssuredFileHandle("put-key-value");
 		JsonFileStore<Map<String, String>> fileStore = new JsonFileStore<Map<String,String>>(output);
 		
-		boolean readFlag = false;
-		Map<String, String> jfspMap = new JsonFileStorePersistentMap<String, String>(fileStore, readFlag, map);
+		Map<String, String> jfspMap = JsonFileStorePersistentMap.<String, String>buildWithDelegate(fileStore, map);
 		
 		// ACT
 		jfspMap.put("B", "second letter");
@@ -113,9 +109,7 @@ public class JsonFileStorePersistentMapTests {
 		File output = fileIOContext.getPathAssuredFileHandle("put-all");
 		JsonFileStore<Map<String, String>> fileStore = new JsonFileStore<Map<String,String>>(output);
 		
-		boolean readFlag = true;
-		Map<String, String> jfspMap =
-				new JsonFileStorePersistentMap<String, String>(fileStore, readFlag, new HashMap<String, String>());
+		Map<String, String> jfspMap = JsonFileStorePersistentMap.<String, String>buildWithDelegateFromFileStore(fileStore);
 		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("A", "first letter");
@@ -139,8 +133,7 @@ public class JsonFileStorePersistentMapTests {
 		File output = fileIOContext.getPathAssuredFileHandle("remove-key");
 		JsonFileStore<Map<String, String>> fileStore = new JsonFileStore<Map<String,String>>(output);
 		
-		boolean readFlag = false;
-		Map<String, String> jfspMap = new JsonFileStorePersistentMap<String, String>(fileStore, readFlag, map);
+		Map<String, String> jfspMap = JsonFileStorePersistentMap.<String, String>buildWithDelegate(fileStore, map);
 		
 		// ACT
 		jfspMap.remove("A");
@@ -163,9 +156,8 @@ public class JsonFileStorePersistentMapTests {
 		JsonFileStore<Map<String, Wrapper<String>>> fileStore = 
 				new JsonFileStore<Map<String, Wrapper<String>>>(output, typeRef);
 		
-		boolean readFlag = false;
 		JsonFileStorePersistentMap<String, Wrapper<String>> jfspMap = 
-				new JsonFileStorePersistentMap<String, Wrapper<String>>(fileStore, readFlag, map);
+				JsonFileStorePersistentMap.<String, Wrapper<String>>buildWithDelegate(fileStore, map);
 		
 		// ACT (1)
 		zValueWrapper.setWrappedObject("really, the last letter");
