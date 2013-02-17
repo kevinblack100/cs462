@@ -162,14 +162,14 @@ public class JsonFileStorePersistentMapTests {
 		// ACT (1)
 		zValueWrapper.setWrappedObject("really, the last letter");
 		
-		// ASSERT (1)
+		// ASSERT (1) map not persisted yet
 		Map<String, Wrapper<String>> persistedMap1 = fileStore.read();
 		assertNotEquals(jfspMap, persistedMap1);
 		
 		// ACT (2)
 		jfspMap.commit();
 		
-		// ASSERT (2)
+		// ASSERT (2) map now persisted
 		Map<String, Wrapper<String>> persistedMap2 = fileStore.read();
 		assertEquals(jfspMap, persistedMap2);
 	}
