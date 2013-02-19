@@ -28,7 +28,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/users")
 public class UserController {
 	
+	//==================================================================================================================
+	// Class Data
+	//==================================================================================================================
+	
 	private static final Logger logger = Logger.getLogger(UserController.class.getName());
+	
+	
+	//==================================================================================================================
+	// Member Data
+	//==================================================================================================================
 	
 	@Autowired
 	private LoginController loginController;
@@ -42,9 +51,18 @@ public class UserController {
 	@Autowired
 	private AuthorizationTokenManager authorizationTokenManager;
 	
+	
+	//==================================================================================================================
+	// Initialization
+	//==================================================================================================================
+	
 	public UserController() {
 		GlobalLogUtils.logConstruction(this);
 	}
+	
+	//==================================================================================================================
+	// Interface
+	//==================================================================================================================
 	
 	@RequestMapping
 	public String listAll(ModelMap model) {
