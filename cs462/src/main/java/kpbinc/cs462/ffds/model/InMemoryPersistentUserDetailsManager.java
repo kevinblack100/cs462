@@ -24,8 +24,8 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@Repository
-@Scope(value = "singleton")
+//@Repository(value = "inMemoryPersistentUserDetailsManager")
+//@Scope(value = "singleton")
 public class InMemoryPersistentUserDetailsManager implements UserDetailsService, UserDetailsManager {
 
 	//==================================================================================================================

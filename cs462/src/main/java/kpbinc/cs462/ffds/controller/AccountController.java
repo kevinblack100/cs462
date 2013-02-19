@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
+import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -57,7 +58,7 @@ public class AccountController {
 	private LoginController loginController;
 	
 	@Autowired
-	private InMemoryUserDetailsManager userDetailsManager;
+	private InMemoryPersistentUserDetailsManager userDetailsManager;
 	
 	
 	//==================================================================================================================
