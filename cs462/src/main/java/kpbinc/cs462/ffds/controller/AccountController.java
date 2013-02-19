@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -119,7 +120,11 @@ public class AccountController {
 	//------------------------------------------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
-	public String getManagementForm() {
+	public String getManagementForm(ModelMap model) {
+		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
+		assert(loggedInUserDetails != null);
+		boolean isDriver = loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER);
+		model.addAttribute("isDriver", isDriver);
 		return "accounts/manage";
 	}
 	

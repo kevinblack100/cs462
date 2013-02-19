@@ -9,7 +9,7 @@
 			<fieldset>
 				<span>How would you like to use the system?</span>
 				<br />
-				<input type="checkbox" id="driver-indicator" name="driver-indicator" value="true" />
+				<input type="checkbox" id="driver-indicator" name="driver-indicator" ${isDriver ? "checked" : "" } value="true" />
 				<label for="driver-indicator">Flower delivery driver</label>
 				<br />
 				<input type="submit" id="submit" name="submit" value="Save" />
