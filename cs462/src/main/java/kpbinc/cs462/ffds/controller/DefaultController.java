@@ -1,7 +1,6 @@
 package kpbinc.cs462.ffds.controller;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
-import kpbinc.cs462.ffds.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -15,9 +14,6 @@ public class DefaultController {
 
 	@Autowired
 	private LoginController loginController;
-	
-	@Autowired
-	private User subject;
 	
 	public DefaultController() {
 		GlobalLogUtils.logConstruction(this);
