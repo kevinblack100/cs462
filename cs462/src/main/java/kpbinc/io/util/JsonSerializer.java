@@ -3,6 +3,10 @@ package kpbinc.io.util;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.security.core.userdetails.User;
+
+import kpbinc.cs462.ffds.model.mixin.UserJsonAnnotatedMixin;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,12 +25,14 @@ public class JsonSerializer {
 	private static ObjectMapper mapper = initializeMapper();
 	
 	/**
-	 * Initializes the ObjectMapper instance.
+	 * Initializes an ObjectMapper instance.
 	 * 
 	 * @return initialized ObjectMapper instance.
 	 */
 	private static ObjectMapper initializeMapper() {
-		return new ObjectMapper();
+		ObjectMapper result = new ObjectMapper();
+		result.addMixInAnnotations(User.class, UserJsonAnnotatedMixin.class);
+		return result;
 	}
 	
 	

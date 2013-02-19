@@ -191,15 +191,17 @@ public class JsonSerializerTests {
 		authorities.add(GrantedAuthorityRoles.ROLE_USER);
 		UserDetails user = new User("avgjoe", "password", authorities);
 		String expectedJsonSerialization = String.format(
-				"{\"password\":\"%s\"," +
+				"{" + 
 				"\"username\":\"%s\"," +
-				"\"authorities\":[{" +
-				"\"authority\":\"%s\"}]," +
+				"\"password\":\"%s\"," +
+				"\"enabled\":true," +
 				"\"accountNonExpired\":true," +
-				"\"accountNonLocked\":true," +
 				"\"credentialsNonExpired\":true," +
-				"\"enabled\":true}",
-				user.getPassword(), user.getUsername(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
+				"\"accountNonLocked\":true," +
+				"\"authorities\":[{" +
+					"\"authority\":\"%s\"}]" +
+				"}",
+				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
 		
 		// ACT/ASSERT
 		assertJsonSerialization(user, expectedJsonSerialization);
@@ -212,15 +214,17 @@ public class JsonSerializerTests {
 		authorities.add(GrantedAuthorityRoles.ROLE_USER);
 		User user = new User("avgjoe", "password", authorities);
 		String jsonSerialization = String.format(
-				"{\"password\":\"%s\"," +
+				"{" + 
 				"\"username\":\"%s\"," +
-				"\"authorities\":[{" +
-				"\"authority\":\"%s\"}]," +
+				"\"password\":\"%s\"," +
+				"\"enabled\":true," +
 				"\"accountNonExpired\":true," +
-				"\"accountNonLocked\":true," +
 				"\"credentialsNonExpired\":true," +
-				"\"enabled\":true}",
-				user.getPassword(), user.getUsername(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
+				"\"accountNonLocked\":true," +
+				"\"authorities\":[{" +
+					"\"authority\":\"%s\"}]" +
+				"}",
+				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
 		
 		// ACT/ASSERT
 		assertJsonDeserialization(jsonSerialization, user, User.class);
