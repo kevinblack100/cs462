@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import kpbinc.cs462.ffds.model.mixin.SimpleGrantedAuthorityJacksonAnnotatedMixin;
+import kpbinc.cs462.ffds.model.mixin.UserDetailsJacksonAnnotatedMixin;
 import kpbinc.cs462.ffds.model.mixin.UserJsonAnnotatedMixin;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -33,6 +35,7 @@ public class JsonSerializer {
 	 */
 	private static ObjectMapper initializeMapper() {
 		ObjectMapper result = new ObjectMapper();
+		result.addMixInAnnotations(UserDetails.class, UserDetailsJacksonAnnotatedMixin.class);
 		result.addMixInAnnotations(User.class, UserJsonAnnotatedMixin.class);
 		result.addMixInAnnotations(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJacksonAnnotatedMixin.class);
 		return result;

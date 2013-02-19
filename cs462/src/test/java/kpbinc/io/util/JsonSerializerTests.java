@@ -212,7 +212,7 @@ public class JsonSerializerTests {
 		// ARRANGE
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(GrantedAuthorityRoles.ROLE_USER);
-		User user = new User("avgjoe", "password", authorities);
+		UserDetails user = new User("avgjoe", "password", authorities);
 		String jsonSerialization = String.format(
 				"{" + 
 				"\"username\":\"%s\"," +
@@ -227,7 +227,7 @@ public class JsonSerializerTests {
 				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
 		
 		// ACT/ASSERT
-		assertJsonDeserialization(jsonSerialization, user, User.class);
+		assertJsonDeserialization(jsonSerialization, user, UserDetails.class);
 	}
 	
 }
