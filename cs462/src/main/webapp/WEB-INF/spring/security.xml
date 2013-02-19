@@ -34,8 +34,6 @@
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="inMemoryPersistentUserDetailsManager">
-<!-- 			<user-service properties="/WEB-INF/ffds/users.properties"> -->
-<!-- 			</user-service> -->
 		</authentication-provider>
 	</authentication-manager>
 	

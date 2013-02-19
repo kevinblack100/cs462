@@ -108,20 +108,6 @@ public class AccountController {
 			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
 			
-			// write entry to the users.properties file as well
-			try {
-				String filePath = servletContext.getRealPath("/WEB-INF/ffds/users.properties");
-				File userPropertiesFile = new File(filePath);
-				boolean append = true;
-				FileWriter writer = new FileWriter(userPropertiesFile, append);
-				String accountEntry = String.format("\n%s=%s,%s,enabled", username, defaultPassword, GrantedAuthorityRoles.ROLE_USER.getAuthority());
-				writer.write(accountEntry);
-				writer.close();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			
 			redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/signin/query");
 		}
 		
