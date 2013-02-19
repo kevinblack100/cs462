@@ -5,11 +5,17 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
 import kpbinc.test.io.util.FileIOTestContext;
 
 import org.junit.Test;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -172,6 +178,52 @@ public class JsonSerializerTests {
 		
 		// ACT/ASSERT
 		assertJsonDeserialization(jsonSerialization, expectedList, new TypeReference<List<String>>() {});
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	// User Serialization
+	//------------------------------------------------------------------------------------------------------------------
+	
+	@Test
+	public void testUserSerialization() {
+		// ARRANGE
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(GrantedAuthorityRoles.ROLE_USER);
+		UserDetails user = new User("avgjoe", "password", authorities);
+		String expectedJsonSerialization = String.format(
+				"{\"password\":\"%s\"," +
+				"\"username\":\"%s\"," +
+				"\"authorities\":[{" +
+				"\"authority\":\"%s\"}]," +
+				"\"accountNonExpired\":true," +
+				"\"accountNonLocked\":true," +
+				"\"credentialsNonExpired\":true," +
+				"\"enabled\":true}",
+				user.getPassword(), user.getUsername(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
+		
+		// ACT/ASSERT
+		assertJsonSerialization(user, expectedJsonSerialization);
+	}
+	
+	@Test
+	public void testUserDeserialization() {
+		// ARRANGE
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(GrantedAuthorityRoles.ROLE_USER);
+		User user = new User("avgjoe", "password", authorities);
+		String jsonSerialization = String.format(
+				"{\"password\":\"%s\"," +
+				"\"username\":\"%s\"," +
+				"\"authorities\":[{" +
+				"\"authority\":\"%s\"}]," +
+				"\"accountNonExpired\":true," +
+				"\"accountNonLocked\":true," +
+				"\"credentialsNonExpired\":true," +
+				"\"enabled\":true}",
+				user.getPassword(), user.getUsername(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
+		
+		// ACT/ASSERT
+		assertJsonDeserialization(jsonSerialization, user, User.class);
 	}
 	
 }
