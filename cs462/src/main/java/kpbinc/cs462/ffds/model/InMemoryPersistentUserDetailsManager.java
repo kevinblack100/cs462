@@ -3,7 +3,9 @@ package kpbinc.cs462.ffds.model;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -67,6 +69,11 @@ public class InMemoryPersistentUserDetailsManager implements UserDetailsService,
 	//==================================================================================================================
 	// Interface
 	//==================================================================================================================
+	
+	public Set<String> getAllUsernames() {
+		Set<String> result = Collections.unmodifiableSet(managedUserDetails.keySet());
+		return result;
+	}
 	
 	@Override
 	public void createUser(UserDetails user) {

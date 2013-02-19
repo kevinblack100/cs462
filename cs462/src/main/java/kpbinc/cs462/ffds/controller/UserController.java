@@ -1,9 +1,5 @@
 package kpbinc.cs462.ffds.controller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +9,7 @@ import javax.servlet.ServletContext;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
+import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
 
 import org.scribe.exceptions.OAuthConnectionException;
 import org.scribe.model.Token;
@@ -47,6 +44,9 @@ public class UserController {
 	
 	@Autowired
 	private ServletContext servletContext;
+	
+	@Autowired
+	private InMemoryPersistentUserDetailsManager userDetailsManager;
 	
 	@Autowired
 	private AuthorizationTokenManager authorizationTokenManager;
@@ -107,32 +107,8 @@ public class UserController {
 	}
 	
 	public List<String> getAllUsernames() {
-		List<String> usernames = new ArrayList<String>();
-		
-		try {
-			// TODO extract and use file parsing code from CS 679 project
-			String filePath = servletContext.getRealPath("/WEB-INF/ffds/users.properties");
-			File userPropertiesFile = new File(filePath);
-			FileReader fr = new FileReader(userPropertiesFile);
-			BufferedReader br = new BufferedReader(fr);
-			
-			String line = br.readLine();
-			while (line != null) {
-				int equalsIndex = line.indexOf("=");
-				String username = line.substring(0, equalsIndex);
-				usernames.add(username);
-				
-				line = br.readLine();
-			}
-			
-			br.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		List<String> usernames = new ArrayList<String>(userDetailsManager.getAllUsernames());
 		Collections.sort(usernames);
-		
 		return usernames;
 	}
 	
