@@ -2,6 +2,7 @@ package kpbinc.io.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -14,6 +15,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
  */
 public class JsonFileStore<T> {
 
+	//==================================================================================================================
+	// Class Data
+	//==================================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(JsonFileStore.class.getName());
+	
+	
 	//==================================================================================================================
 	// Member Data
 	//==================================================================================================================
@@ -91,6 +99,7 @@ public class JsonFileStore<T> {
 		}
 		catch (IOException e) {
 			flag = false;
+			logger.warning("commit failed: " + e.getMessage());
 		}
 		return flag;
 	}
@@ -119,6 +128,7 @@ public class JsonFileStore<T> {
 		}
 		catch (IOException e) {
 			// do nothing
+			logger.warning("read failed: " + e.getMessage());
 		}
 		return object;
 	}
