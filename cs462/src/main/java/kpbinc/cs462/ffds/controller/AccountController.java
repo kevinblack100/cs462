@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -101,7 +102,7 @@ public class AccountController {
 			logger.info("Registering account with username: " + username + " and default password: " + defaultPassword);
 			
 			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+			authorities.add(GrantedAuthorityRoles.ROLE_USER);
 			
 			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
@@ -112,7 +113,7 @@ public class AccountController {
 				File userPropertiesFile = new File(filePath);
 				boolean append = true;
 				FileWriter writer = new FileWriter(userPropertiesFile, append);
-				String accountEntry = String.format("\n%s=%s,%s,enabled", username, defaultPassword, "ROLE_USER");
+				String accountEntry = String.format("\n%s=%s,%s,enabled", username, defaultPassword, GrantedAuthorityRoles.ROLE_USER.getAuthority());
 				writer.write(accountEntry);
 				writer.close();
 			}
@@ -144,17 +145,17 @@ public class AccountController {
 		String username = loggedInUserDetails.getUsername();
 		
 		if (isDriver) {
-			if (!loggedInUserDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+			if (!loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER)) {
 				Collection<GrantedAuthority> modifiedAuthorities = new ArrayList<GrantedAuthority>(loggedInUserDetails.getAuthorities());
-				modifiedAuthorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+				modifiedAuthorities.add(GrantedAuthorityRoles.ROLE_DRIVER);
 				
 				updateAuthorities(username, modifiedAuthorities);
 			}
 		}
 		else {
-			if (loggedInUserDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+			if (loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER)) {
 				Collection<GrantedAuthority> modifiedAuthorities = new ArrayList<GrantedAuthority>(loggedInUserDetails.getAuthorities());
-				modifiedAuthorities.remove(new SimpleGrantedAuthority("ROLE_DRIVER"));
+				modifiedAuthorities.remove(GrantedAuthorityRoles.ROLE_DRIVER);
 				
 				updateAuthorities(username, modifiedAuthorities);
 			}
