@@ -9,6 +9,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.cs462.ffds.model.DriverProfile;
+import kpbinc.cs462.ffds.model.DriverProfileManager;
 import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
 import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
 
@@ -55,6 +57,9 @@ public class AccountController {
 	
 	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
+	
+	@Autowired
+	private DriverProfileManager driverProfileManager;
 	
 	
 	//==================================================================================================================
@@ -139,7 +144,10 @@ public class AccountController {
 				
 				updateAuthorities(username, modifiedAuthorities);
 			}
-			// TODO store driverESL
+			
+			DriverProfile profile = new DriverProfile(username);
+			profile.setEventSignalURL(driverESL);
+			driverProfileManager.createOrUpdate(profile);
 		}
 		else {
 			if (loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER)) {
@@ -148,6 +156,7 @@ public class AccountController {
 				
 				updateAuthorities(username, modifiedAuthorities);
 			}
+			driverProfileManager.deleteProfileFor(username);
 		}
 		
 		return "redirect:/ffds/users/" + username;
