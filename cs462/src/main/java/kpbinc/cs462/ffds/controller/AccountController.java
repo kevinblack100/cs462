@@ -123,8 +123,17 @@ public class AccountController {
 	public String getManagementForm(ModelMap model) {
 		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
+		
 		boolean isDriver = loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER);
 		model.addAttribute("isDriver", isDriver);
+		
+		String driverESL = "";
+		DriverProfile profile = driverProfileManager.getProfileFor(loggedInUserDetails.getUsername());
+		if (profile != null) {
+			driverESL = profile.getEventSignalURL();
+		}
+		model.addAttribute("driverESL", driverESL);
+		
 		return "accounts/manage";
 	}
 	
