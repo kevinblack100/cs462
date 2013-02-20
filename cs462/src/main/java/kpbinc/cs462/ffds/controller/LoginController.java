@@ -47,11 +47,6 @@ public class LoginController extends BaseController implements Serializable {
 		response.sendRedirect(redirectLocation);
 	}
 	
-	public boolean isUserLoggedIn(String username) {
-		boolean result = getLoggedInUserContext().isUserLoggedIn(username);
-		return result;
-	}
-	
 	public UserDetails getSignedInUserDetails() {
 		UserDetails signedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		return signedInUserDetails;

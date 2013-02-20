@@ -81,7 +81,7 @@ public class UserController extends BaseController {
 		boolean hasFoursquareAuthToken = authorizationTokenManager.hasAuthorizationToken(username, "foursquare");
 		model.addAttribute("hasFoursquareAuthToken", hasFoursquareAuthToken);
 		
-		boolean userLoggedIn = loginController.isUserLoggedIn(username);
+		boolean userLoggedIn = getLoggedInUserContext().isUserLoggedIn(username);
 		model.addAttribute("userLoggedIn", userLoggedIn);
 		
 		if (hasFoursquareAuthToken) {
