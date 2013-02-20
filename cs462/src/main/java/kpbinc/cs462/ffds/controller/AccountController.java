@@ -53,9 +53,6 @@ public class AccountController extends BaseController {
 	private ApplicationConstants applicationConstants;
 	
 	@Autowired
-	private LoginController loginController;
-	
-	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
 	
 	@Autowired

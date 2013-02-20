@@ -35,10 +35,7 @@ public class UserController extends BaseController {
 	//==================================================================================================================
 	// Member Data
 	//==================================================================================================================
-	
-	@Autowired
-	private LoginController loginController;
-	
+
 	@Autowired
 	private OAuthController oauthController;
 	
