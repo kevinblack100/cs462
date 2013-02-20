@@ -121,7 +121,7 @@ public class AccountController extends BaseController {
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String getManagementForm(ModelMap model) {
-		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
+		UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
 		
 		boolean isDriver = loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER);
@@ -142,7 +142,7 @@ public class AccountController extends BaseController {
 			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
 			@RequestParam(value = "driver-esl", defaultValue = "") String driverESL) {
 		
-		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
+		UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
 		String username = loggedInUserDetails.getUsername();
 		
