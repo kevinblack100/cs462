@@ -12,6 +12,9 @@
 				<input type="checkbox" id="driver-indicator" name="driver-indicator" ${isDriver ? "checked" : "" } value="true" />
 				<label for="driver-indicator">Flower delivery driver</label>
 				<br />
+				<label for="driver-esl">Event Signal URL (ESL)</label>
+				<input type="text" id="driver-esl" name="driver-esl" size=60 />
+				<br />
 				<input type="submit" id="submit" name="submit" value="Save" />
 			</fieldset>
 		</form>
