@@ -5,6 +5,13 @@ import kpbinc.cs462.ffds.controller.policy.OrderPolicy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Defines common members used by all controllers (or the views rendered by the controllers). Though this class is not
+ * annotated as a @Controller the @Autowired members will be correctly initialized if the sub-classes that extend
+ * BaseController are annotated as @Controllers.
+ * 
+ * @author Kevin Black
+ */
 public abstract class BaseController {
 
 	//~ Member Data ====================================================================================================
