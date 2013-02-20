@@ -34,7 +34,7 @@ public class InMemoryPersistentUserDetailsManager implements UserDetailsService,
 	// Class Data
 	//==================================================================================================================
 	
-	private static final String fileStoreRelativePath = "/WEB-INF/ffds/user_details.json";
+	private static final String fileStoreRelativePath = "/WEB-INF/ffds/stores/userdetails.json";
 	
 	
 	//==================================================================================================================
