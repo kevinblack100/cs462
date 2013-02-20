@@ -6,6 +6,10 @@
 	|
 	<a href="${pageContext.request.contextPath}/ffds/users/">Users</a>
 	|
+	<c:if test="${orderPolicy.maySubmit(loginController.signedInUserDetails)}">
+		<a href="${pageContext.request.contextPath}/ffds/orders/submit">Submit Order</a>
+		|
+	</c:if>
 	<c:choose>
 		<c:when test="${loginController.signedInUserDetails ne null}">
 			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/manage">Manage Account</a>

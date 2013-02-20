@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/orders")
-public class OrderController {
+public class OrderController extends BaseController {
 
 	//~ Class Data =====================================================================================================
 	
@@ -25,6 +25,7 @@ public class OrderController {
 	//~ Initialization =================================================================================================
 	
 	public OrderController() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 	
