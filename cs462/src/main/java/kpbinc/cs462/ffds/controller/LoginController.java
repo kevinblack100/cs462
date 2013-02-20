@@ -48,32 +48,13 @@ public class LoginController extends BaseController implements Serializable {
 	}
 	
 	public boolean isUserLoggedIn(String username) {
-		UserDetails loggedInUserDetails = getSignedInUserDetails();
-		boolean result = (   loggedInUserDetails != null
-						  && loggedInUserDetails.getUsername().equals(username));
+		boolean result = getLoggedInUserContext().isUserLoggedIn(username);
 		return result;
 	}
 	
 	public UserDetails getSignedInUserDetails() {
-		UserDetails signedInUserDetails = null;
-		
-		SecurityContext context = SecurityContextHolder.getContext();
-		if (context != null) {
-			Authentication token = context.getAuthentication();
-			if (   token != null
-				&& token instanceof UsernamePasswordAuthenticationToken) {
-				
-				Object principal = token.getPrincipal();
-				if (   principal != null
-					&& principal instanceof UserDetails) {
-					signedInUserDetails = (UserDetails) principal;
-				}
-				else {
-					// TODO notify of unhandled change to Spring API?
-				}
-			}
-		}
-		
+		UserDetails signedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		return signedInUserDetails;
 	}
+	
 }

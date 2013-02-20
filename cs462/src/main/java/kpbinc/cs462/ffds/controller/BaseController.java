@@ -16,6 +16,9 @@ public abstract class BaseController {
 
 	//~ Member Data ====================================================================================================
 	
+	// setter @Autowired
+	private LoggedInUserContext loggedInUserContext;
+	
 	@Autowired
 	private OrderPolicy orderPolicy;
 	
@@ -24,6 +27,18 @@ public abstract class BaseController {
 	
 	protected BaseController() {
 		GlobalLogUtils.logConstruction(this);
+	}
+	
+	
+	//~ Interface ======================================================================================================
+	
+	public LoggedInUserContext getLoggedInUserContext() {
+		return loggedInUserContext;
+	}
+	
+	@Autowired
+	public void setLoggedInUserContext(LoggedInUserContext loggedInUserContext) {
+		this.loggedInUserContext = loggedInUserContext;
 	}
 	
 }
