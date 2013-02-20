@@ -26,7 +26,7 @@ public class AuthorizationTokenManager {
 	// Class Data
 	//==================================================================================================================
 	
-	private static final String AUTH_TOKEN_STORE_FILEPATH = "/WEB-INF/ffds/logs/authtokens.json";
+	private static final String AUTH_TOKEN_STORE_FILEPATH = "/WEB-INF/ffds/stores/authtokens.json";
 	
 	public static class TokenWrapper {
 		

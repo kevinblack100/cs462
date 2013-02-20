@@ -22,7 +22,7 @@ public class DriverProfileManager {
 	// Class Data
 	//==================================================================================================================
 	
-	private static final String DRIVER_PROFILES_STORE_FILEPATH = "/WEB-INF/ffds/logs/driverprofiles.json"; 
+	private static final String DRIVER_PROFILES_STORE_FILEPATH = "/WEB-INF/ffds/stores/driverprofiles.json"; 
 	
 	
 	//==================================================================================================================
