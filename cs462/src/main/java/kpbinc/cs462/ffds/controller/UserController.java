@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Scope(value = "request")
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends BaseController {
 	
 	//==================================================================================================================
 	// Class Data
