@@ -125,7 +125,8 @@ public class AccountController {
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.POST)
 	public String saveChanges(
-			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver) {
+			@RequestParam(value = "driver-indicator", defaultValue = "false") boolean isDriver,
+			@RequestParam(value = "driver-esl", defaultValue = "") String driverESL) {
 		
 		UserDetails loggedInUserDetails = loginController.getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
@@ -138,6 +139,7 @@ public class AccountController {
 				
 				updateAuthorities(username, modifiedAuthorities);
 			}
+			// TODO store driverESL
 		}
 		else {
 			if (loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER)) {
