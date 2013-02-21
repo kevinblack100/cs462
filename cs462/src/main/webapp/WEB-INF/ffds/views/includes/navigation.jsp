@@ -9,6 +9,8 @@
 	<c:if test="${orderPolicy.maySubmit(loggedInUserContext.signedInUserDetails)}">
 		<a href="${pageContext.request.contextPath}/ffds/orders/submit">Submit Order</a>
 		|
+		<a href="${pageContext.request.contextPath}/ffds/shop/profile">Shop Profile</a>
+		|
 	</c:if>
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
