@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.DriverProfile;
 import kpbinc.cs462.ffds.model.DriverProfileManager;
+import kpbinc.cs462.ffds.model.ShopProfile;
+import kpbinc.cs462.ffds.model.ShopProfileManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,6 +32,9 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	private EventGenerator eventGenerator;
+	
+	@Autowired
+	private ShopProfileManager shopProfileManager;
 	
 	@Autowired
 	private DriverProfileManager driverProfileManager;
@@ -56,9 +61,13 @@ public class OrderController extends BaseController {
 			@RequestParam(value = "delivery-address", required = true) String deliveryAddressRaw,
 			@RequestParam(value = "delivery-time") String deliveryTimeRaw) {
 		
+		ShopProfile shopProfile = shopProfileManager.getProfile();
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append("_domain=rfq") // _domain and _name do not have to be URL encoded
 			   .append("&_name=delivery_ready")
+			   .append("&shop_name=").append(urlEncode(shopProfile.getName()))
+			   .append("&shop_address=").append(urlEncode(shopProfile.getAddress()))
 		       .append("&pickup_time=").append(urlEncode(pickupTimeRaw))
 		       .append("&delivery_address=").append(urlEncode(deliveryAddressRaw));
 		if (!deliveryTimeRaw.isEmpty()) {
