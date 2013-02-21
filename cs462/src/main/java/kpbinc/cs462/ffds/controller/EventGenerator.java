@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.logging.Logger;
 
 import kpbinc.common.util.logging.GlobalLogUtils;
@@ -32,8 +33,8 @@ public class EventGenerator {
 	// ~ Interface =====================================================================================================
 
 	/**
-	 * @param eventSignalURL
-	 * @param eventDetails
+	 * @param eventSignalURL event signal URL
+	 * @param eventDetails URL encoded query string with event details 
 	 * @return true if the event was sent successfully, false otherwise
 	 */
 	public boolean sendEvent(String eventSignalURL, String eventDetails) {

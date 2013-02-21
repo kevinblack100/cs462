@@ -1,5 +1,7 @@
 package kpbinc.cs462.ffds.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -55,12 +57,12 @@ public class OrderController extends BaseController {
 			@RequestParam(value = "delivery-time") String deliveryTimeRaw) {
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append("_domain=rfq")
+		builder.append("_domain=rfq") // _domain and _name do not have to be URL encoded
 			   .append("&_name=delivery_ready")
-		       .append("&pickup_time=").append(pickupTimeRaw)
-		       .append("&delivery_address=").append(deliveryAddressRaw);
+		       .append("&pickup_time=").append(urlEncode(pickupTimeRaw))
+		       .append("&delivery_address=").append(urlEncode(deliveryAddressRaw));
 		if (!deliveryTimeRaw.isEmpty()) {
-			builder.append("&delivery_time=").append(deliveryTimeRaw);
+			builder.append("&delivery_time=").append(urlEncode(deliveryTimeRaw));
 		}
 		String eventDetails = builder.toString();
 		
@@ -73,4 +75,14 @@ public class OrderController extends BaseController {
 		return "redirect:/ffds/";
 	}
 	
+	private static String urlEncode(String input) {
+		String result = input; // send original
+		try {
+			result = URLEncoder.encode(input, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			logger.warning("UTF-8 not supported?: " + e.getMessage());
+		}
+		return result;
+	}
 }
