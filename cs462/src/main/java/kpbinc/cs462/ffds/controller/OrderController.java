@@ -1,13 +1,10 @@
 package kpbinc.cs462.ffds.controller;
 
-<<<<<<< HEAD
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-=======
->>>>>>> 746e6353b0142bee8d366878c6661cb5f93c0a98
 import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.DriverProfile;
 import kpbinc.cs462.ffds.model.DriverProfileManager;
@@ -19,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Scope(value = "request")
