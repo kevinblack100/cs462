@@ -1,6 +1,8 @@
 package kpbinc.cs462.ffds.model;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -61,6 +63,11 @@ public class DriverProfileManager {
 	public DriverProfile createOrUpdate(DriverProfile profile) {
 		DriverProfile formerProfile = getDriverProfiles().put(profile.getUsername(), profile);
 		return formerProfile;
+	}
+	
+	public Collection<DriverProfile> getAllProfiles() {
+		Collection<DriverProfile> profiles = getDriverProfiles().values();
+		return profiles;
 	}
 	
 	public DriverProfile getProfileFor(String username) {
