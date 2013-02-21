@@ -50,12 +50,18 @@ public class OrderController extends BaseController {
 	
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public String submitOrder(
-			@RequestParam(value = "pickup-time") String pickupTimeRaw) {
+			@RequestParam(value = "pickup-time", required = true) String pickupTimeRaw,
+			@RequestParam(value = "delivery-address", required = true) String deliveryAddressRaw,
+			@RequestParam(value = "delivery-time") String deliveryTimeRaw) {
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("_domain=rfq")
 			   .append("&_name=delivery_ready")
-		       .append("&pickup_time=").append(pickupTimeRaw);
+		       .append("&pickup_time=").append(pickupTimeRaw)
+		       .append("&delivery_address=").append(deliveryAddressRaw);
+		if (!deliveryTimeRaw.isEmpty()) {
+			builder.append("&delivery_time=").append(deliveryTimeRaw);
+		}
 		String eventDetails = builder.toString();
 		
 		Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
