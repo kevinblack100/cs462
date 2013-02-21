@@ -8,10 +8,10 @@
 		<form method="post" action="${pageContext.request.contextPath}/ffds/shop/profile">
 			<fieldset>
 				<label for="shop-name">Shop name</label>
-				<input type="text" id="shop-name" name="shop-name" />
+				<input type="text" id="shop-name" name="shop-name" value="${profile.name}" />
 				<br />
 				<label for="shop-address">Shop Address</label>
-				<input type="text" id="shop-address" name="shop-address" />
+				<input type="text" id="shop-address" name="shop-address" value="${profile.address}" />
 				<br />
 				<br />
 				<input type="submit" id="submit" name="submit" value="Submit" />
