@@ -9,7 +9,7 @@
 	<groupId>kpbinc.cs462</groupId>
 	<artifactId>shop</artifactId>
 	<version>0</version>
-	<name>Kevin Black's CS 462 Webapp</name>
+	<name>Kevin Black's CS 462 Flower Shop Webapp</name>
 	
 	<packaging>war</packaging>
 	
