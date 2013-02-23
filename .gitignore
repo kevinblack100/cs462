@@ -1,3 +1,4 @@
 *.pem
 *~
-cs462/target/*
+shop/target/*
+tmp/*
