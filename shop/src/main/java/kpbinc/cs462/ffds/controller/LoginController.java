@@ -33,14 +33,15 @@ public class LoginController extends BaseController implements Serializable {
 	}
 	
 	@RequestMapping(value = "/success")
-	public void doSignin(HttpServletResponse response) throws IOException {
+	public String doSignin(HttpServletResponse response) throws IOException {
 		UserDetails signedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
-		String redirectLocation = "/cs462/ffds/";
+		String redirectLocation = "/ffds/";
 		if (signedInUserDetails != null) {
 			String username = signedInUserDetails.getUsername();
 			redirectLocation += "users/" + username;
 		}
-		response.sendRedirect(redirectLocation);
+		
+		return "redirect:" + redirectLocation;
 	}
 	
 }
