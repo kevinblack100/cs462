@@ -39,7 +39,7 @@ public class OAuthController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/v2/authorize/{username}/{api}")
-	public void authorizeUserAt(
+	public String authorizeUserAt(
 			@PathVariable("username") String username,
 			@PathVariable("api") String api,
 			HttpServletRequest request,
@@ -54,14 +54,14 @@ public class OAuthController extends BaseController {
 			redirectLocation = response.encodeRedirectURL(authorizationURL);
 		}
 		else {
-			redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
+			redirectLocation = "/ffds/users/" + username;
 		}
 		
-		response.sendRedirect(redirectLocation);
+		return "redirect:" + redirectLocation;
 	}
 	
 	@RequestMapping(value = "/v2/requesttoken")
-	public void registerOAuthCode(
+	public String registerOAuthCode(
 			@RequestParam(value = "api", required = true) String api,
 			@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "code", required = true) String code,
@@ -80,8 +80,8 @@ public class OAuthController extends BaseController {
 			}
 		}
 
-		String redirectLocation = response.encodeRedirectURL("/cs462/ffds/users/" + username);
-		response.sendRedirect(redirectLocation);
+		String redirectLocation = "/ffds/users/" + username;
+		return "redirect:" + redirectLocation;
 	}
 	
 	public String getDetailsForUser(String api, String requestURL, String username) {
