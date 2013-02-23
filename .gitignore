@@ -1,4 +1,5 @@
 *.pem
 *~
 shop/target/*
+driver/target/*
 tmp/*
