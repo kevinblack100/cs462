@@ -82,7 +82,7 @@ public class AccountController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/register/execute")
-	public void registerAccount(
+	public String registerAccount(
 			@RequestParam(value = "username", required = true) String username,
 			HttpServletResponse response) throws IOException {
 		String redirectLocation = null;
@@ -93,7 +93,7 @@ public class AccountController extends BaseController {
 			
 			logger.info(String.format("Account with username \"%s\" already exists\n", username));
 			
-			redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/accounts/register/query");
+			redirectLocation = "/ffds/secure/accounts/register/query";
 		}
 		catch (UsernameNotFoundException exception) {
 			// Account does not exist
@@ -106,10 +106,10 @@ public class AccountController extends BaseController {
 			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
 			
-			redirectLocation = response.encodeRedirectURL("/cs462/ffds/secure/signin/query");
+			redirectLocation = "/ffds/secure/signin/query";
 		}
 		
-		response.sendRedirect(redirectLocation);
+		return "redirect:" + redirectLocation;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
