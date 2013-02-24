@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.model.mixin;
+package kpbinc.cs462.shared.model.mixin;
 
 import java.util.Collection;
 
@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @SuppressWarnings("serial")
-public abstract class UserJsonAnnotatedMixin extends User {
+public abstract class UserJacksonAnnotatedMixin extends User {
 
-	public UserJsonAnnotatedMixin(
+	public UserJacksonAnnotatedMixin(
 			@JsonProperty("username") String username,
 			@JsonProperty("password") String password,
 			@JsonProperty("enabled") boolean enabled,

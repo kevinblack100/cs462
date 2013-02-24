@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import kpbinc.cs462.shared.model.mixin.SimpleGrantedAuthorityJacksonAnnotatedMixin;
 import kpbinc.cs462.shared.model.mixin.UserDetailsJacksonAnnotatedMixin;
-import kpbinc.cs462.ffds.model.mixin.UserJsonAnnotatedMixin;
+import kpbinc.cs462.shared.model.mixin.UserJacksonAnnotatedMixin;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +36,7 @@ public class JsonSerializer {
 	private static ObjectMapper initializeMapper() {
 		ObjectMapper result = new ObjectMapper();
 		result.addMixInAnnotations(UserDetails.class, UserDetailsJacksonAnnotatedMixin.class);
-		result.addMixInAnnotations(User.class, UserJsonAnnotatedMixin.class);
+		result.addMixInAnnotations(User.class, UserJacksonAnnotatedMixin.class);
 		result.addMixInAnnotations(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJacksonAnnotatedMixin.class);
 		return result;
 	}
