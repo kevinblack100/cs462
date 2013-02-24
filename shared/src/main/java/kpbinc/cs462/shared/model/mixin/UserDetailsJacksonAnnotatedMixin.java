@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.model.mixin;
+package kpbinc.cs462.shared.model.mixin;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

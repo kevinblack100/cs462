@@ -7,8 +7,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import kpbinc.cs462.ffds.model.mixin.SimpleGrantedAuthorityJacksonAnnotatedMixin;
-import kpbinc.cs462.ffds.model.mixin.UserDetailsJacksonAnnotatedMixin;
+import kpbinc.cs462.shared.model.mixin.SimpleGrantedAuthorityJacksonAnnotatedMixin;
+import kpbinc.cs462.shared.model.mixin.UserDetailsJacksonAnnotatedMixin;
 import kpbinc.cs462.ffds.model.mixin.UserJsonAnnotatedMixin;
 
 import com.fasterxml.jackson.core.type.TypeReference;
