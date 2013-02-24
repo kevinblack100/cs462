@@ -2,4 +2,5 @@
 *~
 shop/target/*
 driver/target/*
+shared/target/*
 tmp/*
