@@ -1,6 +1,7 @@
 package kpbinc.util;
 
 import static org.junit.Assert.*;
+import kpbinc.cs462.shared.TestConstants;
 import kpbinc.io.util.JsonSerializerTests;
 
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class WrapperTests {
 	@Test
 	public void testObjectNotCopied() {
 		// ARRANGE/ACT
-		String object = "somestring";
+		String object = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper = new Wrapper<String>(object);
 		
 		// ASSERT
@@ -31,7 +32,7 @@ public class WrapperTests {
 	@Test
 	public void testEqualsSelf() {
 		// ARRANGE
-		String object = "somestring";
+		String object = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper = new Wrapper<String>(object);
 		
 		// ACT/ASSERT
@@ -51,9 +52,9 @@ public class WrapperTests {
 	@Test
 	public void testEqualsWithEqualNonNullContent() {
 		// ARRANGE
-		String object1 = "somestring";
+		String object1 = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper1 = new Wrapper<String>(object1);
-		String object2 = "somestring";
+		String object2 = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper2 = new Wrapper<String>(object2);
 		
 		// ACT/ASSERT
@@ -74,7 +75,7 @@ public class WrapperTests {
 	public void testNotEqualsWithNullAndNonNullContent() {
 		// ARRANGE
 		Wrapper<String> wrapper1 = new Wrapper<String>();
-		String object = "somestring";
+		String object = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper2 = new Wrapper<String>(object);
 		
 		// ACT/ASSERT
@@ -85,9 +86,9 @@ public class WrapperTests {
 	@Test
 	public void testNotEqualsWithDifferentContent() {
 		// ARRANGE
-		String object1 = "somestring";
+		String object1 = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper1 = new Wrapper<String>(object1);
-		String object2 = "someotherstring";
+		String object2 = TestConstants.TEST_STRING_TWO;
 		Wrapper<String> wrapper2 = new Wrapper<String>(object2);
 		
 		// ACT/ASSERT
@@ -99,7 +100,7 @@ public class WrapperTests {
 	public void testNotEqualsDifferentlyTypeWrapper() {
 		// ARRANGE
 		Wrapper<Integer> numberWrapper = new Wrapper<Integer>(0);
-		Wrapper<String> stringWrapper = new Wrapper<String>("somestring");
+		Wrapper<String> stringWrapper = new Wrapper<String>(TestConstants.TEST_STRING_ONE);
 		
 		// ACT/ASSERT
 		assertNotEquals(numberWrapper, stringWrapper);
@@ -109,7 +110,7 @@ public class WrapperTests {
 	@Test
 	public void testJsonSerialization() {
 		// ARRANGE
-		String object = "somestring";
+		String object = TestConstants.TEST_STRING_ONE;
 		Wrapper<String> wrapper = new Wrapper<String>(object);
 		
 		String expectedJsonSerialization = String.format("{\"wrappedObject\":\"%s\"}", object);
@@ -121,7 +122,7 @@ public class WrapperTests {
 	@Test
 	public void testJsonDeserialization() {
 		// ARRANGE
-		String object = "somestring";
+		String object = TestConstants.TEST_STRING_ONE;
 		String jsonSerialization = String.format("{\"wrappedObject\":\"%s\"}", object);
 		
 		Wrapper<String> expectedWrapper = new Wrapper<String>(object);
