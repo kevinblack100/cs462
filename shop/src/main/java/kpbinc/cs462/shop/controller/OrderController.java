@@ -1,14 +1,14 @@
-package kpbinc.cs462.ffds.controller;
+package kpbinc.cs462.shop.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import kpbinc.cs462.ffds.model.DriverProfile;
-import kpbinc.cs462.ffds.model.DriverProfileManager;
-import kpbinc.cs462.ffds.model.ShopProfile;
-import kpbinc.cs462.ffds.model.ShopProfileManager;
+import kpbinc.cs462.shop.model.DriverProfile;
+import kpbinc.cs462.shop.model.DriverProfileManager;
+import kpbinc.cs462.shop.model.ShopProfile;
+import kpbinc.cs462.shop.model.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;

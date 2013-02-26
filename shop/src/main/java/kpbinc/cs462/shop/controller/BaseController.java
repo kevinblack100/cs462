@@ -1,7 +1,7 @@
-package kpbinc.cs462.ffds.controller;
+package kpbinc.cs462.shop.controller;
 
 import kpbinc.util.logging.GlobalLogUtils;
-import kpbinc.cs462.ffds.controller.policy.OrderPolicy;
+import kpbinc.cs462.shop.controller.policy.OrderPolicy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

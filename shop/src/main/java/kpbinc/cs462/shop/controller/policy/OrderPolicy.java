@@ -1,6 +1,6 @@
-package kpbinc.cs462.ffds.controller.policy;
+package kpbinc.cs462.shop.controller.policy;
 
-import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
+import kpbinc.cs462.shop.model.GrantedAuthorityRoles;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.context.annotation.Scope;

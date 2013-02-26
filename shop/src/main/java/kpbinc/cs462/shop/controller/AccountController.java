@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.controller;
+package kpbinc.cs462.shop.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
-import kpbinc.cs462.ffds.model.DriverProfile;
-import kpbinc.cs462.ffds.model.DriverProfileManager;
-import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
-import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
+import kpbinc.cs462.shop.model.DriverProfile;
+import kpbinc.cs462.shop.model.DriverProfileManager;
+import kpbinc.cs462.shop.model.GrantedAuthorityRoles;
+import kpbinc.cs462.shop.model.InMemoryPersistentUserDetailsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;

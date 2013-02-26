@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.model;
+package kpbinc.cs462.shop.model;
 
 import java.io.File;
 import java.util.Map;

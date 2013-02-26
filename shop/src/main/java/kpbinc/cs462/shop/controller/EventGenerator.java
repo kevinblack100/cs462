@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.controller;
+package kpbinc.cs462.shop.controller;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

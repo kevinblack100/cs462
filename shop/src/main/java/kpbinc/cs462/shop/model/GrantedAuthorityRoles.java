@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.model;
+package kpbinc.cs462.shop.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

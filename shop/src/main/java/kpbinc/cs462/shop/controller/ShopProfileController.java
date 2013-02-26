@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.controller;
+package kpbinc.cs462.shop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import kpbinc.cs462.ffds.model.ShopProfile;
-import kpbinc.cs462.ffds.model.ShopProfileManager;
+import kpbinc.cs462.shop.model.ShopProfile;
+import kpbinc.cs462.shop.model.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller

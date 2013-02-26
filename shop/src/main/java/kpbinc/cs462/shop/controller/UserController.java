@@ -1,4 +1,4 @@
-package kpbinc.cs462.ffds.controller;
+package kpbinc.cs462.shop.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
-import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
-import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
+import kpbinc.cs462.shop.model.AuthorizationTokenManager;
+import kpbinc.cs462.shop.model.InMemoryPersistentUserDetailsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.exceptions.OAuthConnectionException;

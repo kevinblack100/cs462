@@ -1,5 +1,6 @@
-package kpbinc.cs462.ffds.model;
+package kpbinc.cs462.shop.model;
 
+import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
