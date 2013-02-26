@@ -1,6 +1,7 @@
 package kpbinc.cs462.ffds.model;
 
 import kpbinc.io.util.JsonSerializerTests;
+import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class DriverProfileTests {
 				username, esl);
 		
 		// ACT/ASSERT
-		JsonSerializerTests.assertJsonSerialization(profile, expectedJsonSerialization);
+		ActAndAssertJsonSerializer.assertJsonSerialization(profile, expectedJsonSerialization);
 	}
 	
 	@Test
@@ -39,7 +40,7 @@ public class DriverProfileTests {
 				username, esl);
 		
 		// ACT/ASSERT
-		JsonSerializerTests.assertJsonDeserialization(jsonSerialization, profile, DriverProfile.class);
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, profile, DriverProfile.class);
 	}
 
 }

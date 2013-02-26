@@ -10,6 +10,7 @@ import java.util.List;
 
 import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
 import kpbinc.test.io.util.FileIOTestContext;
+import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,19 +32,6 @@ public class JsonSerializerTests {
 	// Action and Assertion Support
 	//==================================================================================================================
 	
-	public static void assertJsonSerialization(Object object, String expectedJsonSerialization) {
-		try {
-			// ACT
-			String actualJsonSerialization = JsonSerializer.serialize(object);
-			
-			// ASSERT
-			assertEquals(expectedJsonSerialization, actualJsonSerialization);
-		}
-		catch (IOException e) {
-			fail(e.getMessage());
-		}
-	}
-	
 	private void assertJsonFileSerialization(Object object, String filename, String expectedJsonSerialization) {
 		// ACT
 		try {
@@ -58,33 +46,7 @@ public class JsonSerializerTests {
 		String actualJsonSerialization = fileIOContext.readFile(filename);
 		assertEquals(expectedJsonSerialization, actualJsonSerialization);
 	}
-	
-	public static <T> void assertJsonDeserialization(String jsonSerialization, T expectedObject, Class<T> clazz) {
-		try {
-			// ACT
-			T actualObject = JsonSerializer.deserialize(jsonSerialization, clazz);
-			
-			// ASSERT
-			assertEquals(expectedObject, actualObject);
-		}
-		catch (IOException e) {
-			fail(e.getMessage());
-		}
-	}
-	
-	public static <T> void assertJsonDeserialization(String jsonSerialization, T expectedObject, TypeReference<T> typeRef) {
-		try {
-			// ACT
-			T actualObject = JsonSerializer.deserialize(jsonSerialization, typeRef);
-			
-			// ASSERT
-			assertEquals(expectedObject, actualObject);
-		}
-		catch (IOException e) {
-			fail(e.getMessage());
-		}
-	}
-	
+		
 	private <T> void assertJsonFileDeserialization(String filename, T expectedObject, Class<T> clazz) {
 		try {
 			// ACT
@@ -115,7 +77,7 @@ public class JsonSerializerTests {
 		String expectedJsonSerialization = String.format("\"%s\"", value);
 		
 		// ACT/ASSERT
-		assertJsonSerialization(value, expectedJsonSerialization);
+		ActAndAssertJsonSerializer.assertJsonSerialization(value, expectedJsonSerialization);
 	}
 
 	@Test
@@ -125,7 +87,7 @@ public class JsonSerializerTests {
 		String jsonSerialization = String.format("\"%s\"", expectedValue);
 		
 		// ACT/ASSERT
-		assertJsonDeserialization(jsonSerialization, expectedValue, String.class);
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, expectedValue, String.class);
 	}
 	
 	@Test
@@ -164,7 +126,7 @@ public class JsonSerializerTests {
 		String expectedJsonSerialization = String.format("[\"%s\"]", value);
 		
 		// ACT/ASSERT
-		assertJsonSerialization(list, expectedJsonSerialization);
+		ActAndAssertJsonSerializer.assertJsonSerialization(list, expectedJsonSerialization);
 	}
 	
 	@Test
@@ -176,7 +138,7 @@ public class JsonSerializerTests {
 		String jsonSerialization = String.format("[\"%s\"]", value);
 		
 		// ACT/ASSERT
-		assertJsonDeserialization(jsonSerialization, expectedList, new TypeReference<List<String>>() {});
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, expectedList, new TypeReference<List<String>>() {});
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------
@@ -203,7 +165,7 @@ public class JsonSerializerTests {
 				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
 		
 		// ACT/ASSERT
-		assertJsonSerialization(user, expectedJsonSerialization);
+		ActAndAssertJsonSerializer.assertJsonSerialization(user, expectedJsonSerialization);
 	}
 	
 	@Test
@@ -226,7 +188,7 @@ public class JsonSerializerTests {
 				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
 		
 		// ACT/ASSERT
-		assertJsonDeserialization(jsonSerialization, user, UserDetails.class);
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, user, UserDetails.class);
 	}
 	
 }

@@ -3,6 +3,7 @@ package kpbinc.util;
 import static org.junit.Assert.*;
 import kpbinc.cs462.shared.TestConstants;
 import kpbinc.io.util.JsonSerializerTests;
+import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
 
@@ -116,7 +117,7 @@ public class WrapperTests {
 		String expectedJsonSerialization = String.format("{\"wrappedObject\":\"%s\"}", object);
 		
 		// ACT/ASSERT
-		JsonSerializerTests.assertJsonSerialization(wrapper, expectedJsonSerialization);
+		ActAndAssertJsonSerializer.assertJsonSerialization(wrapper, expectedJsonSerialization);
 	}
 	
 	@Test
@@ -128,7 +129,7 @@ public class WrapperTests {
 		Wrapper<String> expectedWrapper = new Wrapper<String>(object);
 		
 		// ACT/ASSERT
-		JsonSerializerTests.assertJsonDeserialization(jsonSerialization, expectedWrapper, new TypeReference<Wrapper<String>>(){});
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, expectedWrapper, new TypeReference<Wrapper<String>>(){});
 	}
 	
 }
