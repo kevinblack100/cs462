@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
 import kpbinc.test.io.util.FileIOTestContext;
 import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -148,8 +148,9 @@ public class JsonSerializerTests {
 	@Test
 	public void testUserSerialization() {
 		// ARRANGE
+		String authorityString = "ROLE_USER";
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(GrantedAuthorityRoles.ROLE_USER);
+		authorities.add(new SimpleGrantedAuthority(authorityString));
 		UserDetails user = new User("avgjoe", "password", authorities);
 		String expectedJsonSerialization = String.format(
 				"{" + 
@@ -162,7 +163,7 @@ public class JsonSerializerTests {
 				"\"authorities\":[{" +
 					"\"authority\":\"%s\"}]" +
 				"}",
-				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
+				user.getUsername(), user.getPassword(), authorityString);
 		
 		// ACT/ASSERT
 		ActAndAssertJsonSerializer.assertJsonSerialization(user, expectedJsonSerialization);
@@ -171,8 +172,9 @@ public class JsonSerializerTests {
 	@Test
 	public void testUserDeserialization() {
 		// ARRANGE
+		String authorityString = "ROLE_USER";
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(GrantedAuthorityRoles.ROLE_USER);
+		authorities.add(new SimpleGrantedAuthority(authorityString));
 		UserDetails user = new User("avgjoe", "password", authorities);
 		String jsonSerialization = String.format(
 				"{" + 
@@ -185,7 +187,7 @@ public class JsonSerializerTests {
 				"\"authorities\":[{" +
 					"\"authority\":\"%s\"}]" +
 				"}",
-				user.getUsername(), user.getPassword(), GrantedAuthorityRoles.ROLE_USER.getAuthority());
+				user.getUsername(), user.getPassword(), authorityString);
 		
 		// ACT/ASSERT
 		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, user, UserDetails.class);
