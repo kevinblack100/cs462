@@ -1,6 +1,5 @@
 package kpbinc.cs462.ffds.model;
 
-import kpbinc.io.util.JsonSerializerTests;
 import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
