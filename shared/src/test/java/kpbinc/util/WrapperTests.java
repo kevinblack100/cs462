@@ -2,7 +2,6 @@ package kpbinc.util;
 
 import static org.junit.Assert.*;
 import kpbinc.cs462.shared.TestConstants;
-import kpbinc.io.util.JsonSerializerTests;
 import kpbinc.test.util.ActAndAssertJsonSerializer;
 
 import org.junit.Test;
