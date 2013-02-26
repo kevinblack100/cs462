@@ -6,22 +6,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
-
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class GrantedAuthorityTests {
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Instance Equality Tests
-	//------------------------------------------------------------------------------------------------------------------
+	//= Member Data ====================================================================================================
+	
+	private static final String PRIMARY_ROLE_NAME = "PRIMARY_ROLE";
+	private static final GrantedAuthority PRIMARY_ROLE = new SimpleGrantedAuthority(PRIMARY_ROLE_NAME);
+	
+	private static final String SECONDARY_ROLE_NAME = "SECONDARY_ROLE";
+	private static final GrantedAuthority SECONDARY_ROLE = new SimpleGrantedAuthority(SECONDARY_ROLE_NAME);
+	
+	
+	//= Tests ==========================================================================================================
+	
+	//- Instance Equality Tests ----------------------------------------------------------------------------------------
 	
 	@Test
 	public void testEqualsSelf() {
 		// ARRANGE
-		GrantedAuthority authority = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority = PRIMARY_ROLE;
 		
 		// ACT/ASSERT
 		assertEquals(authority, authority);
@@ -30,7 +37,7 @@ public class GrantedAuthorityTests {
 	@Test
 	public void testEqualsIdentical() {
 		// ARRANGE
-		GrantedAuthority authority1 = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority1 = PRIMARY_ROLE;
 		GrantedAuthority authority2 = new SimpleGrantedAuthority(authority1.getAuthority());
 		
 		// ACT/ASSERT
@@ -41,7 +48,7 @@ public class GrantedAuthorityTests {
 	@Test
 	public void testNotEqualsNull() {
 		// ARRANGE
-		GrantedAuthority authority = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority = PRIMARY_ROLE;
 		
 		// ACT/ASSERT
 		assertNotEquals(authority, null);
@@ -50,8 +57,8 @@ public class GrantedAuthorityTests {
 	@Test
 	public void testNotEqualsOther() {
 		// ARRANGE
-		GrantedAuthority authority1 = GrantedAuthorityRoles.ROLE_USER;
-		GrantedAuthority authority2 = GrantedAuthorityRoles.ROLE_DRIVER;
+		GrantedAuthority authority1 = PRIMARY_ROLE;
+		GrantedAuthority authority2 = SECONDARY_ROLE;
 		// ACT/ASSERT
 		assertNotEquals(authority1, authority2);
 		assertNotEquals(authority2, authority1);
@@ -60,22 +67,20 @@ public class GrantedAuthorityTests {
 	@Test
 	public void testNotEqualsNonType() {
 		// ARRANGE
-		GrantedAuthority authority = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority = PRIMARY_ROLE;
 		Object object = new Object();
 		
 		// ACT/ASSERT
 		assertNotEquals(authority, object);
 	}
 	
-	//------------------------------------------------------------------------------------------------------------------
-	// Collection Membership Tests
-	//------------------------------------------------------------------------------------------------------------------
+	//- Collection Membership Tests ------------------------------------------------------------------------------------
 	
 	@Test
 	public void testSelfMembershipInCollection() {
 		// ARRANGE
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		GrantedAuthority authority = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority = PRIMARY_ROLE;
 		authorities.add(authority);
 		
 		// ACT/ASSERT
@@ -86,9 +91,9 @@ public class GrantedAuthorityTests {
 	public void testIdenticalMembershipInCollection() {
 		// ARRANGE
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(GrantedAuthorityRoles.ROLE_USER);
+		authorities.add(PRIMARY_ROLE);
 		
-		GrantedAuthority authorityCopy = new SimpleGrantedAuthority(GrantedAuthorityRoles.ROLE_USER.getAuthority());
+		GrantedAuthority authorityCopy = new SimpleGrantedAuthority(PRIMARY_ROLE.getAuthority());
 		
 		// ACT/ASSERT
 		assertTrue(authorities.contains(authorityCopy));
@@ -97,7 +102,7 @@ public class GrantedAuthorityTests {
 	@Test
 	public void testSelfMembershipInWildcardCollection() {
 		// ARRANGE
-		GrantedAuthority authority = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority = PRIMARY_ROLE;
 		Collection<? extends GrantedAuthority> authorities = Arrays.asList(authority);
 		
 		// ACT/ASSERT
@@ -107,10 +112,10 @@ public class GrantedAuthorityTests {
 	@Test
 	public void testIdenticalMembershipInWildcardCollection() {
 		// ARRANGE
-		GrantedAuthority authority = GrantedAuthorityRoles.ROLE_USER;
+		GrantedAuthority authority = PRIMARY_ROLE;
 		Collection<? extends GrantedAuthority> authorities = Arrays.asList(authority);
 		
-		GrantedAuthority authorityCopy = new SimpleGrantedAuthority(GrantedAuthorityRoles.ROLE_USER.getAuthority());
+		GrantedAuthority authorityCopy = new SimpleGrantedAuthority(PRIMARY_ROLE.getAuthority());
 		
 		// ACT/ASSERT
 		assertTrue(authorities.contains(authorityCopy));
