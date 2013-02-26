@@ -10,7 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Logger;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

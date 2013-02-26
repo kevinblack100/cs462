@@ -1,6 +1,6 @@
 package kpbinc.cs462.ffds.model;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.util.logging.GlobalLogUtils;
 
 public class ShopProfile {
 

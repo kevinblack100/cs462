@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.io.util.JsonFileStore;
+import kpbinc.util.logging.GlobalLogUtils;
 
 @Repository
 @Scope(value = "singleton")

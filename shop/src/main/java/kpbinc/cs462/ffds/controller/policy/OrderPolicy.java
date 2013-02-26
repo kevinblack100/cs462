@@ -1,7 +1,7 @@
 package kpbinc.cs462.ffds.controller.policy;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.userdetails.UserDetails;

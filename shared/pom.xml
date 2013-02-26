@@ -8,7 +8,7 @@
 
   	<groupId>kpbinc.cs462</groupId>
   	<artifactId>shared</artifactId>
-  	<version>0.1</version>
+  	<version>0.2</version>
   	<name>Kevin Black's CS 462 Shared Webapp Code</name>
   
   	<packaging>jar</packaging>

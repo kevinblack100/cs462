@@ -8,11 +8,11 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.DriverProfile;
 import kpbinc.cs462.ffds.model.DriverProfileManager;
 import kpbinc.cs462.ffds.model.GrantedAuthorityRoles;
 import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

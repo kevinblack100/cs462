@@ -1,6 +1,6 @@
 package kpbinc.cs462.ffds.controller;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

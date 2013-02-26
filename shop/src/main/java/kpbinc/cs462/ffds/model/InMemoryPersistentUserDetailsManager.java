@@ -10,9 +10,9 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.io.util.JsonFileStore;
 import kpbinc.io.util.JsonFileStorePersistentMap;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

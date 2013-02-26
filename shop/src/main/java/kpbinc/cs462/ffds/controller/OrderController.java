@@ -5,11 +5,11 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.DriverProfile;
 import kpbinc.cs462.ffds.model.DriverProfileManager;
 import kpbinc.cs462.ffds.model.ShopProfile;
 import kpbinc.cs462.ffds.model.ShopProfileManager;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

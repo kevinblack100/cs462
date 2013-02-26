@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 import kpbinc.cs462.ffds.model.InMemoryPersistentUserDetailsManager;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.exceptions.OAuthConnectionException;
 import org.scribe.model.Token;

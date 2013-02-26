@@ -5,9 +5,9 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.AuthorizationTokenManager;
 import kpbinc.cs462.ffds.model.OAuthServiceManager;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;

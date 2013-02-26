@@ -6,9 +6,9 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.io.util.JsonFileStore;
 import kpbinc.io.util.JsonFileStorePersistentMap;
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;

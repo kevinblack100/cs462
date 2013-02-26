@@ -1,4 +1,4 @@
-package kpbinc.common.util.logging;
+package kpbinc.util.logging;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

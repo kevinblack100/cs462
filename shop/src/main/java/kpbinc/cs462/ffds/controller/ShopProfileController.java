@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import kpbinc.common.util.logging.GlobalLogUtils;
 import kpbinc.cs462.ffds.model.ShopProfile;
 import kpbinc.cs462.ffds.model.ShopProfileManager;
+import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller
 @Scope(value = "request")
