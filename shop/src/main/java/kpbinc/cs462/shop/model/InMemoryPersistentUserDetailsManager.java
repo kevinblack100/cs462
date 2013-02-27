@@ -15,19 +15,15 @@ import kpbinc.io.util.JsonFileStorePersistentMap;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-//@Repository(value = "inMemoryPersistentUserDetailsManager")
-//@Scope(value = "singleton")
 public class InMemoryPersistentUserDetailsManager implements UserDetailsService, UserDetailsManager {
 	
 	//==================================================================================================================
