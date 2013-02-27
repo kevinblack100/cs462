@@ -1,0 +1,1 @@
+{"admin":{"username":"admin","password":"password","enabled":true,"accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"authorities":[{"authority":"ROLE_USER"}, {"authority":"ROLE_ADMIN"}]}}
