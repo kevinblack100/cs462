@@ -90,7 +90,8 @@ public class AccountController extends ShopBaseSiteContextController {
 		
 		try {
 			// Does account already exist?
-			UserDetails currentRegistrantDetails = userDetailsManager.loadUserByUsername(username);
+			userDetailsManager.loadUserByUsername(username);
+			// if it did not exist then an exception was thrown
 			
 			logger.info(String.format("Account with username \"%s\" already exists\n", username));
 			
