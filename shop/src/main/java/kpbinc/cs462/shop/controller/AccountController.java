@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.cs462.shared.model.InMemoryPersistentUserDetailsManager;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.DriverProfileManager;
@@ -50,7 +51,7 @@ public class AccountController extends BaseController {
 	private ServletContext servletContext;
 	
 	@Autowired
-	private ApplicationConstants applicationConstants;
+	private CommonApplicationConstants applicationConstants;
 	
 	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;

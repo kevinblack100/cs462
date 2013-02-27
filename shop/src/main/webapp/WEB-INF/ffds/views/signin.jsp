@@ -15,7 +15,7 @@
 				<input id="password" name="password" type="password" size="20" />
 				<br />
 				-->
-				<input type="hidden" id="password" name="password" value="${applicationConstants.defaultPassword}" />
+				<input type="hidden" id="password" name="password" value="${commonApplicationConstants.defaultPassword}" />
 				<input id="submit" name="submit" type="submit" value="Sign In" />
 			</fieldset>
 		</form>

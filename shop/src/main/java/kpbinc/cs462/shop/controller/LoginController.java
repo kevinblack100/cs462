@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class LoginController extends BaseController implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	private ApplicationConstants applicationConstants;
+	private CommonApplicationConstants applicationConstants;
 	
 	public LoginController() {
 		GlobalLogUtils.logConstruction(this);
