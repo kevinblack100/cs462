@@ -26,6 +26,10 @@
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
 	
+	<context:component-scan base-package="kpbinc.cs462.shared.session" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	
 	<!-- Model scan -->
 	<context:component-scan base-package="kpbinc.cs462.shop.model" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
