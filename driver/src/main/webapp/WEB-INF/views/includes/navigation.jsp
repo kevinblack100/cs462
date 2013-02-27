@@ -10,8 +10,8 @@
 		</c:when>
 		<c:otherwise>
 			<a href="${pageContext.request.contextPath}/pages/secure/accounts/signin">Sign In</a>
-			|
-			<span>TODO: Register</span>
+			/
+			<a href="${pageContext.request.contextPath}/pages/secure/accounts/register">Register</a>
 		</c:otherwise>
 	</c:choose>
 </div>
