@@ -1,4 +1,4 @@
-package kpbinc.cs462.shared.session;
+package kpbinc.cs462.shared.controller.context;
 
 import kpbinc.util.logging.GlobalLogUtils;
 
