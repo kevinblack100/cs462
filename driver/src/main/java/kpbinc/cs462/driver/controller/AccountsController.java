@@ -40,12 +40,12 @@ public class AccountsController extends DriverBaseSiteContextController implemen
 	//= Interface ======================================================================================================
 	
 	@RequestMapping(value = "/signin")
-	public String presentSignin() {
+	public String getSigninForm() {
 		return "signin";
 	}
 	
 	@RequestMapping(value = "/authenticate/success")
-	public String doSignin() {
+	public String authenticatedSuccessfully() {
 		String redirectLocation = "/pages/";
 		return "redirect:" + redirectLocation;
 	}
