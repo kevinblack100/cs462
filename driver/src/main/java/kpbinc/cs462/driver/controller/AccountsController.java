@@ -96,7 +96,7 @@ public class AccountsController extends DriverBaseSiteContextController implemen
 	
 	@RequestMapping(value = "/signin")
 	public String getSigninForm() {
-		return "signin";
+		return "accounts/signin";
 	}
 	
 	@RequestMapping(value = "/authenticate/success")
