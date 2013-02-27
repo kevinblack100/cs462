@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/oauth")
-public class OAuthController extends BaseController {
+public class OAuthController extends ShopBaseSiteContextController {
 
 	@Autowired
 	private AuthorizationTokenManager authorizationTokenManager;

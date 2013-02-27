@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/secure/signin")
-public class LoginController extends BaseController implements Serializable {
+public class LoginController extends ShopBaseSiteContextController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

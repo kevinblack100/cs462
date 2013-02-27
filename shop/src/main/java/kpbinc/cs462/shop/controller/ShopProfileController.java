@@ -15,7 +15,7 @@ import kpbinc.util.logging.GlobalLogUtils;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/shop")
-public class ShopProfileController extends BaseController {
+public class ShopProfileController extends ShopBaseSiteContextController {
 
 	//~ Member Data ====================================================================================================
 	

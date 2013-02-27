@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/orders")
-public class OrderController extends BaseController {
+public class OrderController extends ShopBaseSiteContextController {
 	
 	//~ Class Data =====================================================================================================
 	

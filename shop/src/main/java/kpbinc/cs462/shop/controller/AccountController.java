@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/secure/accounts")
-public class AccountController extends BaseController {
+public class AccountController extends ShopBaseSiteContextController {
 	
 	//==================================================================================================================
 	// Class Data

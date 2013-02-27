@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/")
-public class DefaultController extends BaseController {
+public class DefaultController extends ShopBaseSiteContextController {
 
 	public DefaultController() {
 		GlobalLogUtils.logConstruction(this);
