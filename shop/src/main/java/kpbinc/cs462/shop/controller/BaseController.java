@@ -1,7 +1,7 @@
 package kpbinc.cs462.shop.controller;
 
 import kpbinc.util.logging.GlobalLogUtils;
-import kpbinc.cs462.shared.controller.SharedBaseController;
+import kpbinc.cs462.shared.controller.SharedBaseSiteContextController;
 import kpbinc.cs462.shop.controller.policy.OrderPolicy;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Kevin Black
  */
-public abstract class BaseController extends SharedBaseController {
+public abstract class BaseController extends SharedBaseSiteContextController {
 
 	//~ Member Data ====================================================================================================
 	

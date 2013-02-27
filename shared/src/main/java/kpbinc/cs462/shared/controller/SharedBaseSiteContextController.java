@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Kevin Black
  */
-public abstract class SharedBaseController {
+public abstract class SharedBaseSiteContextController {
 
 	//= Member Data ====================================================================================================
 	
@@ -22,7 +22,7 @@ public abstract class SharedBaseController {
 	
 	//= Initialization =================================================================================================
 	
-	protected SharedBaseController() {
+	protected SharedBaseSiteContextController() {
 		GlobalLogUtils.logConstruction(this);
 	}
 	
