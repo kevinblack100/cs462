@@ -6,7 +6,7 @@
 	|
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
-			<span>TODO: Sign Out</span>
+			<a href="${pageContext.request.contextPath}/pages/secure/signout/execute">Sign Out</a>
 		</c:when>
 		<c:otherwise>
 			<a href="${pageContext.request.contextPath}/pages/secure/signin/query">Sign In</a>

@@ -24,6 +24,10 @@
 			default-target-url="/pages/secure/signin/success"
 			password-parameter="password"
 			username-parameter="username" />
+		<logout
+			logout-url="/pages/secure/signout/execute" 
+			logout-success-url="/pages/"
+			invalidate-session="true" />
 	</http>
 
 	<authentication-manager>
