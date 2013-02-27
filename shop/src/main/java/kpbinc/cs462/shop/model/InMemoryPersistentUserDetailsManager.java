@@ -29,13 +29,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 //@Repository(value = "inMemoryPersistentUserDetailsManager")
 //@Scope(value = "singleton")
 public class InMemoryPersistentUserDetailsManager implements UserDetailsService, UserDetailsManager {
-
-	//==================================================================================================================
-	// Class Data
-	//==================================================================================================================
-	
-	private static final String fileStoreRelativePath = "/WEB-INF/ffds/stores/userdetails.json";
-	
 	
 	//==================================================================================================================
 	// Member Data
@@ -44,6 +37,8 @@ public class InMemoryPersistentUserDetailsManager implements UserDetailsService,
 	@Autowired
 	private ServletContext servletContext;
 	
+	private String fileStoreRelativePath;
+	
 	private Map<String, UserDetails> managedUserDetails;
 	
 	
@@ -51,8 +46,19 @@ public class InMemoryPersistentUserDetailsManager implements UserDetailsService,
 	// Initialization
 	//==================================================================================================================
 	
-	public InMemoryPersistentUserDetailsManager() {
+	/**
+	 * 
+	 * @param fileStoreRelativePath a non-null file path string
+	 * 
+	 * @throws IllegalArgumentException if fileStoreRelativePath is null
+	 */
+	public InMemoryPersistentUserDetailsManager(String fileStoreRelativePath) {
 		GlobalLogUtils.logConstruction(this);
+		
+		if (fileStoreRelativePath == null) {
+			throw new IllegalArgumentException("fileStoreRelativePath must not be null");
+		}
+		this.fileStoreRelativePath = fileStoreRelativePath;
 	}
 	
 	@PostConstruct
