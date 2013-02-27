@@ -46,7 +46,7 @@ public class LoginController extends DriverBaseSiteContextController implements 
 	
 	@RequestMapping(value = "/success")
 	public String doSignin() {
-		String redirectLocation = "/";
+		String redirectLocation = "/pages/";
 		return "redirect:" + redirectLocation;
 	}
 	
