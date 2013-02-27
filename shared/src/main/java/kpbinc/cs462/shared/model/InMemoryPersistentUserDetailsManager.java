@@ -1,4 +1,4 @@
-package kpbinc.cs462.shop.model;
+package kpbinc.cs462.shared.model;
 
 import java.io.File;
 import java.util.ArrayList;

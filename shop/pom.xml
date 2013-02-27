@@ -18,11 +18,12 @@
 	</build>
 	
 	<properties>
-		<SharedCodeVersion>0.2</SharedCodeVersion>
+		<SharedCodeVersion>0.3</SharedCodeVersion>
 	
 		<JacksonVersion>2.1.3</JacksonVersion>
 		<JSTLVersion>1.2</JSTLVersion>
 		<ScribeVersion>1.3.3</ScribeVersion>
+		<ServletAPIVersion>3.0-alpha-1</ServletAPIVersion>
 		<SpringFrameworkVersion>3.0.7.RELEASE</SpringFrameworkVersion>
 		<SpringSecurityVersion>3.1.3.RELEASE</SpringSecurityVersion>
 	</properties>
@@ -43,7 +44,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>3.0-alpha-1</version>
+			<version>${ServletAPIVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
