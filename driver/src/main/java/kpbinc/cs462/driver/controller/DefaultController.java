@@ -9,7 +9,7 @@ import kpbinc.util.logging.GlobalLogUtils;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/")
-public class DefaultController {
+public class DefaultController extends DriverBaseSiteContextController {
 
 	//= Initialization =================================================================================================
 	
