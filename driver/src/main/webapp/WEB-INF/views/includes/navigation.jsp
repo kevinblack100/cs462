@@ -6,10 +6,10 @@
 	|
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
-			<a href="${pageContext.request.contextPath}/pages/secure/signout/execute">Sign Out</a>
+			<a href="${pageContext.request.contextPath}/pages/secure/accounts/signout">Sign Out</a>
 		</c:when>
 		<c:otherwise>
-			<a href="${pageContext.request.contextPath}/pages/secure/signin/query">Sign In</a>
+			<a href="${pageContext.request.contextPath}/pages/secure/accounts/signin">Sign In</a>
 			|
 			<span>TODO: Register</span>
 		</c:otherwise>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Scope(value = "request")
-@RequestMapping(value = "/secure/signin")
+@RequestMapping(value = "/secure/accounts")
 public class LoginController extends DriverBaseSiteContextController implements Serializable {
 
 	//= Class Data =====================================================================================================
@@ -39,12 +39,12 @@ public class LoginController extends DriverBaseSiteContextController implements 
 	
 	//= Interface ======================================================================================================
 	
-	@RequestMapping(value = "/query")
+	@RequestMapping(value = "/signin")
 	public String presentSignin() {
 		return "signin";
 	}
 	
-	@RequestMapping(value = "/success")
+	@RequestMapping(value = "/authenticate/success")
 	public String doSignin() {
 		String redirectLocation = "/pages/";
 		return "redirect:" + redirectLocation;

@@ -14,18 +14,18 @@
 	<http use-expressions="true">
 		<!-- URLs to secure and how to secure them -->
 		<!-- pattern is ant regex so ** matches any directory path -->
-		<intercept-url pattern="/pages/secure/signin/query" access="permitAll" />
+		<intercept-url pattern="/pages/secure/accounts/signin" access="permitAll" />
 		<intercept-url pattern="/pages/secure/**" access="hasRole('ROLE_USER')"/>
 		<!-- Redirect to a form login if not authenticated/authorized? -->
 		<form-login
-			login-page="/pages/secure/signin/query"
-			login-processing-url="/pages/secure/signin/authenticate"
+			login-page="/pages/secure/accounts/signin"
+			login-processing-url="/pages/secure/accounts/authenticate"
 			always-use-default-target="true"
-			default-target-url="/pages/secure/signin/success"
+			default-target-url="/pages/secure/accounts/authenticate/success"
 			password-parameter="password"
 			username-parameter="username" />
 		<logout
-			logout-url="/pages/secure/signout/execute" 
+			logout-url="/pages/secure/accounts/signout" 
 			logout-success-url="/pages/"
 			invalidate-session="true" />
 	</http>
