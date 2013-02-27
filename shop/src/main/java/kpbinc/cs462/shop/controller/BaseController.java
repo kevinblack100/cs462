@@ -1,7 +1,7 @@
 package kpbinc.cs462.shop.controller;
 
 import kpbinc.util.logging.GlobalLogUtils;
-import kpbinc.cs462.shared.controller.context.LoggedInUserContext;
+import kpbinc.cs462.shared.controller.SharedBaseController;
 import kpbinc.cs462.shop.controller.policy.OrderPolicy;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Kevin Black
  */
-public abstract class BaseController {
+public abstract class BaseController extends SharedBaseController {
 
 	//~ Member Data ====================================================================================================
-	
-	// setter @Autowired
-	private LoggedInUserContext loggedInUserContext;
 	
 	@Autowired
 	private OrderPolicy orderPolicy;
@@ -27,19 +24,8 @@ public abstract class BaseController {
 	//~ Initialization =================================================================================================
 	
 	protected BaseController() {
+		super();
 		GlobalLogUtils.logConstruction(this);
-	}
-	
-	
-	//~ Interface ======================================================================================================
-	
-	public LoggedInUserContext getLoggedInUserContext() {
-		return loggedInUserContext;
-	}
-	
-	@Autowired
-	public void setLoggedInUserContext(LoggedInUserContext loggedInUserContext) {
-		this.loggedInUserContext = loggedInUserContext;
 	}
 	
 }
