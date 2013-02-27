@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/secure/accounts")
-public class LoginController extends DriverBaseSiteContextController implements Serializable {
+public class AccountsController extends DriverBaseSiteContextController implements Serializable {
 
 	//= Class Data =====================================================================================================
 	
@@ -32,7 +32,7 @@ public class LoginController extends DriverBaseSiteContextController implements 
 	
 	//= Initialization =================================================================================================
 	
-	public LoginController() {
+	public AccountsController() {
 		GlobalLogUtils.logConstruction(this);
 	}
 	
