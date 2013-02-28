@@ -8,9 +8,10 @@
 
   	<groupId>kpbinc.cs462</groupId>
   	<artifactId>shared</artifactId>
-  	<version>0.3</version>
+  	<version>0.4</version>
   	<name>Kevin Black's CS 462 Shared Webapp Code</name>
   	<description>
+  		0.4 moved components from shop necessary to handle OAuth (first part was committed as part of 0.3)
   		0.3 moved components from shop necessary to handle user log-in, registration, and persistence
   		0.2 common/general kpbinc packages moved from shop
   		0.1 kpbinc.cs462.shared.model.mixin package moved from shop
