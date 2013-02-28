@@ -31,6 +31,17 @@
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
 	
+	<bean id="authorizationTokenManager"
+		class="kpbinc.cs462.shared.model.manage.AuthorizationTokenManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/authtokens.json" />	
+	</bean>
+	<bean id="oauthServiceManager"
+		class="kpbinc.cs462.shared.model.manage.OAuthServiceManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/config/apiclientconfig.json" />	
+	</bean>
+	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/"/>
