@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Scope(value = "request")
-@RequestMapping(value = "/secure/signin")
+@RequestMapping(value = "/secure/accounts")
 public class LoginController extends ShopBaseSiteContextController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -28,12 +28,12 @@ public class LoginController extends ShopBaseSiteContextController implements Se
 		GlobalLogUtils.logConstruction(this);
 	}
 	
-	@RequestMapping(value = "/query")
+	@RequestMapping(value = "/signin")
 	public String presentSignin() {
 		return "signin";
 	}
 	
-	@RequestMapping(value = "/success")
+	@RequestMapping(value = "/authenticate/success")
 	public String doSignin(HttpServletResponse response) throws IOException {
 		UserDetails signedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		String redirectLocation = "/ffds/";

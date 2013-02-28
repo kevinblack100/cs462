@@ -16,10 +16,10 @@
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
 			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/manage">Manage Account</a>
 			/
-			<a href="${pageContext.request.contextPath}/ffds/secure/signout/execute">Sign Out</a>
+			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/signout">Sign Out</a>
 		</c:when>
 		<c:otherwise>
-			<a href="${pageContext.request.contextPath}/ffds/secure/signin/query">Sign In</a>
+			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/signin">Sign In</a>
 			/
 			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/register/query">Register</a>
 		</c:otherwise>
