@@ -103,6 +103,25 @@ public class AccountsController extends ShopBaseSiteContextController {
 		
 		return "redirect:" + redirectLocation;
 	}
+	
+	//- Sign-in & Authentication Dispatch ------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/signin")
+	public String getSigninForm() {
+		return "accounts/signin";
+	}
+	
+	@RequestMapping(value = "/authenticate/success")
+	public String authenticatedSuccessfully() {
+		UserDetails signedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
+		String redirectLocation = "/ffds/";
+		if (signedInUserDetails != null) {
+			String username = signedInUserDetails.getUsername();
+			redirectLocation += "users/" + username;
+		}
+		
+		return "redirect:" + redirectLocation;
+	}
 
 	//- Account Management ---------------------------------------------------------------------------------------------
 	
