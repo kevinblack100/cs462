@@ -31,7 +31,7 @@
 	</context:component-scan>
 	
 	<!-- Model scan -->
-	<context:component-scan base-package="kpbinc.cs462.shop.model" use-default-filters="false">
+	<context:component-scan base-package="kpbinc.cs462.shop.model.manage" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
 	
@@ -41,7 +41,7 @@
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/authtokens.json" />	
 	</bean>
 	<bean id="oauthServiceManager"
-		class="kpbinc.cs462.shop.model.OAuthServiceManager"
+		class="kpbinc.cs462.shared.model.manage.OAuthServiceManager"
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/config/apiclientconfig.json" />	
 	</bean>

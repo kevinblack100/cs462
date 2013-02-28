@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kpbinc.cs462.shop.model.ShopProfile;
-import kpbinc.cs462.shop.model.ShopProfileManager;
+import kpbinc.cs462.shop.model.manage.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller

@@ -6,9 +6,9 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import kpbinc.cs462.shop.model.DriverProfile;
-import kpbinc.cs462.shop.model.DriverProfileManager;
 import kpbinc.cs462.shop.model.ShopProfile;
-import kpbinc.cs462.shop.model.ShopProfileManager;
+import kpbinc.cs462.shop.model.manage.DriverProfileManager;
+import kpbinc.cs462.shop.model.manage.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;

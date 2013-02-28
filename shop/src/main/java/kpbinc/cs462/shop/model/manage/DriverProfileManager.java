@@ -1,12 +1,12 @@
-package kpbinc.cs462.shop.model;
+package kpbinc.cs462.shop.model.manage;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.io.util.JsonFileStore;
 import kpbinc.io.util.JsonFileStorePersistentMap;
 

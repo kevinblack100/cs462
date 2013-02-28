@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.shared.model.manage.AuthorizationTokenManager;
-import kpbinc.cs462.shop.model.OAuthServiceManager;
+import kpbinc.cs462.shared.model.manage.OAuthServiceManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.exceptions.OAuthException;

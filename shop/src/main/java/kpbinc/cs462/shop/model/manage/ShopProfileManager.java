@@ -1,4 +1,4 @@
-package kpbinc.cs462.shop.model;
+package kpbinc.cs462.shop.model.manage;
 
 import java.io.File;
 
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.io.util.JsonFileStore;
 import kpbinc.util.logging.GlobalLogUtils;
 
