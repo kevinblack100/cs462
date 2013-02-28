@@ -40,6 +40,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/authtokens.json" />	
 	</bean>
+	<bean id="oauthServiceManager"
+		class="kpbinc.cs462.shop.model.OAuthServiceManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/config/apiclientconfig.json" />	
+	</bean>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -14,20 +14,12 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;
 import org.scribe.oauth.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@Repository
-@Scope(value = "singleton")
 public class OAuthServiceManager {
 
-	//==================================================================================================================
-	// Class Data
-	//==================================================================================================================
-	
-	private static final String API_APP_CONFIG_FILEPATH = "/WEB-INF/ffds/config/apiclientconfig.json";
+	//= Class Data =====================================================================================================
 	
 	@SuppressWarnings("unused")
 	private static class APIClientConfiguration {
@@ -65,30 +57,34 @@ public class OAuthServiceManager {
 		
 	}
 	
-	//==================================================================================================================
-	// Member Data
-	//==================================================================================================================
+	//= Member Data ====================================================================================================
 	
 	@Autowired
 	private ServletContext servletContext;
+	
+	private String fileStoreRelativePath;
 	
 	private Map<String, APIClientConfiguration> apiClientConfigurations;
 	
 	private Map<String, Map<String, OAuthService>> apiOAuthServices = new HashMap<String, Map<String, OAuthService>>();
 	
 	
-	//==================================================================================================================
-	// Initialization
-	//==================================================================================================================
+	//= Initialization =================================================================================================
 	
-	public OAuthServiceManager() {
+	/**
+	 * @param fileStoreRelativePath
+	 * @throws IllegalArgumentException if fileStoreRelativePath is null
+	 */
+	public OAuthServiceManager(String fileStoreRelativePath) {
 		GlobalLogUtils.logConstruction(this);
+		if (fileStoreRelativePath == null) {
+			throw new IllegalArgumentException("file store relative path must not be null");
+		}
+		this.fileStoreRelativePath = fileStoreRelativePath;
 	}
 	
 	
-	//==================================================================================================================
-	// Interface
-	//==================================================================================================================
+	//= Interface ======================================================================================================
 	
 	public OAuthService getOAuthService(String api, String username) {
 		Map<String, OAuthService> usernameToService = apiOAuthServices.get(api);
@@ -125,7 +121,7 @@ public class OAuthServiceManager {
 	
 	private Map<String, APIClientConfiguration> getAPIClientConfigurations() {
 		if (apiClientConfigurations == null) {
-			String fullPath = servletContext.getRealPath(API_APP_CONFIG_FILEPATH);
+			String fullPath = servletContext.getRealPath(fileStoreRelativePath);
 			File apiClientConfigFile = new File(fullPath);
 			JsonFileStore<Map<String, APIClientConfiguration>> fileStore =
 					new JsonFileStore<Map<String, APIClientConfiguration>>(apiClientConfigFile, 
