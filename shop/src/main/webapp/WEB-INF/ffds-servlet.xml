@@ -34,6 +34,9 @@
 	<context:component-scan base-package="kpbinc.cs462.shop.model" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
+	<context:component-scan base-package="kpbinc.cs462.shared.model.manage" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
