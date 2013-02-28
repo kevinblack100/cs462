@@ -34,9 +34,12 @@
 	<context:component-scan base-package="kpbinc.cs462.shop.model" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
-	<context:component-scan base-package="kpbinc.cs462.shared.model.manage" use-default-filters="false">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
-	</context:component-scan>
+	
+	<bean id="authorizationTokenManager"
+		class="kpbinc.cs462.shared.model.manage.AuthorizationTokenManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/authtokens.json" />	
+	</bean>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

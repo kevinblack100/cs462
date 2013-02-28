@@ -12,21 +12,13 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@Repository
-@Scope(value = "singleton")
 public class AuthorizationTokenManager {
 
-	//==================================================================================================================
-	// Class Data
-	//==================================================================================================================
-	
-	private static final String AUTH_TOKEN_STORE_FILEPATH = "/WEB-INF/ffds/stores/authtokens.json";
+	//= Class Data =====================================================================================================
 	
 	public static class TokenWrapper {
 		
@@ -80,32 +72,36 @@ public class AuthorizationTokenManager {
 		}
 	}
 	
-	//==================================================================================================================
-	// Member Data
-	//==================================================================================================================
+	//= Member Data ====================================================================================================
 	
 	@Autowired
 	private ServletContext servletContext;
 	
+	private String fileStoreRelativePath;
+	
 	private JsonFileStorePersistentMap<String, Map<String, TokenWrapper>> authorizationTokensIndex = null;
 	
 	
-	//==================================================================================================================
-	// Initialization
-	//==================================================================================================================
+	//= Initialization =================================================================================================
 	
-	public AuthorizationTokenManager() {
+	/**
+	 * @param fileStoreRelativePath
+	 * @throws IllegalArgumentException if fileStoreRelativePath is null
+	 */
+	public AuthorizationTokenManager(String fileStoreRelativePath) {
 		GlobalLogUtils.logConstruction(this);
+		if (fileStoreRelativePath == null) {
+			throw new IllegalArgumentException("file store relative path must not be null");
+		}
+		this.fileStoreRelativePath = fileStoreRelativePath;
 	}
 	
 	
-	//==================================================================================================================
-	// Interface
-	//==================================================================================================================
+	//= Interface ======================================================================================================
 	
 	private JsonFileStorePersistentMap<String, Map<String, TokenWrapper>> getIndex() {
 		if (authorizationTokensIndex == null) {
-			String fullPath = servletContext.getRealPath(AUTH_TOKEN_STORE_FILEPATH);
+			String fullPath = servletContext.getRealPath(fileStoreRelativePath);
 			File authTokenStoreFile = new File(fullPath);
 			JsonFileStore<Map<String, Map<String, TokenWrapper>>> fileStore = 
 					new JsonFileStore<Map<String, Map<String, TokenWrapper>>>(authTokenStoreFile, 
