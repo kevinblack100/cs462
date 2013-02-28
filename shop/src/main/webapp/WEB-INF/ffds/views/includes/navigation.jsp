@@ -21,7 +21,7 @@
 		<c:otherwise>
 			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/signin">Sign In</a>
 			/
-			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/register/query">Register</a>
+			<a href="${pageContext.request.contextPath}/ffds/secure/accounts/register">Register</a>
 		</c:otherwise>
 	</c:choose>
 </div>

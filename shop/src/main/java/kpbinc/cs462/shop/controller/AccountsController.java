@@ -67,12 +67,12 @@ public class AccountsController extends ShopBaseSiteContextController {
 	
 	//- Account Registration -------------------------------------------------------------------------------------------
 	
-	@RequestMapping(value = "/register/query")
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegistrationForm() {
 		return "accounts/register";
 	}
 	
-	@RequestMapping(value = "/register/execute")
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerAccount(
 			@RequestParam(value = "username", required = true) String username,
 			HttpServletResponse response) throws IOException {
