@@ -30,7 +30,7 @@ public class LoginController extends ShopBaseSiteContextController implements Se
 	
 	@RequestMapping(value = "/signin")
 	public String presentSignin() {
-		return "signin";
+		return "accounts/signin";
 	}
 	
 	@RequestMapping(value = "/authenticate/success")
