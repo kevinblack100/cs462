@@ -1,9 +1,6 @@
 package kpbinc.cs462.shop.controller;
 
-import java.io.IOException;
 import java.io.Serializable;
-
-import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -29,12 +26,12 @@ public class LoginController extends ShopBaseSiteContextController implements Se
 	}
 	
 	@RequestMapping(value = "/signin")
-	public String presentSignin() {
+	public String getSigninForm() {
 		return "accounts/signin";
 	}
 	
 	@RequestMapping(value = "/authenticate/success")
-	public String doSignin(HttpServletResponse response) throws IOException {
+	public String authenticatedSuccessfully() {
 		UserDetails signedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		String redirectLocation = "/ffds/";
 		if (signedInUserDetails != null) {
