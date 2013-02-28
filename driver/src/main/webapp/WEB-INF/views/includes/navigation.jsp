@@ -4,6 +4,8 @@
 <div id="navigation">
 	<a href="${pageContext.request.contextPath}/pages/">Home</a>
 	|
+	<a href="${pageContext.request.contextPath}/pages/users">Users</a>
+	|
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
 			<a href="${pageContext.request.contextPath}/pages/secure/accounts/signout">Sign Out</a>
