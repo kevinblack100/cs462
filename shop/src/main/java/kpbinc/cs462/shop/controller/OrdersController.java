@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/orders")
-public class OrderController extends ShopBaseSiteContextController {
+public class OrdersController extends ShopBaseSiteContextController {
 	
-	//~ Class Data =====================================================================================================
+	//= Class Data =====================================================================================================
 	
-	private static final Logger logger = Logger.getLogger(OrderController.class.getName());
+	private static final Logger logger = Logger.getLogger(OrdersController.class.getName());
 	
 	
-	//~ Member Data ====================================================================================================
+	//= Member Data ====================================================================================================
 	
 	@Autowired
 	private EventGenerator eventGenerator;
@@ -40,15 +40,15 @@ public class OrderController extends ShopBaseSiteContextController {
 	private DriverProfileManager driverProfileManager;
 	
 	
-	//~ Initialization =================================================================================================
+	//= Initialization =================================================================================================
 	
-	public OrderController() {
+	public OrdersController() {
 		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 	
 	
-	//~ Interface ======================================================================================================
+	//= Interface ======================================================================================================
 	
 	@RequestMapping(value = "/submit", method = RequestMethod.GET)
 	public String getOrderSubmissionForm() {
