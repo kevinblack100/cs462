@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Scope(value = "request")
 @RequestMapping("/users")
-public class UserController extends ShopBaseSiteContextController {
+public class UsersController extends ShopBaseSiteContextController {
 	
 	//= Class Data =====================================================================================================
 	
-	private static final Logger logger = Logger.getLogger(UserController.class.getName());
+	private static final Logger logger = Logger.getLogger(UsersController.class.getName());
 	
 	
 	//= Member Data ====================================================================================================
@@ -47,7 +47,7 @@ public class UserController extends ShopBaseSiteContextController {
 	
 	//= Initialization =================================================================================================
 	
-	public UserController() {
+	public UsersController() {
 		GlobalLogUtils.logConstruction(this);
 	}
 	
