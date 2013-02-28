@@ -34,11 +34,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/secure/accounts")
-public class AccountController extends ShopBaseSiteContextController {
+public class AccountsController extends ShopBaseSiteContextController {
 	
 	//= Class Data =====================================================================================================
 	
-	private static final Logger logger = Logger.getLogger(AccountController.class.getName());
+	private static final Logger logger = Logger.getLogger(AccountsController.class.getName());
 	
 	
 	//= Member Data ====================================================================================================
@@ -58,7 +58,7 @@ public class AccountController extends ShopBaseSiteContextController {
 	
 	//= Initialization =================================================================================================
 	
-	public AccountController() {
+	public AccountsController() {
 		GlobalLogUtils.logConstruction(this);
 	}
 	
