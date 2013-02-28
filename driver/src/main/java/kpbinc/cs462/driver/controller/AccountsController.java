@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.cs462.shared.controller.context.LoggedInUserContext;
-import kpbinc.cs462.shared.model.InMemoryPersistentUserDetailsManager;
+import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;

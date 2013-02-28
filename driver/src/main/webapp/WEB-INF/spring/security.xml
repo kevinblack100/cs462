@@ -40,7 +40,7 @@
 	
 	<beans:bean
 		id="inMemoryPersistentUserDetailsManager"
-		class="kpbinc.cs462.shared.model.InMemoryPersistentUserDetailsManager"
+		class="kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager"
 		scope="singleton">
 		<beans:constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/userdetails.json" />
 	</beans:bean>
