@@ -2,12 +2,10 @@ package kpbinc.cs462.shared.event;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.logging.Logger;
 
 import kpbinc.util.logging.GlobalLogUtils;
@@ -19,18 +17,19 @@ import org.springframework.stereotype.Component;
 @Scope(value = "request")
 public class EventGenerator {
 
-	// ~ Class Data ====================================================================================================
-
+	//= Class Data =====================================================================================================
+	
 	private static final Logger logger = Logger.getLogger(EventGenerator.class.getName());
 
 	
-	// ~ Initialization ================================================================================================
+	//= Initialization =================================================================================================
 
 	public EventGenerator() {
 		GlobalLogUtils.logConstruction(this);
 	}
 
-	// ~ Interface =====================================================================================================
+	
+	//= Interface ======================================================================================================
 
 	/**
 	 * @param eventSignalURL event signal URL
