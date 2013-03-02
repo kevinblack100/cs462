@@ -1,4 +1,4 @@
-package kpbinc.cs462.shop.controller;
+package kpbinc.cs462.shared.event;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
