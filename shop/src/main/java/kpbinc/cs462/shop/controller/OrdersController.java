@@ -34,10 +34,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private EventGenerator eventGenerator;
-	
-	@Autowired
-	private EventSerializer urlEncodeEventSerializer;
-	
+		
 	@Autowired
 	private ShopProfileManager shopProfileManager;
 	
@@ -76,11 +73,10 @@ public class OrdersController extends ShopBaseSiteContextController {
 		if (StringUtils.isNotBlank(deliveryTimeRaw)) {
 			event.addAttribute("delivery_time", deliveryTimeRaw);
 		}
-		String eventDetails = urlEncodeEventSerializer.serialize(event);
 
 		Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
 		for (DriverProfile profile : driverProfiles) {
-			boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), eventDetails);
+			boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), event);
 			logger.info(String.format("rfq:delivery_ready sent to %s successfully?: %s", profile.getEventSignalURL(), Boolean.toString(success)));
 		}
 		

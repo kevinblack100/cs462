@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,12 @@ public class EventGenerator {
 	
 	private static final Logger logger = Logger.getLogger(EventGenerator.class.getName());
 
+	
+	//= Member Data ====================================================================================================
+	
+	@Autowired
+	private EventSerializer urlEncodeEventSerializer;
+	
 	
 	//= Initialization =================================================================================================
 
@@ -36,11 +43,11 @@ public class EventGenerator {
 	 * @param eventDetails URL encoded query string with event details 
 	 * @return true if the event was sent successfully, false otherwise
 	 */
-	public boolean sendEvent(String eventSignalURL, String eventDetails) {
+	public boolean sendEvent(String eventSignalURL, Event event) {
 		// based on examples at http://www.xyzws.com/Javafaq/how-to-use-httpurlconnection-post-data-to-web-server/139
 
 		assert (eventSignalURL != null);
-		assert (eventDetails != null);
+		assert (event != null);
 
 		boolean wasSuccessful = false;
 
@@ -53,7 +60,8 @@ public class EventGenerator {
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-			connection.setRequestProperty("Content-Length",	Integer.toString(eventDetails.getBytes().length));
+			String serializedEvent = urlEncodeEventSerializer.serialize(event);
+			connection.setRequestProperty("Content-Length",	Integer.toString(serializedEvent.getBytes().length));
 			connection.setRequestProperty("Content-Language", "en-US");
 
 			connection.setUseCaches(false);
@@ -62,7 +70,7 @@ public class EventGenerator {
 
 			// Send request
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-			wr.writeBytes(eventDetails);
+			wr.writeBytes(serializedEvent);
 			wr.flush();
 			wr.close();
 
