@@ -1,0 +1,89 @@
+package kpbinc.cs462.shared.event;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class URLEncodeEventSerializerTests {
+
+	//= Class Data =====================================================================================================
+	
+	private static final String DEFAULT_DOMAIN = "test";
+	
+	private static final String RESERVED_DOMAIN_KEY = "_domain";
+	private static final String RESERVED_NAME_KEY = "_name";
+
+	
+	//= ACT/ASSERT =====================================================================================================
+	
+	private void actAndAssert(Event event, String expectedSerialization) {
+		// ACT
+		EventSerializer serializer = new URLEncodeEventSerializer();
+		String actualSerialization = serializer.serialize(event);
+		
+		// ASSERT
+		assertEquals(expectedSerialization, actualSerialization);
+	}
+	
+	
+	//= Tests ==========================================================================================================
+	
+	@Test
+	public void testEncodeDomainAndName() {
+		// ARRANGE
+		String name = "encode-domain-and-name";
+		Event event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		String expectedSerialization = String.format("%s=%s&%s=%s",
+				RESERVED_DOMAIN_KEY, event.getDomain(),
+				RESERVED_NAME_KEY, event.getName());
+		
+		actAndAssert(event, expectedSerialization);
+	}
+
+	@Test
+	public void testEncodeWithOneAttribute() {
+		// ARRANGE
+		String name = "encode-domain-and-name";
+		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		
+		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		event.addAttribute(attrib1Name, attrib1Value);
+		
+		String expectedSerialization = String.format("%s=%s&%s=%s&%s=%s",
+				RESERVED_DOMAIN_KEY, event.getDomain(),
+				RESERVED_NAME_KEY, event.getName(),
+				// TODO create a URLEncoder wrapper that will not throw UnsupportedEncodingExceptions and use it here
+				attrib1Name, "Hello+World");
+		
+		actAndAssert(event, expectedSerialization);
+	}
+	
+	/**
+	 * Validate that the encoder properly separates (and encodes) multiple attribute name-value pairs.
+	 */
+	@Test
+	public void testEncodeWithTwoAttributes() {		
+		// ARRANGE
+		String name = "encode-domain-and-name";
+		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		
+		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		event.addAttribute(attrib1Name, attrib1Value);
+		
+		String attrib2Name = "attrib2";
+		String attrib2Value = "shared-code";
+		event.addAttribute(attrib2Name, attrib2Value);
+		
+		String expectedSerialization = String.format("%s=%s&%s=%s&%s=%s&%s=%s",
+				RESERVED_DOMAIN_KEY, event.getDomain(),
+				RESERVED_NAME_KEY, event.getName(),
+				// TODO create a URLEncoder wrapper that will not throw UnsupportedEncodingExceptions and use it here
+				attrib1Name, "Hello+World",	
+				attrib2Name, attrib2Value);
+		
+		actAndAssert(event, expectedSerialization);
+	}
+	
+}
