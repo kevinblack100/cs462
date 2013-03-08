@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author Kevin Black
  */
-@Component
+@Component(value = "urlEncodeEventSerializer")
 @Scope(value = "singleton")
 public class URLEncodeEventSerializer implements EventSerializer {
 
