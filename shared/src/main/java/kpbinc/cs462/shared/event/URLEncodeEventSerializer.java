@@ -53,11 +53,11 @@ public class URLEncodeEventSerializer implements EventSerializer {
 		}
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append(RESERVED_DOMAIN_KEY).append(EQUALS).append(event.getDomain());
-		builder.append(KEY_VALUE_PAIR_SEPARATOR).append(RESERVED_NAME_KEY).append(EQUALS).append(event.getName());
+		appendKeyValuePair(builder, RESERVED_DOMAIN_KEY, event.getDomain());
+		appendKeyValuePair(builder, RESERVED_NAME_KEY, event.getName());
 		for (Map.Entry<String, Object> attribute : event.getAttributes().entrySet()) {
 			String serializedValue = encode(attribute.getValue());
-			builder.append(KEY_VALUE_PAIR_SEPARATOR).append(attribute.getKey()).append(EQUALS).append(serializedValue);
+			appendKeyValuePair(builder, attribute.getKey(), serializedValue);
 		}
 		
 		String serializedEvent = builder.toString();
@@ -67,7 +67,14 @@ public class URLEncodeEventSerializer implements EventSerializer {
 	
 	//= Support ========================================================================================================
 	
-	private String encode(Object value) {
+	private static void appendKeyValuePair(StringBuilder builder, String key, String value) {
+		if (0 < builder.length()) {
+			builder.append(KEY_VALUE_PAIR_SEPARATOR);
+		}
+		builder.append(key).append(EQUALS).append(value);
+	}
+	
+	private static String encode(Object value) {
 		assert(value != null);
 		
 		String encodedValue = null;
