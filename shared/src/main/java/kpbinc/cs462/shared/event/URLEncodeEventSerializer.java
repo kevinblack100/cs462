@@ -84,7 +84,7 @@ public class URLEncodeEventSerializer implements EventSerializer {
 		}
 		catch (UnsupportedEncodingException e) {
 			logger.warning("Unsupported character encoding while URL encoding: " + e.getMessage());
-			e.printStackTrace(); // TODO instead throw an EventSerializationException?
+			e.printStackTrace(); // TODO instead throw an EventSerializationException? Don't expect failure since using UTF-8
 		}
 		
 		return encodedValue;
