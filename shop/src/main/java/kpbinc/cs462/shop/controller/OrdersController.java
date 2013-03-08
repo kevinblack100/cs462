@@ -1,17 +1,18 @@
 package kpbinc.cs462.shop.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.EventGenerator;
+import kpbinc.cs462.shared.event.EventSerializer;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ public class OrdersController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private EventGenerator eventGenerator;
+	
+	@Autowired
+	private EventSerializer urlEncodeEventSerializer;
 	
 	@Autowired
 	private ShopProfileManager shopProfileManager;
@@ -64,18 +68,16 @@ public class OrdersController extends ShopBaseSiteContextController {
 		
 		ShopProfile shopProfile = shopProfileManager.getProfile();
 		
-		StringBuilder builder = new StringBuilder();
-		builder.append("_domain=rfq") // _domain and _name do not have to be URL encoded
-			   .append("&_name=delivery_ready")
-			   .append("&shop_name=").append(urlEncode(shopProfile.getName()))
-			   .append("&shop_address=").append(urlEncode(shopProfile.getAddress()))
-		       .append("&pickup_time=").append(urlEncode(pickupTimeRaw))
-		       .append("&delivery_address=").append(urlEncode(deliveryAddressRaw));
-		if (!deliveryTimeRaw.isEmpty()) {
-			builder.append("&delivery_time=").append(urlEncode(deliveryTimeRaw));
+		BasicEventImpl event = new BasicEventImpl("rfq", "delivery_ready");
+		event.addAttribute("shop_name", shopProfile.getName());
+		event.addAttribute("shop_address", shopProfile.getAddress());
+		event.addAttribute("pickup_time", pickupTimeRaw);
+		event.addAttribute("delivery_address", deliveryAddressRaw);
+		if (StringUtils.isNotBlank(deliveryTimeRaw)) {
+			event.addAttribute("delivery_time", deliveryTimeRaw);
 		}
-		String eventDetails = builder.toString();
-		
+		String eventDetails = urlEncodeEventSerializer.serialize(event);
+
 		Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
 		for (DriverProfile profile : driverProfiles) {
 			boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), eventDetails);
@@ -83,17 +85,6 @@ public class OrdersController extends ShopBaseSiteContextController {
 		}
 		
 		return "redirect:/ffds/";
-	}
-	
-	private static String urlEncode(String input) {
-		String result = input; // send original
-		try {
-			result = URLEncoder.encode(input, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			logger.warning("UTF-8 not supported?: " + e.getMessage());
-		}
-		return result;
 	}
 
 }
