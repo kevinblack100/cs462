@@ -35,6 +35,7 @@ public class BasicEventImplTests {
 		// ARRANGE nothing
 		
 		// ACT -> ASSERT
+		@SuppressWarnings("unused")
 		Event event = new BasicEventImpl("", " ");
 	}
 
