@@ -2,6 +2,7 @@ package kpbinc.cs462.shared.event;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -55,9 +56,11 @@ public class URLEncodeEventSerializer implements EventSerializer {
 		StringBuilder builder = new StringBuilder();
 		appendKeyValuePair(builder, RESERVED_DOMAIN_KEY, event.getDomain());
 		appendKeyValuePair(builder, RESERVED_NAME_KEY, event.getName());
-		for (Map.Entry<String, Object> attribute : event.getAttributes().entrySet()) {
-			String serializedValue = encode(attribute.getValue());
-			appendKeyValuePair(builder, attribute.getKey(), serializedValue);
+		for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
+			for (Object value : attribute.getValue()) {
+				String serializedValue = encode(value);
+				appendKeyValuePair(builder, attribute.getKey(), serializedValue);
+			}
 		}
 		
 		String serializedEvent = builder.toString();

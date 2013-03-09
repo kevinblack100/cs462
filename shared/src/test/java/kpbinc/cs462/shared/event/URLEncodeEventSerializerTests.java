@@ -86,4 +86,30 @@ public class URLEncodeEventSerializerTests {
 		actAndAssert(event, expectedSerialization);
 	}
 	
+	/**
+	 * Validate that the encoder properly encodes multi-valued attributes
+	 */
+	@Test
+	public void testEncodeMultiValuedAttribute() {
+		// ARRANGE
+		String name = "encode-domain-and-name";
+		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		
+		String attrib1Name = "attrib1";
+		String attrib1Value1 = "Hello World";
+		event.addAttribute(attrib1Name, attrib1Value1);
+		
+		String attrib1Value2 = "Goodbye";
+		event.addAttribute(attrib1Name, attrib1Value2);
+		
+		String expectedSerialization = String.format("%s=%s&%s=%s&%s=%s&%s=%s",
+				RESERVED_DOMAIN_KEY, event.getDomain(),
+				RESERVED_NAME_KEY, event.getName(),
+				// TODO create a URLEncoder wrapper that will not throw UnsupportedEncodingExceptions and use it here
+				attrib1Name, "Hello+World",	
+				attrib1Name, attrib1Value2);
+		
+		actAndAssert(event, expectedSerialization);
+	}
+	
 }
