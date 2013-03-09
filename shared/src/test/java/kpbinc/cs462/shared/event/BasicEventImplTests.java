@@ -2,6 +2,9 @@ package kpbinc.cs462.shared.event;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 public class BasicEventImplTests {
@@ -27,18 +30,45 @@ public class BasicEventImplTests {
 	}
 
 	@Test
-	public void testAddAttribute() {
+	public void testAddSingleValuedAttribute() {
 		// ARRANGE
-		String name = "add-attribute";
+		String name = "add-single-valued-attribute";
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
 		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		
+		List<Object> expectedValueStructure = new ArrayList<Object>();
+		expectedValueStructure.add(attrib1Value);
 		
 		// ACT
-		Object previousValue = event.addAttribute(attrib1Name, "Hello World");
+		event.addAttribute(attrib1Name, attrib1Value);
 		
 		// ASSERT
-		assertNull("previous value", previousValue);
 		assertTrue("event contains " + attrib1Name, event.getAttributes().containsKey(attrib1Name));
+		assertEquals(attrib1Name + " value", expectedValueStructure, event.getAttributes().get(attrib1Name));
+	}
+	
+	@Test
+	public void testAddMultiValuedAttribute() {
+		// ARRANGE
+		String name = "add-multi-valued-attribute";
+		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		
+		String attrib1Name = "attrib1";
+		String attrib1Value1 = "Hello World";
+		String attrib1Value2 = "Goodbye";
+		
+		List<Object> expectedValueStructure = new ArrayList<Object>();
+		expectedValueStructure.add(attrib1Value1);
+		expectedValueStructure.add(attrib1Value2);
+		
+		// ACT
+		event.addAttribute(attrib1Name, attrib1Value1);
+		event.addAttribute(attrib1Name, attrib1Value2);
+		
+		// ASSERT
+		assertTrue("event contains " + attrib1Name, event.getAttributes().containsKey(attrib1Name));
+		assertEquals(attrib1Name + " value structure", expectedValueStructure, event.getAttributes().get(attrib1Name));
 	}
 	
 }

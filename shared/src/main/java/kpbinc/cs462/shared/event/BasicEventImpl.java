@@ -1,6 +1,8 @@
 package kpbinc.cs462.shared.event;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -12,7 +14,7 @@ public class BasicEventImpl implements Event {
 	
 	private String domain;
 	private String name;
-	private Map<String, Object> attributes;
+	private Map<String, List<Object>> attributes;
 	
 	
 	//= Initialization =================================================================================================
@@ -34,7 +36,7 @@ public class BasicEventImpl implements Event {
 		
 		this.domain = domain;
 		this.name = name;
-		this.attributes = new TreeMap<String, Object>();
+		this.attributes = new TreeMap<String, List<Object>>();
 	}
 	
 	
@@ -51,13 +53,21 @@ public class BasicEventImpl implements Event {
 	}
 
 	@Override
-	public Map<String, Object> getAttributes() {
+	public Map<String, List<Object>> getAttributes() {
 		return Collections.unmodifiableMap(attributes);
 	}
 
-	public Object addAttribute(String attribName, Object value) {
-		Object previousValue = attributes.put(attribName, value);
-		return previousValue;
+	/**
+	 * Adds the attribute name-value pair to this event.
+	 * 
+	 * @param attribName name of the attribute
+	 * @param value value of the attribute, or a value of the attribute if multi-valued
+	 */
+	public void addAttribute(String attribName, Object value) {
+		if (!attributes.containsKey(attribName)) {
+			attributes.put(attribName, new ArrayList<Object>());
+		}
+		attributes.get(attribName).add(value);
 	}
 	
 }
