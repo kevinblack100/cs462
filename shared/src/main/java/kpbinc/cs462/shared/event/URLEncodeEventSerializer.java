@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static kpbinc.cs462.shared.event.CommonEventSerializationConstants.*;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.context.annotation.Scope;
@@ -23,10 +24,7 @@ public class URLEncodeEventSerializer implements EventSerializer {
 	//= Class Data =====================================================================================================
 	
 	private static final Logger logger = Logger.getLogger(URLEncodeEventSerializer.class.getName());
-	
-	private static final String RESERVED_DOMAIN_KEY = "_domain";
-	private static final String RESERVED_NAME_KEY = "_name";
-	
+
 	private static final String EQUALS = "=";
 	private static final String KEY_VALUE_PAIR_SEPARATOR = "&";
 	
@@ -54,8 +52,8 @@ public class URLEncodeEventSerializer implements EventSerializer {
 		}
 		
 		StringBuilder builder = new StringBuilder();
-		appendKeyValuePair(builder, RESERVED_DOMAIN_KEY, event.getDomain());
-		appendKeyValuePair(builder, RESERVED_NAME_KEY, event.getName());
+		appendKeyValuePair(builder, DOMAIN_KEY, event.getDomain());
+		appendKeyValuePair(builder, NAME_KEY, event.getName());
 		for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
 			for (Object value : attribute.getValue()) {
 				String serializedValue = encode(value);
