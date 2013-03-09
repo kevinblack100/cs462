@@ -62,8 +62,15 @@ public class BasicEventImpl implements Event {
 	 * 
 	 * @param attribName name of the attribute
 	 * @param value value of the attribute, or a value of the attribute if multi-valued
+	 * 
+	 * @throws EventRenderingException if attribName is reserved. Reserved event attributes are set through the
+	 * constructor.
 	 */
-	public void addAttribute(String attribName, Object value) {
+	public void addAttribute(String attribName, Object value) throws EventRenderingException {
+		if (CommonEventSerializationConstants.isReservedAttributeName(attribName)) {
+			throw new EventRenderingException("attribute name must not be reserved");
+		}
+		
 		if (!attributes.containsKey(attribName)) {
 			attributes.put(attribName, new ArrayList<Object>());
 		}

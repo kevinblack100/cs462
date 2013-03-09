@@ -1,5 +1,6 @@
 package kpbinc.cs462.shared.event;
 
+import static kpbinc.cs462.shared.event.CommonEventSerializationConstants.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class BasicEventImplTests {
 	public void testConstructorFailure() throws EventRenderingException {
 		// ARRANGE nothing
 		
-		// ACT
+		// ACT -> ASSERT
 		Event event = new BasicEventImpl("", " ");
 	}
 
@@ -77,6 +78,29 @@ public class BasicEventImplTests {
 		// ASSERT
 		assertTrue("event contains " + attrib1Name, event.getAttributes().containsKey(attrib1Name));
 		assertEquals(attrib1Name + " value structure", expectedValueStructure, event.getAttributes().get(attrib1Name));
+	}
+	
+	@Test(expected = EventRenderingException.class) //< ASSERT
+	public void testAddWellknownReservedAttribute() throws EventRenderingException {
+		// ARRANGE
+		String name = "add-wellknown-reserved-attribute";
+		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		
+		// ACT -> ASSERT
+		event.addAttribute(DOMAIN_KEY, "alternate");
+	}
+	
+	@Test(expected = EventRenderingException.class) //< ASSERT
+	public void testAddNonWellknownReservedAttribute() throws EventRenderingException {
+		// ARRANGE
+		String name = "add-non-wellknown-reserved-attribute";
+		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
+		
+		String reservedAttribName = "_anystring";
+		assertTrue(isReservedAttributeName(reservedAttribName));
+		
+		// ACT -> ASSERT
+		event.addAttribute(reservedAttribName, "somestring");
 	}
 	
 }
