@@ -17,7 +17,7 @@ public class BasicEventImplTests {
 	//= Tests ==========================================================================================================
 	
 	@Test
-	public void testConstructorSuccess() {
+	public void testConstructorSuccess() throws EventRenderingException {
 		// ARRANGE
 		String name = "constructor-success";
 		
@@ -28,9 +28,17 @@ public class BasicEventImplTests {
 		assertEquals("domain", DEFAULT_DOMAIN, event.getDomain());
 		assertEquals("name", name, event.getName());
 	}
+	
+	@Test(expected = EventRenderingException.class) //< ASSERT
+	public void testConstructorFailure() throws EventRenderingException {
+		// ARRANGE nothing
+		
+		// ACT
+		Event event = new BasicEventImpl("", " ");
+	}
 
 	@Test
-	public void testAddSingleValuedAttribute() {
+	public void testAddSingleValuedAttribute() throws EventRenderingException  {
 		// ARRANGE
 		String name = "add-single-valued-attribute";
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
@@ -49,7 +57,7 @@ public class BasicEventImplTests {
 	}
 	
 	@Test
-	public void testAddMultiValuedAttribute() {
+	public void testAddMultiValuedAttribute() throws EventRenderingException  {
 		// ARRANGE
 		String name = "add-multi-valued-attribute";
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);

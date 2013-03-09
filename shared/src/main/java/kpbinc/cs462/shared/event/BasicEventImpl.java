@@ -23,15 +23,15 @@ public class BasicEventImpl implements Event {
 	 * @param domain event domain name, must not be blank
 	 * @param name event name, must not be blank
 	 * 
-	 * @throws IllegalArgumentException if domain or name are blank.
+	 * @throws EventRenderingException if domain or name are blank.
 	 */
-	public BasicEventImpl(String domain, String name) {
+	public BasicEventImpl(String domain, String name) throws EventRenderingException {
 		// Preconditions
 		if (StringUtils.isBlank(domain)) {
-			throw new IllegalArgumentException("domain must not be blank");
+			throw new EventRenderingException("domain must not be blank");
 		}
 		if (StringUtils.isBlank(name)) {
-			throw new IllegalArgumentException("name must not be blank");
+			throw new EventRenderingException("name must not be blank");
 		}
 		
 		this.domain = domain;

@@ -27,7 +27,7 @@ public class URLEncodeEventSerializerTests {
 	//= Tests ==========================================================================================================
 	
 	@Test
-	public void testEncodeDomainAndName() {
+	public void testEncodeDomainAndName() throws EventRenderingException {
 		// ARRANGE
 		String name = "encode-domain-and-name";
 		Event event = new BasicEventImpl(DEFAULT_DOMAIN, name);
@@ -39,7 +39,7 @@ public class URLEncodeEventSerializerTests {
 	}
 
 	@Test
-	public void testEncodeWithOneAttribute() {
+	public void testEncodeWithOneAttribute() throws EventRenderingException {
 		// ARRANGE
 		String name = "encode-domain-and-name";
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
@@ -61,7 +61,7 @@ public class URLEncodeEventSerializerTests {
 	 * Validate that the encoder properly separates (and encodes) multiple attribute name-value pairs.
 	 */
 	@Test
-	public void testEncodeWithTwoAttributes() {		
+	public void testEncodeWithTwoAttributes() throws EventRenderingException {		
 		// ARRANGE
 		String name = "encode-domain-and-name";
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
@@ -88,7 +88,7 @@ public class URLEncodeEventSerializerTests {
 	 * Validate that the encoder properly encodes multi-valued attributes
 	 */
 	@Test
-	public void testEncodeMultiValuedAttribute() {
+	public void testEncodeMultiValuedAttribute() throws EventRenderingException {
 		// ARRANGE
 		String name = "encode-domain-and-name";
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
