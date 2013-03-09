@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.EventGenerator;
+import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventSerializer;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.ShopProfile;
@@ -65,19 +66,29 @@ public class OrdersController extends ShopBaseSiteContextController {
 		
 		ShopProfile shopProfile = shopProfileManager.getProfile();
 		
-		BasicEventImpl event = new BasicEventImpl("rfq", "delivery_ready");
-		event.addAttribute("shop_name", shopProfile.getName());
-		event.addAttribute("shop_address", shopProfile.getAddress());
-		event.addAttribute("pickup_time", pickupTimeRaw);
-		event.addAttribute("delivery_address", deliveryAddressRaw);
-		if (StringUtils.isNotBlank(deliveryTimeRaw)) {
-			event.addAttribute("delivery_time", deliveryTimeRaw);
+		BasicEventImpl event = null;
+		try {
+			event = new BasicEventImpl("rfq", "delivery_ready");
+			event.addAttribute("shop_name", shopProfile.getName());
+			event.addAttribute("shop_address", shopProfile.getAddress());
+			event.addAttribute("pickup_time", pickupTimeRaw);
+			event.addAttribute("delivery_address", deliveryAddressRaw);
+			if (StringUtils.isNotBlank(deliveryTimeRaw)) {
+				event.addAttribute("delivery_time", deliveryTimeRaw);
+			}
+		}
+		catch (EventRenderingException e) {
+			// TODO change redirect location, and add error message
+			logger.warning(e.getMessage());
+			e.printStackTrace();
 		}
 
-		Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
-		for (DriverProfile profile : driverProfiles) {
-			boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), event);
-			logger.info(String.format("rfq:delivery_ready sent to %s successfully?: %s", profile.getEventSignalURL(), Boolean.toString(success)));
+		if (event != null) {
+			Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
+			for (DriverProfile profile : driverProfiles) {
+				boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), event);
+				logger.info(String.format("rfq:delivery_ready sent to %s successfully?: %s", profile.getEventSignalURL(), Boolean.toString(success)));
+			}
 		}
 		
 		return "redirect:/ffds/";
