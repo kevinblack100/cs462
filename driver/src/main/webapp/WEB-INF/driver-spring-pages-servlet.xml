@@ -25,6 +25,9 @@
 	<context:component-scan base-package="kpbinc.cs462.shared.controller.context" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
+	<context:component-scan base-package="kpbinc.cs462.shared.event" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
 	
 	<!-- Model scan -->
 	<context:component-scan base-package="kpbinc.cs462.driver.model" use-default-filters="false">

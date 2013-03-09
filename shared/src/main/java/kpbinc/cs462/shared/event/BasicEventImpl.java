@@ -67,6 +67,7 @@ public class BasicEventImpl implements Event {
 	 * constructor.
 	 */
 	public void addAttribute(String attribName, Object value) throws EventRenderingException {
+		// TODO validate that the name and value are not null
 		if (CommonEventSerializationConstants.isReservedAttributeName(attribName)) {
 			throw new EventRenderingException("attribute name must not be reserved");
 		}
