@@ -56,7 +56,7 @@ public class EventDispatchController {
 			logger.info(String.format("parsed event %s:%s", event.getDomain(), event.getName()));
 		}
 		catch (EventRenderingException e) {
-			// TODO set mesage
+			// TODO set message
 			logger.warning("EventRenderingException occurred: " + e.getMessage());
 			e.printStackTrace();
 		}
