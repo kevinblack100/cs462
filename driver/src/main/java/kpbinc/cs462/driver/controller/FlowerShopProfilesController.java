@@ -1,12 +1,16 @@
 package kpbinc.cs462.driver.controller;
 
+import kpbinc.cs462.driver.model.DriverProfile;
 import kpbinc.cs462.driver.model.FlowerShopProfile;
+import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.driver.model.manage.FlowerShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/shops")
-public class FlowerShopProfilesController {
+public class FlowerShopProfilesController extends DriverBaseSiteContextController {
 
 	//= Class Data =====================================================================================================
 	
@@ -23,6 +27,9 @@ public class FlowerShopProfilesController {
 	
 	@Autowired
 	private FlowerShopProfileManager flowerShopProfileManager;
+	
+	@Autowired
+	private DriverProfileManager driverProfileManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -37,7 +44,8 @@ public class FlowerShopProfilesController {
 	//- Web API --------------------------------------------------------------------------------------------------------
 	
 	@RequestMapping
-	public String getShopsList() {
+	public String getShopsList(ModelMap model) {
+		setDriverProfile(model);
 		return "shops/list";
 	}
 	
@@ -72,8 +80,20 @@ public class FlowerShopProfilesController {
 	
 	//- Member API -----------------------------------------------------------------------------------------------------
 	
-	public FlowerShopProfileManager getManager() {
+	public FlowerShopProfileManager getFlowerShopManager() {
 		return flowerShopProfileManager;
+	}
+	
+	
+	//= Support ========================================================================================================
+	
+	private void setDriverProfile(ModelMap model) {
+		UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
+		if (loggedInUserDetails != null) {
+			String username = loggedInUserDetails.getUsername();
+			DriverProfile profile = driverProfileManager.get(username);
+			model.addAttribute("driverProfile", profile);
+		}
 	}
 	
 }

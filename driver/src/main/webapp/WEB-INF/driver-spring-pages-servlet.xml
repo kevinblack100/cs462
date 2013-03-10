@@ -50,6 +50,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/flower-shop-profiles.json" />
 	</bean>
+	<bean id="driverProfileManager"
+		class="kpbinc.cs462.driver.model.manage.DriverProfileManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/driver-profiles.json" />	
+	</bean>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -38,16 +38,31 @@
 					<td id="profile-id-header" class="table-header">ID</td>
 					<td id="profile-name-header" class="table-header">Name</td>
 					<td id="profile-location-header" class="table-header">Location</td>
-					<td id="profile-esl-header" class="table-header">Event Signal URL for rfq:bid_available</td>
+					<td id="profile-esl-header" class="table-header">Event Signal URL for sending rfq:bid_available</td>
+					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
+					<td id="driver-esl-header" class="table-header">Event Signal URL for receiving rfq:delivery_ready</td>
+					</c:if>
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${flowerShopProfilesController.manager.all}" var="profile">
+			<c:forEach items="${flowerShopProfilesController.flowerShopManager.all}" var="profile">
 				<tr>
 					<td class="profile-id">${profile.id}</td>
 					<td class="profile-name">${profile.name}</td>
 					<td class="profile-location">${profile.location}</td>
 					<td class="profile-esl">${profile.eventSignalURL}</td>
+					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
+					<td id="driver-esl">
+						<c:choose>
+							<c:when test="${driverProfile.deliveryReadyESLs[profile.id]} != null">
+								${driverProfile.deliveryReadyESLs[profile.id]}
+							</c:when>
+							<c:otherwise>
+								Generate (TODO)
+							</c:otherwise>
+						</c:choose>
+					</td>
+					</c:if>
 				</tr>
 			</c:forEach>
 			</tbody>
