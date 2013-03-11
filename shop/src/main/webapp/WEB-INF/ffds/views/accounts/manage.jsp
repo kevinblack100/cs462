@@ -5,7 +5,7 @@
 	<jsp:attribute name="title">Manage Account</jsp:attribute>
 	<jsp:body>
 		<h1>Manage Account</h1>
-		<form method="POST" action="${pageContext.request.contextPath}/ffds/secure/accounts/manage">
+		<form method="POST" action="${contextPaths.dynamicPath}/secure/accounts/manage">
 			<fieldset>
 				<span>How would you like to use the system?</span>
 				<br>

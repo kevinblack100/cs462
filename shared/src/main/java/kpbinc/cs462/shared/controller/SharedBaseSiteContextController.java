@@ -1,6 +1,7 @@
 package kpbinc.cs462.shared.controller;
 
 import kpbinc.util.logging.GlobalLogUtils;
+import kpbinc.cs462.shared.controller.context.ContextPaths;
 import kpbinc.cs462.shared.controller.context.LoggedInUserContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public abstract class SharedBaseSiteContextController {
 	// setter @Autowired
 	private LoggedInUserContext loggedInUserContext;
 	
+	// setter @Autowired
+	private ContextPaths contextPaths;
+	
 	
 	//= Initialization =================================================================================================
 	
@@ -36,6 +40,15 @@ public abstract class SharedBaseSiteContextController {
 	@Autowired
 	public void setLoggedInUserContext(LoggedInUserContext loggedInUserContext) {
 		this.loggedInUserContext = loggedInUserContext;
+	}
+	
+	public ContextPaths getContextPaths() {
+		return contextPaths;
+	}
+	
+	@Autowired
+	public void setContextPaths(ContextPaths contextPaths) {
+		this.contextPaths = contextPaths;
 	}
 	
 }
