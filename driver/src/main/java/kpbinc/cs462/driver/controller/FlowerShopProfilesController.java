@@ -10,6 +10,8 @@ import kpbinc.cs462.driver.model.DriverProfile;
 import kpbinc.cs462.driver.model.FlowerShopProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.driver.model.manage.FlowerShopProfileManager;
+import kpbinc.cs462.shared.event.ESLGenerator;
+import kpbinc.net.URLKeySymbols;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 	
 	
 	//= Member Data ====================================================================================================
+	
+	@Autowired
+	private ESLGenerator eslGenerator;
 	
 	@Autowired
 	private FlowerShopProfileManager flowerShopProfileManager;
@@ -104,16 +109,13 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 				
 				if (!driverProfile.getDeliveryReadyESLs().containsKey(shopProfileID)) {
 					try {
-						URL requestURL = new URL(request.getRequestURL().toString());
-						String eslProtocol = requestURL.getProtocol();
-						String eslHost = requestURL.getHost();
-						int eslPort = requestURL.getPort();
-						String eslFile = new StringBuilder(request.getContextPath())
-								.append("/pages/event/delivery_ready/")
-								.append(shopProfileID)
-								.append("/").append(driverName)
+						String eslFile = new StringBuilder()
+								.append(URLKeySymbols.PATH_SEPARATOR).append("event")
+								.append(URLKeySymbols.PATH_SEPARATOR).append("delivery_ready")
+								.append(URLKeySymbols.PATH_SEPARATOR).append(shopProfileID)
+								.append(URLKeySymbols.PATH_SEPARATOR).append(driverName)
 								.toString();
-						URL esl = new URL(eslProtocol, eslHost, eslPort, eslFile);
+						URL esl = eslGenerator.generate(request, eslFile);
 						driverProfile.addDeliveryReadyESL(shopProfileID, esl.toString());
 						driverProfileManager.update(driverName, driverProfile);
 					}
