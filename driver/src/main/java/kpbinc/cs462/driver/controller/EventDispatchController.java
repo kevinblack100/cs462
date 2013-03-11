@@ -1,9 +1,12 @@
 package kpbinc.cs462.driver.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventRenderingException;
@@ -41,6 +44,8 @@ public class EventDispatchController {
 	
 	//= Interface ======================================================================================================
 	
+	//- Manual Event Dispatch Testing ----------------------------------------------------------------------------------
+	
 	@RequestMapping(value = "/dispatch", method = RequestMethod.GET)
 	public String getDispatchForm() {
 		return "events/dispatch";
@@ -62,6 +67,39 @@ public class EventDispatchController {
 		}
 		
 		return "events/dispatch";
+	}
+	
+	//- rfq:delivery_ready Event Handling ------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/delivery_ready/{shop-profile-id}/{driver-username}", method = RequestMethod.POST)
+	public void handleDeliveryReady(
+			HttpServletRequest request,
+			HttpServletResponse response) {
+		@SuppressWarnings("unchecked")
+		Map<String, String[]> parameters = request.getParameterMap();
+		
+		try {
+			PrintWriter responsePayloadWriter = response.getWriter();
+			
+			try {
+				Event event = eventTransformer.transform(parameters);
+				responsePayloadWriter.write("received");
+
+				// TODO other event processing
+			}
+			catch (EventRenderingException e) {
+				responsePayloadWriter.write(e.getMessage());
+				logger.warning("EventRenderingException occurred: " + e.getMessage());
+				e.printStackTrace();
+			}
+			
+			responsePayloadWriter.flush();
+		}
+		catch (IOException e) {
+			// problem in preparing the response
+			logger.warning("IOException occurred: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 }

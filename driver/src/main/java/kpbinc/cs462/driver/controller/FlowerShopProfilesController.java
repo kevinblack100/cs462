@@ -109,7 +109,7 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 						String eslHost = requestURL.getHost();
 						int eslPort = requestURL.getPort();
 						String eslFile = new StringBuilder(request.getContextPath())
-								.append("/pages/esl/delivery_ready/")
+								.append("/pages/event/delivery_ready/")
 								.append(shopProfileID)
 								.append("/").append(driverName)
 								.toString();
