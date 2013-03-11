@@ -4,14 +4,14 @@
 
 <customtags:pagetemplate>
 	<jsp:attribute name="header">
-		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/site/shops/list.css" />
+		<link rel="stylesheet" type="text/css" href="${contextPaths.staticPath}/site/shops/list.css" />
 	</jsp:attribute>
 	<jsp:attribute name="title">Flower Shop List</jsp:attribute>
 	<jsp:body>
 		<h1>Registered Flower Shops</h1>
 		
 		<h3>Register new Flower Shop Profile</h3>
-		<form method="post" action="${pageContext.request.contextPath}/pages/shops/create">
+		<form method="post" action="${contextPaths.dynamicPath}/shops/create">
 			<fieldset>
 				<div>
 					<dl>
@@ -58,7 +58,7 @@
 								${driverProfile.deliveryReadyESLs[profile.id]}
 							</c:when>
 							<c:otherwise>
-								<form method="post" action="${pageContext.request.contextPath}/pages/shops/generate-delivery-ready-esl">
+								<form method="post" action="${contextPaths.dynamicPath}/shops/generate-delivery-ready-esl">
 									<fieldset>
 										<input type="hidden" name="shop-profile-id" value="${profile.id}" />
 										<input type="submit" name="button-generate-esl" value="Generate" />

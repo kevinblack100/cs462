@@ -4,12 +4,12 @@
 
 <customtags:pagetemplate>
 	<jsp:attribute name="header">
-		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/site/users/profile.css" />
+		<link rel="stylesheet" type="text/css" href="${contextPaths.staticPath}/site/users/profile.css" />
 	
-		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/jquery-1.9.1.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/thirdparty/handlebars-1.0.rc.2.js"></script>
+		<script type="text/javascript" src="${contextPaths.staticPath}/thirdparty/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="${contextPaths.staticPath}/thirdparty/handlebars-1.0.rc.2.js"></script>
 		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/site/users/profile.js"></script>
+		<script type="text/javascript" src="${contextPaths.staticPath}/site/users/profile.js"></script>
 		
 		<script type="text/x-handlebars-template" id="checkin-list-template">
 			<div class="checkin-list">
@@ -46,7 +46,7 @@
 				<c:otherwise>
 					<c:choose>
 						<c:when test="${userLoggedIn}">
-						<a href="${pageContext.request.contextPath}/pages/oauth/v2/authorize/${username}/foursquare">
+						<a href="${contextPaths.dynamicPath}/oauth/v2/authorize/${username}/foursquare">
 							Authorize FFDS to use your Foursquare Account
 						</a>
 						</c:when>

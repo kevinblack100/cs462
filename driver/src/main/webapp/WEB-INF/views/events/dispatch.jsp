@@ -6,7 +6,7 @@
 	<jsp:attribute name="title">Dispatch Event</jsp:attribute>
 	<jsp:body>
 		<h1>Dispatch Events</h1>
-		<form method="post" action="${pageContext.request.contextPath}/pages/event/dispatch">
+		<form method="post" action="${contextPaths.dynamicPath}/event/dispatch">
 			<fieldset>
 				<div id="form-fields">
 					<dl>
