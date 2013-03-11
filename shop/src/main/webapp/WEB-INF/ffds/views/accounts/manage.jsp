@@ -8,14 +8,21 @@
 		<form method="POST" action="${pageContext.request.contextPath}/ffds/secure/accounts/manage">
 			<fieldset>
 				<span>How would you like to use the system?</span>
-				<br />
+				<br>
 				<input type="checkbox" id="driver-indicator" name="driver-indicator" ${isDriver ? "checked" : "" } value="true" />
 				<label for="driver-indicator">Flower delivery driver</label>
 				<br />
+				<div>
+					<span>Flower Shop Details</span>
+					<br>
+					<span>Name: ${shopProfile.name}</span>
+					<br>
+					<span>Address: ${shopProfile.address}</span>
+				</div>
 				<label for="driver-esl">Event Signal URL (ESL)</label>
 				<!-- TODO escape driverESL so that it will render properly -->
 				<input type="text" id="driver-esl" name="driver-esl" size=60 value="${driverESL}" />
-				<br />
+				<br>
 				<input type="submit" id="submit" name="submit" value="Save" />
 			</fieldset>
 		</form>

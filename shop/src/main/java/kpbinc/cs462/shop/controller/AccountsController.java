@@ -12,7 +12,9 @@ import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.GrantedAuthorityRoles;
+import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
+import kpbinc.cs462.shop.model.manage.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class AccountsController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private DriverProfileManager driverProfileManager;
+	
+	@Autowired
+	private ShopProfileManager shopProfileManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -127,18 +132,25 @@ public class AccountsController extends ShopBaseSiteContextController {
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public String getManagementForm(ModelMap model) {
+		// Check have a user
 		UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
 		
+		// Check if user is a Driver
 		boolean isDriver = loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER);
 		model.addAttribute("isDriver", isDriver);
 		
+		// Prepare Driver ESL
 		String driverESL = "";
 		DriverProfile profile = driverProfileManager.getProfileFor(loggedInUserDetails.getUsername());
 		if (profile != null) {
 			driverESL = profile.getEventSignalURL();
 		}
 		model.addAttribute("driverESL", driverESL);
+		
+		// Prepare ShopProfile
+		ShopProfile shopProfile = shopProfileManager.getProfile();
+		model.addAttribute("shopProfile", shopProfile);
 		
 		return "accounts/manage";
 	}
