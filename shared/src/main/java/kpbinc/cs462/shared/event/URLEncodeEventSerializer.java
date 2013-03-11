@@ -1,12 +1,10 @@
 package kpbinc.cs462.shared.event;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static kpbinc.cs462.shared.event.CommonEventSerializationConstants.*;
+import kpbinc.net.UTF8URLEncoder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.context.annotation.Scope;
@@ -23,12 +21,8 @@ public class URLEncodeEventSerializer implements EventSerializer {
 
 	//= Class Data =====================================================================================================
 	
-	private static final Logger logger = Logger.getLogger(URLEncodeEventSerializer.class.getName());
-
 	private static final String EQUALS = "=";
 	private static final String KEY_VALUE_PAIR_SEPARATOR = "&";
-	
-	private static final String CHARACTER_ENCODING = "UTF-8";
 	
 	
 	//= Initialization =================================================================================================
@@ -56,7 +50,7 @@ public class URLEncodeEventSerializer implements EventSerializer {
 		appendKeyValuePair(builder, NAME_KEY, event.getName());
 		for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
 			for (Object value : attribute.getValue()) {
-				String serializedValue = encode(value);
+				String serializedValue = UTF8URLEncoder.encode(value);
 				appendKeyValuePair(builder, attribute.getKey(), serializedValue);
 			}
 		}
@@ -73,22 +67,6 @@ public class URLEncodeEventSerializer implements EventSerializer {
 			builder.append(KEY_VALUE_PAIR_SEPARATOR);
 		}
 		builder.append(key).append(EQUALS).append(value);
-	}
-	
-	private static String encode(Object value) {
-		assert(value != null);
-		
-		String encodedValue = null;
-		
-		try {
-			encodedValue = URLEncoder.encode(value.toString(), CHARACTER_ENCODING);
-		}
-		catch (UnsupportedEncodingException e) {
-			logger.warning("Unsupported character encoding while URL encoding: " + e.getMessage());
-			e.printStackTrace(); // TODO instead throw an EventSerializationException? Don't expect failure since using UTF-8
-		}
-		
-		return encodedValue;
 	}
 	
 }
