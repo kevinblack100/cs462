@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>720</x>
+      <y>200</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>MOManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>440</x>
+      <y>290</y>
+      <w>230</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>SingleMOManager
+--
+create(MO)
+get(): MO
+update(MO)
+delete(): boolean
+clear() [synonymous w/ delete]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>700</x>
+      <y>290</y>
+      <w>190</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>MO1DMapManager
+--
+create(K, MO)
+get(K): MO
+getAll(): List&lt;MO&gt;
+update(K, MO)
+delete(K): boolean
+clear()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>910</x>
+      <y>290</y>
+      <w>200</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>MO2DMapManager
+--
+create(FK, SK, MO)
+get(FK, SK): MO
+getAll(FK): List&lt;MO&gt;
+update(FK, SK, MO)
+delete(FK, SK): boolean
+clear()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>700</x>
+      <y>450</y>
+      <w>190</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>MO1DMapManager
+--
+register(K, MO)
+get(K): MO
+getAll(): List&lt;MO&gt;
+update(K, MO)
+unregister(K): boolean
+clear()</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
