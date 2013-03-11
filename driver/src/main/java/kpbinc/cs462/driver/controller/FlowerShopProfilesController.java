@@ -1,5 +1,11 @@
 package kpbinc.cs462.driver.controller;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+
 import kpbinc.cs462.driver.model.DriverProfile;
 import kpbinc.cs462.driver.model.FlowerShopProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
@@ -21,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class FlowerShopProfilesController extends DriverBaseSiteContextController {
 
 	//= Class Data =====================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(FlowerShopProfilesController.class.getName());
 	
 	
 	//= Member Data ====================================================================================================
@@ -70,6 +78,56 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 			profile.setEventSignalURL(eventSignalURL);
 			
 			flowerShopProfileManager.register(id, profile);
+		}
+		else {
+			// TODO set error message
+		}
+		
+		return "redirect:/pages/shops/";
+	}
+	
+	@RequestMapping(value = "/generate-delivery-ready-esl", method = RequestMethod.POST)
+	public String generateDeliveryReadyESL(
+			HttpServletRequest request,
+			@RequestParam(value = "shop-profile-id") Long shopProfileID) {
+		
+		// check that the ID is valid
+		FlowerShopProfile shopProfile = flowerShopProfileManager.get(shopProfileID);
+		if (shopProfile != null) {
+			UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
+			if (loggedInUserDetails != null) {
+				String driverName = loggedInUserDetails.getUsername();
+				DriverProfile driverProfile = driverProfileManager.get(driverName);
+				if (driverProfile == null) {
+					driverProfile = new DriverProfile(driverName);
+				}
+				
+				if (!driverProfile.getDeliveryReadyESLs().containsKey(shopProfileID)) {
+					try {
+						URL requestURL = new URL(request.getRequestURL().toString());
+						String eslProtocol = requestURL.getProtocol();
+						String eslHost = requestURL.getHost();
+						int eslPort = requestURL.getPort();
+						String eslFile = new StringBuilder(request.getContextPath())
+								.append("/pages/esl/delivery_ready/")
+								.append(shopProfileID)
+								.append("/").append(driverName)
+								.toString();
+						URL esl = new URL(eslProtocol, eslHost, eslPort, eslFile);
+						driverProfile.addDeliveryReadyESL(shopProfileID, esl.toString());
+						driverProfileManager.update(driverName, driverProfile);
+					}
+					catch (MalformedURLException e) {
+						logger.warning("Unexpected MalformedURLException: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
+				// else ESL already generated, so the call to this method was erroneous
+			}
+			else {
+				// No driver, can't generate ESL
+				// TODO set error message
+			}
 		}
 		else {
 			// TODO set error message

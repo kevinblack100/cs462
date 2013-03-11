@@ -58,7 +58,12 @@
 								${driverProfile.deliveryReadyESLs[profile.id]}
 							</c:when>
 							<c:otherwise>
-								Generate (TODO)
+								<form method="post" action="${pageContext.request.contextPath}/pages/shops/generate-delivery-ready-esl">
+									<fieldset>
+										<input type="hidden" name="shop-profile-id" value="${profile.id}" />
+										<input type="submit" name="button-generate-esl" value="Generate" />
+									</fieldset>
+								</form>
 							</c:otherwise>
 						</c:choose>
 					</td>

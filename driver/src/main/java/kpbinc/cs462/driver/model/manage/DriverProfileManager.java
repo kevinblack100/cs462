@@ -60,14 +60,7 @@ public class DriverProfileManager {
 	}
 	
 	public void register(String id, DriverProfile profile) {
-		if (id == null) {
-			throw new IllegalArgumentException("id must not be null");
-		}
-		if (profile == null) {
-			throw new IllegalArgumentException("profile must not be null");
-		}
-		
-		getDriverProfiles().put(id, profile);
+		registerOrUpdate(id, profile);
 	}
 	
 	public DriverProfile get(String id) {
@@ -80,6 +73,27 @@ public class DriverProfileManager {
 		return profiles;
 	}
 	
-	// TODO update, unregister
+	public DriverProfile update(String id, DriverProfile profile) {
+		DriverProfile previous = registerOrUpdate(id, profile);
+		return previous;
+	}
+	
+	// TODO unregister
 
+	
+	//= Support ========================================================================================================
+	
+	private DriverProfile registerOrUpdate(String id, DriverProfile profile) {
+		if (id == null) {
+			throw new IllegalArgumentException("id must not be null");
+		}
+		if (profile == null) {
+			throw new IllegalArgumentException("profile must not be null");
+		}
+		
+		DriverProfile previous = getDriverProfiles().put(id, profile);
+		
+		return previous;
+	}
+	
 }
