@@ -5,7 +5,7 @@
 	<jsp:attribute name="title">Flower Shop Profile</jsp:attribute>
 	<jsp:body>
 		<h1>Flower Shop Profile</h1>
-		<form method="post" action="${pageContext.request.contextPath}/ffds/shop/profile">
+		<form method="post" action="${contextPaths.dynamicPath}/shop/profile">
 			<fieldset>
 				<label for="shop-name">Shop name</label>
 				<input type="text" id="shop-name" name="shop-name" value="${profile.name}" />

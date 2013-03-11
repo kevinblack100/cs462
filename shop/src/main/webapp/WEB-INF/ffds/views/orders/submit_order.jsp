@@ -5,7 +5,7 @@
 	<jsp:attribute name="title">Submit Order</jsp:attribute>
 	<jsp:body>
 		<h1>Submit Order</h1>
-		<form method="post" action="${pageContext.request.contextPath}/ffds/orders/submit">
+		<form method="post" action="${contextPaths.dynamicPath}/orders/submit">
 			<fieldset>
 				<label for="pickup-time">Pickup Time</label>
 				<input type="time" id="pickup-time" name="pickup-time" />

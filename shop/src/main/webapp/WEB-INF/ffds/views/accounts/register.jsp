@@ -5,7 +5,7 @@
 	<jsp:attribute name="title">Register</jsp:attribute>
 	<jsp:body>
 		<h1>Register</h1>
-		<form method="POST" action="${pageContext.request.contextPath}/ffds/secure/accounts/register">
+		<form method="POST" action="${contextPaths.dynamicPath}/secure/accounts/register">
 			<fieldset>
 				<label for="username">Username:</label>
 				<input type="text" id="username" name="username" size="20" />

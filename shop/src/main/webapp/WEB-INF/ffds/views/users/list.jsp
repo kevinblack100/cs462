@@ -9,7 +9,7 @@
 		<ul>
 		<c:forEach items="${usernames}" var="username">
 			<li>
-				<a href="${pageContext.request.contextPath}/ffds/users/${username}">${username}</a>
+				<a href="${contextPaths.dynamicPath}/users/${username}">${username}</a>
 			</li>
 		</c:forEach>
 		</ul>
