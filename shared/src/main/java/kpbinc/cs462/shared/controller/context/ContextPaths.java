@@ -5,14 +5,10 @@ import javax.servlet.ServletContext;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import kpbinc.net.URLKeySymbols;
 import kpbinc.util.logging.GlobalLogUtils;
 
 public class ContextPaths {
-
-	//= Class Data =====================================================================================================
-	
-	private static final String URL_PATH_SEPARATOR = "/";
-	
 	
 	//= Member Data ====================================================================================================
 	
@@ -71,7 +67,7 @@ public class ContextPaths {
 	private String buildBaseRelativePath(String relativePath) {
 		StringBuilder builder = new StringBuilder(getBasePath());
 		if (StringUtils.isNotBlank(relativePath)) {
-			builder.append(URL_PATH_SEPARATOR).append(relativePath);
+			builder.append(URLKeySymbols.PATH_SEPARATOR).append(relativePath);
 		}
 		String path = builder.toString();
 		return path;
