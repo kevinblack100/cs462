@@ -54,7 +54,7 @@
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
 					<td id="driver-esl">
 						<c:choose>
-							<c:when test="${driverProfile.deliveryReadyESLs[profile.id]} != null">
+							<c:when test="${driverProfile.deliveryReadyESLs.containsKey(profile.id)}">
 								${driverProfile.deliveryReadyESLs[profile.id]}
 							</c:when>
 							<c:otherwise>

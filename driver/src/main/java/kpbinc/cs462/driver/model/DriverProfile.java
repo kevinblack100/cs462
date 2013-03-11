@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import kpbinc.util.DecoratedMap;
 import kpbinc.util.logging.GlobalLogUtils;
 
 public class DriverProfile {
@@ -22,7 +23,7 @@ public class DriverProfile {
 	public DriverProfile(@JsonProperty("username") String username) {
 		GlobalLogUtils.logConstruction(this);
 		setUsername(username);
-		deliveryReadyESLs = new HashMap<Long, String>();
+		deliveryReadyESLs = new DecoratedMap<Long, String>(new HashMap<Long, String>());
 	}
 
 	
@@ -53,7 +54,12 @@ public class DriverProfile {
 	}
 
 	public void setDeliveryReadyESLs(Map<Long, String> deliveryReadyESLs) {
-		this.deliveryReadyESLs = deliveryReadyESLs;
+		if (DecoratedMap.class.isInstance(deliveryReadyESLs)) {
+			this.deliveryReadyESLs = deliveryReadyESLs;
+		}
+		else {
+			this.deliveryReadyESLs = new DecoratedMap<Long, String>(deliveryReadyESLs);
+		}
 	}
 	
 	public void addDeliveryReadyESL(Long shopID, String deliveryReadyESL) {
