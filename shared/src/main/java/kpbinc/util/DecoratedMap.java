@@ -29,6 +29,18 @@ public class DecoratedMap<K, V> implements Map<K, V> {
 	//= Interface ======================================================================================================
 	
 	@Override
+	public boolean equals(Object object) {
+		boolean result = delegateMap.equals(object);
+		return result;
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = delegateMap.hashCode();
+		return hash;
+	}
+	
+	@Override
 	public void clear() {
 		delegateMap.clear();		
 	}

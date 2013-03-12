@@ -15,7 +15,7 @@ public class DriverProfile {
 	//= Member Data ====================================================================================================
 	
 	private String username;
-	private Map<Long, String> deliveryReadyESLs;
+	private Map<Long, Map<String, String>> deliveryReadyESLs;
 	
 	
 	//= Initialization =================================================================================================
@@ -23,7 +23,7 @@ public class DriverProfile {
 	public DriverProfile(@JsonProperty("username") String username) {
 		GlobalLogUtils.logConstruction(this);
 		setUsername(username);
-		deliveryReadyESLs = new DecoratedMap<Long, String>(new HashMap<Long, String>());
+		deliveryReadyESLs = new DecoratedMap<Long, Map<String, String>>(new HashMap<Long, Map<String, String>>());
 	}
 
 	
@@ -49,21 +49,26 @@ public class DriverProfile {
 		this.username = username;
 	}
 
-	public Map<Long, String> getDeliveryReadyESLs() {
+	public Map<Long, Map<String, String>> getDeliveryReadyESLs() {
 		return deliveryReadyESLs;
 	}
 
-	public void setDeliveryReadyESLs(Map<Long, String> deliveryReadyESLs) {
+	public void setDeliveryReadyESLs(Map<Long, Map<String, String>> deliveryReadyESLs) {
 		if (DecoratedMap.class.isInstance(deliveryReadyESLs)) {
 			this.deliveryReadyESLs = deliveryReadyESLs;
 		}
 		else {
-			this.deliveryReadyESLs = new DecoratedMap<Long, String>(deliveryReadyESLs);
+			this.deliveryReadyESLs = new DecoratedMap<Long, Map<String, String>>(deliveryReadyESLs);
 		}
 	}
 	
-	public void addDeliveryReadyESL(Long shopID, String deliveryReadyESL) {
-		this.deliveryReadyESLs.put(shopID, deliveryReadyESL);
+	public void addDeliveryReadyESL(Long shopID, String eventFullName, String deliveryReadyESL) {
+		Map<String, String> eventToESLMap = deliveryReadyESLs.get(shopID);
+		if (eventToESLMap == null) {
+			eventToESLMap = new HashMap<String, String>();
+			deliveryReadyESLs.put(shopID, eventToESLMap);
+		}
+		eventToESLMap.put(eventFullName, deliveryReadyESL);
 	}
 
 }

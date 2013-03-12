@@ -12,18 +12,22 @@ public class DriverProfileTests {
 		String username = "avgjoe";
 		DriverProfile profile = new DriverProfile(username);
 		Long shopID = 1l;
+		String eventName = "event:something";
 		String esl = "http://something.somedomain.net/deliveryready/esl/for/avgjoe";
-		profile.addDeliveryReadyESL(shopID, esl);
+		profile.addDeliveryReadyESL(shopID, eventName, esl);
 		
 		StringBuilder builder = new StringBuilder()
 			.append("{")
 			.append("\"username\":\"%s\",")
 			.append("\"deliveryReadyESLs\":")
 				.append("{")
-					.append("\"%d\":\"%s\"")
+					.append("\"%d\":")
+						.append("{")
+							.append("\"%s\":\"%s\"")
+						.append("}")
 				.append("}")
 			.append("}");
-		String expectedJsonSerialization = String.format(builder.toString(), username, shopID, esl);
+		String expectedJsonSerialization = String.format(builder.toString(), username, shopID, eventName, esl);
 		
 		// ACT/ASSERT
 		ActAndAssertJsonSerializer.assertJsonSerialization(profile, expectedJsonSerialization);
@@ -35,18 +39,22 @@ public class DriverProfileTests {
 		String username = "avgjoe";
 		DriverProfile profile = new DriverProfile(username);
 		Long shopID = 1l;
+		String eventName = "event:something";
 		String esl = "http://something.somedomain.net/deliveryready/esl/for/avgjoe";
-		profile.addDeliveryReadyESL(shopID, esl);
+		profile.addDeliveryReadyESL(shopID, eventName, esl);
 		
 		StringBuilder builder = new StringBuilder()
 			.append("{")
 			.append("\"username\":\"%s\",")
 			.append("\"deliveryReadyESLs\":")
 				.append("{")
-					.append("\"%d\":\"%s\"")
+					.append("\"%d\":")
+						.append("{")
+							.append("\"%s\":\"%s\"")
+						.append("}")
 				.append("}")
 			.append("}");
-		String jsonSerialization = String.format(builder.toString(), username, shopID, esl);
+		String jsonSerialization = String.format(builder.toString(), username, shopID, eventName, esl);
 		
 		// ACT/ASSERT
 		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, profile, DriverProfile.class);
