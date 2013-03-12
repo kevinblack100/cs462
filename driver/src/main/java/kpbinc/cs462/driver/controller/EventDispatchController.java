@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.driver.model.DriverProfile;
+import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
@@ -16,6 +18,7 @@ import kpbinc.util.logging.GlobalLogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -33,6 +36,9 @@ public class EventDispatchController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private DriverProfileManager driverProfileManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -71,26 +77,41 @@ public class EventDispatchController {
 	
 	//- rfq:delivery_ready Event Handling ------------------------------------------------------------------------------
 	
-	@RequestMapping(value = "/delivery_ready/{shop-profile-id}/{driver-username}", method = RequestMethod.POST)
+	@RequestMapping(value = "/rfq/delivery_ready/{shop-profile-id}/{driver-username}", method = RequestMethod.POST)
 	public void handleDeliveryReady(
 			HttpServletRequest request,
-			HttpServletResponse response) {
-		@SuppressWarnings("unchecked")
-		Map<String, String[]> parameters = request.getParameterMap();
-		
+			HttpServletResponse response,
+			@PathVariable(value = "shop-profile-id") Long shopProfileID,
+			@PathVariable(value = "driver-username") String driverUsername) {
 		try {
 			PrintWriter responsePayloadWriter = response.getWriter();
 			
-			try {
-				Event event = eventTransformer.transform(parameters);
-				responsePayloadWriter.write("received");
-
-				// TODO other event processing
+			DriverProfile driverProfile = driverProfileManager.get(driverUsername);
+			if (   driverProfile.getRegisteredESLs().containsKey(shopProfileID)
+				&& driverProfile.getRegisteredESLs().get(shopProfileID).containsKey("rfq:delivery_ready")) {
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, String[]> parameters = request.getParameterMap();
+					
+					Event event = eventTransformer.transform(parameters);
+					if (   event.getDomain().equals("rfq")
+						&& event.getName().equals("delivery_ready")) {
+						responsePayloadWriter.write("received");
+						
+						// TODO other event processing
+					}
+					else {
+						responsePayloadWriter.write("expected an rfq:delivery_ready event");
+					}
+				}
+				catch (EventRenderingException e) {
+					responsePayloadWriter.write(e.getMessage());
+					logger.warning("EventRenderingException occurred: " + e.getMessage());
+					e.printStackTrace();
+				}
 			}
-			catch (EventRenderingException e) {
-				responsePayloadWriter.write(e.getMessage());
-				logger.warning("EventRenderingException occurred: " + e.getMessage());
-				e.printStackTrace();
+			else {
+				responsePayloadWriter.write("channel is not registered");
 			}
 			
 			responsePayloadWriter.flush();
