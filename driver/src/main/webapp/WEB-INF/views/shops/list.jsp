@@ -22,6 +22,14 @@
 						<dd><label for="location">Location: </label></dd>
 						<dt><input type="text" id="new-profile-location" name="location" size=30 /></dt>
 					</dl>
+					<dl>
+						<dd><label for="latitude">Latitude: </label></dd>
+						<dt><input type="text" id="new-profile-latitude" name="latitude" size=10 /></dt>
+					</dl>
+					<dl>
+						<dd><label for="longitude">Longitude: </label></dd>
+						<dt><input type="text" id="new-profile-longitude" name="longitude" size=10 /></dt>
+					</dl>
 				</div>
 				<input type="submit" id="new-profile-submit" value="Register" />
 			</fieldset>
@@ -34,6 +42,8 @@
 					<td id="profile-id-header" class="table-header">ID</td>
 					<td id="profile-name-header" class="table-header">Name</td>
 					<td id="profile-location-header" class="table-header">Location</td>
+					<td id="profile-latitude-header" class="table-header">Latitude</td>
+					<td id="profile-longitude-header" class="table-header">Longitude</td>
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
 					<td id="driver-esl-header" class="table-header">Event Signal URLs</td>
 					</c:if>
@@ -45,6 +55,8 @@
 					<td class="profile-id">${profile.id}</td>
 					<td class="profile-name">${profile.name}</td>
 					<td class="profile-location">${profile.location}</td>
+					<td class="profile-latitude">${profile.latitude}</td>
+					<td class="profile-longitude">${profile.longitude}</td>
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
 					<td id="driver-esls">
 						<c:choose>

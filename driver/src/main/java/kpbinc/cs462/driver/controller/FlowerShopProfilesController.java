@@ -64,11 +64,15 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createShop(
-			@RequestParam(value = "name") String name,
-			@RequestParam(value = "location") String location) {
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "location", required = true) String location,
+			@RequestParam(value = "latitude", required = true) Double latitude,
+			@RequestParam(value = "longitude", required = true) Double longitude) {
 		
 		if (   name != null
-			&& location != null) {
+			&& location != null
+			&& latitude != null
+			&& longitude != null) {
 			
 			// ID hack
 			String combined = name + location;
@@ -78,6 +82,8 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 			profile.setId(id);
 			profile.setName(name);
 			profile.setLocation(location);
+			profile.setLatitude(latitude);
+			profile.setLongitude(longitude);
 			
 			flowerShopProfileManager.register(id, profile);
 		}

@@ -16,6 +16,10 @@
 			<span>Name: ${shopProfile.name}</span>
 			<br>
 			<span>Address: ${shopProfile.address}</span>
+			<br>
+			<span>Latitude: ${shopProfile.latitude}</span>
+			<br>
+			<span>Longitude: ${shopProfile.longitude}</span>
 		</div>
 		
 		<br>
