@@ -55,7 +55,7 @@
 					<td id="driver-esl">
 						<c:choose>
 							<c:when test="${driverProfile.deliveryReadyESLs.containsKey(profile.id)}">
-								${driverProfile.deliveryReadyESLs[profile.id]}
+								${driverProfile.deliveryReadyESLs[profile.id]['rfq:delivery_ready']}
 							</c:when>
 							<c:otherwise>
 								<form method="post" action="${contextPaths.dynamicPath}/shops/generate-delivery-ready-esl">

@@ -109,9 +109,10 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 				
 				if (!driverProfile.getDeliveryReadyESLs().containsKey(shopProfileID)) {
 					try {
-						String eslFile = URLPathBuilder.build("event", "delivery_ready", shopProfileID.toString(), driverName);
+						String eventFullName = "rfq:delivery_ready";
+						String eslFile = URLPathBuilder.build("event", "rfq", "delivery_ready", shopProfileID.toString(), driverName);
 						URL esl = eslGenerator.generate(request, eslFile);
-						driverProfile.addDeliveryReadyESL(shopProfileID, esl.toString());
+						driverProfile.addDeliveryReadyESL(shopProfileID, eventFullName, esl.toString());
 						driverProfileManager.update(driverName, driverProfile);
 					}
 					catch (MalformedURLException e) {
