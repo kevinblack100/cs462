@@ -91,7 +91,8 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 	@RequestMapping(value = "/generate-delivery-ready-esl", method = RequestMethod.POST)
 	public String generateDeliveryReadyESL(
 			HttpServletRequest request,
-			@RequestParam(value = "shop-profile-id") Long shopProfileID) {
+			@RequestParam(value = "shop-profile-id") Long shopProfileID,
+			@RequestParam(value = "bid-available-esl") String bidAvailableESL) {
 		
 		// check that the ID is valid
 		FlowerShopProfile shopProfile = flowerShopProfileManager.get(shopProfileID);
@@ -106,16 +107,20 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 				
 				if (!driverProfile.getDeliveryReadyESLs().containsKey(shopProfileID)) {
 					try {
-						String eventFullName = "rfq:delivery_ready";
+						String deliveryReadyFullName = "rfq:delivery_ready";
 						String eslFile = URLPathBuilder.build("event", "rfq", "delivery_ready", shopProfileID.toString(), driverName);
 						URL esl = eslGenerator.generate(request, eslFile);
-						driverProfile.addDeliveryReadyESL(shopProfileID, eventFullName, esl.toString());
-						driverProfileManager.update(driverName, driverProfile);
+						driverProfile.addDeliveryReadyESL(shopProfileID, deliveryReadyFullName, esl.toString());
 					}
 					catch (MalformedURLException e) {
 						logger.warning("Unexpected MalformedURLException: " + e.getMessage());
 						e.printStackTrace();
 					}
+					
+					String bidAvailableFullName = "rfq:bid_available";
+					driverProfile.addDeliveryReadyESL(shopProfileID, bidAvailableFullName, bidAvailableESL);
+					
+					driverProfileManager.update(driverName, driverProfile);
 				}
 				// else ESL already generated, so the call to this method was erroneous
 			}

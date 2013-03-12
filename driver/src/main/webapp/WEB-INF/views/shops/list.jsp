@@ -35,7 +35,7 @@
 					<td id="profile-name-header" class="table-header">Name</td>
 					<td id="profile-location-header" class="table-header">Location</td>
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
-					<td id="driver-esl-header" class="table-header">Event Signal URL for receiving rfq:delivery_ready</td>
+					<td id="driver-esl-header" class="table-header">Event Signal URLs</td>
 					</c:if>
 				</tr>
 			</thead>
@@ -46,15 +46,21 @@
 					<td class="profile-name">${profile.name}</td>
 					<td class="profile-location">${profile.location}</td>
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
-					<td id="driver-esl">
+					<td id="driver-esls">
 						<c:choose>
 							<c:when test="${driverProfile.deliveryReadyESLs.containsKey(profile.id)}">
-								${driverProfile.deliveryReadyESLs[profile.id]['rfq:delivery_ready']}
+								<span>to send rfq:bid_available: ${driverProfile.deliveryReadyESLs[profile.id]['rfq:bid_available']}</span>
+								<br>
+								<span>to receive rfq:delivery_ready: ${driverProfile.deliveryReadyESLs[profile.id]['rfq:delivery_ready']}</span>
 							</c:when>
 							<c:otherwise>
 								<form method="post" action="${contextPaths.dynamicPath}/shops/generate-delivery-ready-esl">
 									<fieldset>
 										<input type="hidden" name="shop-profile-id" value="${profile.id}" />
+										<label for="bid-available-esl">to send rfq:bid_available:</label>
+										<input type="text" name="bid-available-esl" value="" />
+										<br>
+										<label for="button-generate-esl">to receive rfq:delivery_ready</label>
 										<input type="submit" name="button-generate-esl" value="Generate" />
 									</fieldset>
 								</form>
