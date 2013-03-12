@@ -22,10 +22,6 @@
 						<dd><label for="location">Location: </label></dd>
 						<dt><input type="text" id="new-profile-location" name="location" size=30 /></dt>
 					</dl>
-					<dl>
-						<dd><label for="esl">Event Signal URL: </label></dd>
-						<dt><input type="text" id="new-profile-esl" name="esl" size=30 /></dt>
-					</dl>
 				</div>
 				<input type="submit" id="new-profile-submit" value="Register" />
 			</fieldset>
@@ -38,7 +34,6 @@
 					<td id="profile-id-header" class="table-header">ID</td>
 					<td id="profile-name-header" class="table-header">Name</td>
 					<td id="profile-location-header" class="table-header">Location</td>
-					<td id="profile-esl-header" class="table-header">Event Signal URL for sending rfq:bid_available</td>
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
 					<td id="driver-esl-header" class="table-header">Event Signal URL for receiving rfq:delivery_ready</td>
 					</c:if>
@@ -50,7 +45,6 @@
 					<td class="profile-id">${profile.id}</td>
 					<td class="profile-name">${profile.name}</td>
 					<td class="profile-location">${profile.location}</td>
-					<td class="profile-esl">${profile.eventSignalURL}</td>
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
 					<td id="driver-esl">
 						<c:choose>

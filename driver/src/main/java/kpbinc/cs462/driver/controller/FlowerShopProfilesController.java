@@ -65,22 +65,19 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createShop(
 			@RequestParam(value = "name") String name,
-			@RequestParam(value = "location") String location,
-			@RequestParam(value = "esl") String eventSignalURL) {
+			@RequestParam(value = "location") String location) {
 		
 		if (   name != null
-			&& location != null
-			&& eventSignalURL != null) {
+			&& location != null) {
 			
 			// ID hack
-			String combined = name + location + eventSignalURL;
+			String combined = name + location;
 			Long id = (long) combined.hashCode();
 			
 			FlowerShopProfile profile = new FlowerShopProfile();
 			profile.setId(id);
 			profile.setName(name);
 			profile.setLocation(location);
-			profile.setEventSignalURL(eventSignalURL);
 			
 			flowerShopProfileManager.register(id, profile);
 		}
