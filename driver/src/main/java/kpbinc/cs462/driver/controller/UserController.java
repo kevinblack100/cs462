@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 
 import kpbinc.cs462.shared.model.manage.AuthorizationTokenManager;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
+import kpbinc.cs462.shared.model.manage.OAuthServiceManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.exceptions.OAuthConnectionException;
@@ -36,7 +37,7 @@ public class UserController extends DriverBaseSiteContextController {
 	private ServletContext servletContext;
 	
 	@Autowired
-	private OAuthController oauthController;
+	private OAuthServiceManager oauthServiceManager;
 	
 	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
@@ -84,7 +85,7 @@ public class UserController extends DriverBaseSiteContextController {
 			}
 			
 			try {
-				String checkinJsonData = oauthController.getDetailsForUser("foursquare", retrieveCheckinsURL, username);
+				String checkinJsonData = oauthServiceManager.callAPI("foursquare", retrieveCheckinsURL, username);
 				model.addAttribute("checkins", checkinJsonData);
 			}
 			catch (OAuthConnectionException e) {

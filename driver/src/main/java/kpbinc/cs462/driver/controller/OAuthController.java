@@ -99,20 +99,4 @@ public class OAuthController extends DriverBaseSiteContextController {
 		return "redirect:" + redirectLocation;
 	}
 	
-	public String getDetailsForUser(String api, String requestURL, String username) {
-		String result = null;
-		
-		OAuthService service = oauthServiceManager.getOAuthService(api, username);
-		Token accessToken = authorizationTokenManager.getAuthorizationToken(username, api);
-		if (   service != null
-			&& accessToken != null) {
-			OAuthRequest request = new OAuthRequest(Verb.GET, requestURL);
-			// TODO implement a signing mechanism to handle foursquare signing
-			Response response = request.send();
-			result = response.getBody();
-		}
-		
-		return result;
-	}
-	
 }

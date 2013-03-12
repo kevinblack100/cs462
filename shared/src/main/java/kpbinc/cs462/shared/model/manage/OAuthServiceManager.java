@@ -12,6 +12,10 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Foursquare2Api;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,6 +77,12 @@ public class OAuthServiceManager {
 	
 	private String fileStoreRelativePath;
 	
+	/**
+	 * For retrieving the authorization tokens when trying to call an API.
+	 */
+	@Autowired
+	private AuthorizationTokenManager authorizationTokenManager;
+	
 	private Map<String, APIClientConfiguration> apiClientConfigurations;
 	
 	private Map<String, Map<String, OAuthService>> apiOAuthServices = new HashMap<String, Map<String, OAuthService>>();
@@ -127,6 +137,25 @@ public class OAuthServiceManager {
 		
 		return service;
 	}
+	
+	public String callAPI(String api, String requestURL, String username) {
+		String result = null;
+		
+		OAuthService service = getOAuthService(api, username);
+		Token accessToken = authorizationTokenManager.getAuthorizationToken(username, api);
+		if (   service != null
+			&& accessToken != null) {
+			OAuthRequest request = new OAuthRequest(Verb.GET, requestURL);
+			// TODO implement a signing mechanism to handle foursquare signing
+			Response response = request.send();
+			result = response.getBody();
+		}
+		
+		return result;
+	}
+	
+	
+	//= Support ========================================================================================================
 	
 	private Map<String, APIClientConfiguration> getAPIClientConfigurations() {
 		if (apiClientConfigurations == null) {
