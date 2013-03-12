@@ -1,20 +1,24 @@
 package kpbinc.cs462.shop.controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
+import kpbinc.cs462.shared.event.ESLGenerator;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.GrantedAuthorityRoles;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
+import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +54,9 @@ public class AccountsController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private CommonApplicationConstants applicationConstants;
+	
+	@Autowired
+	private ESLGenerator eslGenerator;
 	
 	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
@@ -131,10 +138,13 @@ public class AccountsController extends ShopBaseSiteContextController {
 	//- Account Management ---------------------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
-	public String getManagementForm(ModelMap model) {
+	public String getManagementForm(
+			HttpServletRequest request,
+			ModelMap model) {
 		// Check have a user
 		UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		assert(loggedInUserDetails != null);
+		String username = loggedInUserDetails.getUsername();
 		
 		// Check if user is a Driver
 		boolean isDriver = loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER);
@@ -142,7 +152,7 @@ public class AccountsController extends ShopBaseSiteContextController {
 		
 		// Prepare Driver ESL
 		String driverESL = "";
-		DriverProfile profile = driverProfileManager.getProfileFor(loggedInUserDetails.getUsername());
+		DriverProfile profile = driverProfileManager.getProfileFor(username);
 		if (profile != null) {
 			driverESL = profile.getEventSignalURL();
 		}
@@ -151,6 +161,17 @@ public class AccountsController extends ShopBaseSiteContextController {
 		// Prepare ShopProfile
 		ShopProfile shopProfile = shopProfileManager.getProfile();
 		model.addAttribute("shopProfile", shopProfile);
+		
+		// Prepare ESL for rfq:bid_available
+		try {
+			String bidAvailableESLPath = URLPathBuilder.build("event", "rfq", "bid_available", username);
+			String bidAvailableESL = eslGenerator.generate(request, bidAvailableESLPath).toString();
+			model.addAttribute("bidAvailableESL", bidAvailableESL);
+		}
+		catch (MalformedURLException e) {
+			logger.warning("MalformedURLException: " + e.getMessage());
+			e.printStackTrace();
+		}
 		
 		return "accounts/manage";
 	}

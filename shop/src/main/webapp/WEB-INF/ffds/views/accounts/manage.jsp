@@ -11,7 +11,8 @@
 				<br>
 				<input type="checkbox" id="driver-indicator" name="driver-indicator" ${isDriver ? "checked" : "" } value="true" />
 				<label for="driver-indicator">Flower delivery driver</label>
-				<br />
+				<br>
+				<br>
 				<div>
 					<span>Flower Shop Details</span>
 					<br>
@@ -19,9 +20,14 @@
 					<br>
 					<span>Address: ${shopProfile.address}</span>
 				</div>
-				<label for="driver-esl">Event Signal URL (ESL)</label>
+				<br>
+				<span>Your ESL for sending rfq:bid_available events: ${bidAvailableESL}</span>
+				<br>
+				<br>
+				<label for="driver-esl">ESL to receive rfq:delivery_ready events</label>
 				<!-- TODO escape driverESL so that it will render properly -->
 				<input type="text" id="driver-esl" name="driver-esl" size=60 value="${driverESL}" />
+				<br>
 				<br>
 				<input type="submit" id="submit" name="submit" value="Save" />
 			</fieldset>
