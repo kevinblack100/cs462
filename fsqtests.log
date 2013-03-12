@@ -60,3 +60,85 @@ response to requester
 {"meta":{"code":200,"errorType":"deprecated","errorDetail":"Please provide an API version to avoid future errors.See http:\/\/bit.ly\/vywCav"},"notifications":[{"type":"notificationTray","item":{"unreadCount":0}}],"response":{"user":{"id":"47635703","firstName":"Kevin","lastName":"Black","gender":"male","relationship":"self","photo":"https:\/\/foursquare.com\/img\/blank_boy.png","friends":{"count":0,"groups":[{"type":"friends","name":"Mutual friends","count":0,"items":[]},{"type":"others","name":"Other friends","count":0,"items":[]}]},"tips":{"count":0},"lists":{"groups":[{"type":"created","count":1,"items":[]}]},"homeCity":"Pleasant Grove, UT","bio":"","contact":{"email":"kevinblack100@gmail.com","facebook":"100000739400282"},"checkinPings":"off","pings":false,"type":"user","badges":{"count":0,"items":[]},"mayorships":{"count":0,"items":[]},"checkins":{"count":0},"following":{"count":0},"requests":{"count":0},"todos":{"count":0},"photos":{"count":0,"items":[]},"scores":{"recent":0,"max":0,"goal":50,"checkinsCount":0},"referralId":"u-47635703"}}}
 
 
+
+
+
+
+Sample Checkin Push data
+
+checkin 	{
+	"createdAt": 1363117366,
+	"id": "513f853629a69eccafc1a9c2",
+	"private": true,
+	"shout": "Hello World",
+	"timeZone": "America/Denver",
+	"timeZoneOffset": -360,
+	"type": "checkin",
+	"user": {
+		"bio": "",
+		"contact": {
+			"email": "kevinblack100@gmail.com",
+			"facebook": "100000739400282"
+		},
+		"firstName": "Kevin",
+		"gender": "male",
+		"homeCity": "Provo, UT",
+		"id": "47635703",
+		"lastName": "Black",
+		"lists": {
+			"groups": [ {
+				"count": 1,
+				"items": [],
+				"type": "created"
+			} ]
+		},
+		"photo": "https://foursquare.com/img/blank_boy.png",
+		"relationship": "self",
+		"tips": {
+			"count": 0
+		}
+	},
+	"venue": {
+		"beenHere": {
+			"count": 0
+		},
+		"canonicalUrl": "https://foursquare.com/v/brigham-young-university/4b5f573ff964a520ffb429e3",
+		"categories": [ {
+			"icon": "https://foursquare.com/img/categories/education/default.png",
+			"id": "4bf58dd8d48988d1ae941735",
+			"name": "University",
+			"parents": [ "College & University" ],
+			"pluralName": "Universities",
+			"primary": true,
+			"shortName": "University"
+		} ],
+		"contact": {
+			"formattedPhone": "(801) 422-4636",
+			"phone": "8014224636",
+			"twitter": "byu"
+		},
+		"id": "4b5f573ff964a520ffb429e3",
+		"likes": {
+			"count": 0, "groups": []
+		},
+		"location": {
+			"address": "1 N University Ave",
+			"cc": "US",
+			"city": "Provo",
+			"country": "United States",
+			"lat": 40.25083926655025,
+			"lng": -111.64926767349243,
+			"postalCode": "84602",
+			"state": "UT"
+		},
+		"name": "Brigham Young University",
+		"stats": {
+			"checkinsCount": 4984,
+			"tipCount": 15,
+			"usersCount": 1017
+		},
+		"url": "http://www.byu.edu",
+		"verified": false
+	},
+	"visibility": "private"
+}

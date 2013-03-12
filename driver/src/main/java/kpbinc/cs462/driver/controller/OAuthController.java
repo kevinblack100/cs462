@@ -1,6 +1,7 @@
 package kpbinc.cs462.driver.controller;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/oauth")
 public class OAuthController extends DriverBaseSiteContextController {
 
+	//= Class Data =====================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(OAuthController.class.getName());
+	
+	
 	//= Member Data ====================================================================================================
 	
 	@Autowired
@@ -55,11 +61,12 @@ public class OAuthController extends DriverBaseSiteContextController {
 		String redirectLocation = null;
 		if (service != null) {
 			String authorizationURL = service.getAuthorizationUrl(null);
-			System.out.println("generated authorization target URL: " + authorizationURL);
+			logger.info("generated authorization target URL: " + authorizationURL);
 			
 			redirectLocation = response.encodeRedirectURL(authorizationURL);
 		}
 		else {
+			// TODO set message
 			redirectLocation = "/pages/users/" + username;
 		}
 		
@@ -71,7 +78,7 @@ public class OAuthController extends DriverBaseSiteContextController {
 			@RequestParam(value = "api", required = true) String api,
 			@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "code", required = true) String code) {
-		System.out.printf("received code for %s at %s: %s\n", username, api, code);
+		logger.info(String.format("received code for %s at %s: %s\n", username, api, code));
 		
 		OAuthService service = oauthServiceManager.getOAuthService(api, username);
 		if (service != null) {
@@ -81,9 +88,12 @@ public class OAuthController extends DriverBaseSiteContextController {
 				authorizationTokenManager.createOrUpdateAuthorizationToken(username, api, accessToken);
 			}
 			catch (OAuthException e) {
+				// TODO set message
+				logger.warning("OAuthException: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
+		// else TODO set message
 
 		String redirectLocation = "/pages/users/" + username;
 		return "redirect:" + redirectLocation;

@@ -26,6 +26,7 @@ public class OAuthServiceManager {
 		
 		private String key;
 		private String secret;
+		private String push;
 		private String callbackBase;
 		
 		public APIClientConfiguration() {
@@ -45,6 +46,14 @@ public class OAuthServiceManager {
 
 		public void setSecret(String secret) {
 			this.secret = secret;
+		}
+		
+		public String getPush() {
+			return push;
+		}
+		
+		public void setPush(String push) {
+			this.push = push;
 		}
 
 		public String getCallbackBase() {
