@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.DriverProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
+import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
+import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -36,6 +38,9 @@ public class EventDispatchController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private EventGenerator eventGenerator;
 	
 	@Autowired
 	private DriverProfileManager driverProfileManager;
@@ -98,7 +103,12 @@ public class EventDispatchController {
 						&& event.getName().equals("delivery_ready")) {
 						responsePayloadWriter.write("received");
 						
-						// TODO other event processing
+						BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
+						bidAvailableEvent.addAttribute("driver_name", driverUsername);
+						bidAvailableEvent.addAttribute("amount", new Float(5.0f));
+						
+						String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
+						eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
 					}
 					else {
 						responsePayloadWriter.write("expected an rfq:delivery_ready event");
