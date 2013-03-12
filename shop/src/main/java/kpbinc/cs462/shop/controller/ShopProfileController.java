@@ -42,9 +42,13 @@ public class ShopProfileController extends ShopBaseSiteContextController {
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public String saveShopProfileChanges(
 			@RequestParam(value = "shop-name", required = true) String name,
-			@RequestParam(value = "shop-address", required = true) String address) {
+			@RequestParam(value = "shop-address", required = true) String address,
+			@RequestParam(value = "shop-latitude", required = true) Double latitude,
+			@RequestParam(value = "shop-longitude", required = true) Double longitude) {
 		
 		ShopProfile newProfile = new ShopProfile(name, address);
+		newProfile.setLatitude(latitude);
+		newProfile.setLongitude(longitude);
 		shopProfileManager.updateProfile(newProfile);
 		
 		return "redirect:/ffds/";

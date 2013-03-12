@@ -4,19 +4,23 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 public class ShopProfile {
 
-	//~ Class Data =====================================================================================================
+	//= Class Data =====================================================================================================
 	
 	private static final String DEFAULT_VALUE = "unknown";
 	
 	
-	//~ Member Data ====================================================================================================
+	//= Member Data ====================================================================================================
 	
 	private String name;
 	
 	private String address;
 	
+	private Double latitude;
 	
-	//~ Initialization =================================================================================================
+	private Double longitude;
+	
+	
+	//= Initialization =================================================================================================
 	
 	public ShopProfile() {
 		GlobalLogUtils.logConstruction(this);
@@ -31,7 +35,7 @@ public class ShopProfile {
 	}
 
 	
-	//~ Interface ======================================================================================================
+	//= Interface ======================================================================================================
 
 	public String getName() {
 		return name;
@@ -49,6 +53,22 @@ public class ShopProfile {
 	public void setAddress(String address) {
 		assert(address != null);
 		this.address = address;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 	
 }
