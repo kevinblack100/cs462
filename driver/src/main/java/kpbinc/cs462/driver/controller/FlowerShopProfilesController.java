@@ -105,12 +105,12 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 					driverProfile = new DriverProfile(driverName);
 				}
 				
-				if (!driverProfile.getDeliveryReadyESLs().containsKey(shopProfileID)) {
+				if (!driverProfile.getRegisteredESLs().containsKey(shopProfileID)) {
 					try {
 						String deliveryReadyFullName = "rfq:delivery_ready";
 						String eslFile = URLPathBuilder.build("event", "rfq", "delivery_ready", shopProfileID.toString(), driverName);
 						URL esl = eslGenerator.generate(request, eslFile);
-						driverProfile.addDeliveryReadyESL(shopProfileID, deliveryReadyFullName, esl.toString());
+						driverProfile.addRegisteredESL(shopProfileID, deliveryReadyFullName, esl.toString());
 					}
 					catch (MalformedURLException e) {
 						logger.warning("Unexpected MalformedURLException: " + e.getMessage());
@@ -118,7 +118,7 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 					}
 					
 					String bidAvailableFullName = "rfq:bid_available";
-					driverProfile.addDeliveryReadyESL(shopProfileID, bidAvailableFullName, bidAvailableESL);
+					driverProfile.addRegisteredESL(shopProfileID, bidAvailableFullName, bidAvailableESL);
 					
 					driverProfileManager.update(driverName, driverProfile);
 				}

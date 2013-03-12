@@ -14,7 +14,7 @@ public class DriverProfileTests {
 		Long shopID = 1l;
 		String eventName = "event:something";
 		String esl = "http://something.somedomain.net/deliveryready/esl/for/avgjoe";
-		profile.addDeliveryReadyESL(shopID, eventName, esl);
+		profile.addRegisteredESL(shopID, eventName, esl);
 		
 		StringBuilder builder = new StringBuilder()
 			.append("{")
@@ -41,7 +41,7 @@ public class DriverProfileTests {
 		Long shopID = 1l;
 		String eventName = "event:something";
 		String esl = "http://something.somedomain.net/deliveryready/esl/for/avgjoe";
-		profile.addDeliveryReadyESL(shopID, eventName, esl);
+		profile.addRegisteredESL(shopID, eventName, esl);
 		
 		StringBuilder builder = new StringBuilder()
 			.append("{")

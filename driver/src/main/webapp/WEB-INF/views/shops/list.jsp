@@ -48,10 +48,10 @@
 					<c:if test="${loggedInUserContext.signedInUserDetails != null}">
 					<td id="driver-esls">
 						<c:choose>
-							<c:when test="${driverProfile.deliveryReadyESLs.containsKey(profile.id)}">
-								<span>to send rfq:bid_available: ${driverProfile.deliveryReadyESLs[profile.id]['rfq:bid_available']}</span>
+							<c:when test="${driverProfile.registeredESLs.containsKey(profile.id)}">
+								<span>to send rfq:bid_available: ${driverProfile.registeredESLs[profile.id]['rfq:bid_available']}</span>
 								<br>
-								<span>to receive rfq:delivery_ready: ${driverProfile.deliveryReadyESLs[profile.id]['rfq:delivery_ready']}</span>
+								<span>to receive rfq:delivery_ready: ${driverProfile.registeredESLs[profile.id]['rfq:delivery_ready']}</span>
 							</c:when>
 							<c:otherwise>
 								<form method="post" action="${contextPaths.dynamicPath}/shops/generate-delivery-ready-esl">

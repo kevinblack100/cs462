@@ -15,7 +15,7 @@ public class DriverProfile {
 	//= Member Data ====================================================================================================
 	
 	private String username;
-	private Map<Long, Map<String, String>> deliveryReadyESLs;
+	private Map<Long, Map<String, String>> registeredESLs;
 	
 	
 	//= Initialization =================================================================================================
@@ -23,7 +23,7 @@ public class DriverProfile {
 	public DriverProfile(@JsonProperty("username") String username) {
 		GlobalLogUtils.logConstruction(this);
 		setUsername(username);
-		deliveryReadyESLs = new DecoratedMap<Long, Map<String, String>>(new HashMap<Long, Map<String, String>>());
+		registeredESLs = new DecoratedMap<Long, Map<String, String>>(new HashMap<Long, Map<String, String>>());
 	}
 
 	
@@ -36,7 +36,7 @@ public class DriverProfile {
 			&& object instanceof DriverProfile) {
 			DriverProfile other = (DriverProfile) object;
 			result = (   StringUtils.equals(this.username, other.username)
-					  && this.deliveryReadyESLs.equals(other.deliveryReadyESLs));
+					  && this.registeredESLs.equals(other.registeredESLs));
 		}
 		return result;
 	}
@@ -49,26 +49,26 @@ public class DriverProfile {
 		this.username = username;
 	}
 
-	public Map<Long, Map<String, String>> getDeliveryReadyESLs() {
-		return deliveryReadyESLs;
+	public Map<Long, Map<String, String>> getRegisteredESLs() {
+		return registeredESLs;
 	}
 
-	public void setDeliveryReadyESLs(Map<Long, Map<String, String>> deliveryReadyESLs) {
-		if (DecoratedMap.class.isInstance(deliveryReadyESLs)) {
-			this.deliveryReadyESLs = deliveryReadyESLs;
+	public void setRegisteredESLs(Map<Long, Map<String, String>> registeredESLs) {
+		if (DecoratedMap.class.isInstance(registeredESLs)) {
+			this.registeredESLs = registeredESLs;
 		}
 		else {
-			this.deliveryReadyESLs = new DecoratedMap<Long, Map<String, String>>(deliveryReadyESLs);
+			this.registeredESLs = new DecoratedMap<Long, Map<String, String>>(registeredESLs);
 		}
 	}
 	
-	public void addDeliveryReadyESL(Long shopID, String eventFullName, String deliveryReadyESL) {
-		Map<String, String> eventToESLMap = deliveryReadyESLs.get(shopID);
+	public void addRegisteredESL(Long shopID, String eventFullName, String esl) {
+		Map<String, String> eventToESLMap = registeredESLs.get(shopID);
 		if (eventToESLMap == null) {
 			eventToESLMap = new HashMap<String, String>();
-			deliveryReadyESLs.put(shopID, eventToESLMap);
+			registeredESLs.put(shopID, eventToESLMap);
 		}
-		eventToESLMap.put(eventFullName, deliveryReadyESL);
+		eventToESLMap.put(eventFullName, esl);
 	}
 
 }
