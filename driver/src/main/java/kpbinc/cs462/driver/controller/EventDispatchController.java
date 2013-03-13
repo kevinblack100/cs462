@@ -155,7 +155,8 @@ public class EventDispatchController {
 							String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
 							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
 						}
-						else {
+						else if (   userProfile != null
+								 && userProfile.getTextableNumber() != null) {
 							Long eventID = eventManager.getNextID();							
 							eventManager.register(eventID, event);
 							
@@ -163,13 +164,14 @@ public class EventDispatchController {
 							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
 							 
 						    Map<String, String> params = new HashMap<String, String>();
-						    String messageContent = String.format("Flower Delivery Ready: shop: %s, pickup: %s, address: %s, time: %s",
+						    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s, time: %s",
+						    		eventID,
 						    		event.getAttributes().get("shop_name").get(0),
 						    		event.getAttributes().get("pickup_time").get(0),
 						    		event.getAttributes().get("delivery_address").get(0),
 						    		event.getAttributes().get("delivery_time").get(0));
 						    params.put("Body", messageContent);
-						    params.put("To", DEFAULT_SMS_DEST_NUMBER);
+						    params.put("To", userProfile.getTextableNumber());
 						    params.put("From", TWILIO_PHONE_NUMBER);
 							     
 						    SmsFactory messageFactory = client.getAccount().getSmsFactory();
