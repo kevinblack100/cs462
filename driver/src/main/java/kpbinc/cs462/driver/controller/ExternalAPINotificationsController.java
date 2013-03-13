@@ -2,13 +2,16 @@ package kpbinc.cs462.driver.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.driver.model.UserProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
+import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.io.util.JavaJsonAccess;
 import kpbinc.io.util.JsonSerializer;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -37,7 +40,7 @@ public class ExternalAPINotificationsController {
 	//= Member Data ====================================================================================================
 	
 	@Autowired
-	private DriverProfileManager driverProfileManager;
+	private UserProfileManager userProfileManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -70,10 +73,19 @@ public class ExternalAPINotificationsController {
 			String userID = rawUserID.toString();
 			
 			Object rawLatitude = JavaJsonAccess.getValue(checkinObject, "venue", "location", "lat");
+			Double latitude = (Double) rawLatitude;
 			
 			Object rawLongitude = JavaJsonAccess.getValue(checkinObject, "venue", "location", "lng");
+			Double longitude = (Double) rawLongitude;
 			
-			logger.info(String.format("checkin for user %s at: %s lat, %s lng", userID, rawLatitude.toString(), rawLongitude.toString()));
+			logger.info(String.format("checkin for user %s at: %f lat, %f lng", userID, latitude, longitude));
+			
+			Collection<UserProfile> profiles = userProfileManager.getByApiID("foursquare", userID);
+			for (UserProfile profile : profiles) {
+				profile.setLastKnownLatitude(latitude);
+				profile.setLastKnownLongitude(longitude);
+				userProfileManager.update(profile.getUsername(), profile);
+			}
 		}
 		catch (IOException e) {
 			logger.warning("Unexpected IOException: " + e.getMessage());

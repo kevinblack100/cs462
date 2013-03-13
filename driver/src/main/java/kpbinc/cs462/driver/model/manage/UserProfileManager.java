@@ -2,6 +2,7 @@ package kpbinc.cs462.driver.model.manage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ import kpbinc.io.util.JsonFileStorePersistentMap;
 import kpbinc.io.util.JsonSerializer;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.scribe.exceptions.OAuthConnectionException;
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +132,16 @@ public class UserProfileManager {
 	public Collection<UserProfile> getAll() {
 		Collection<UserProfile> profiles = getUserProfiles().values();
 		return profiles;
+	}
+	
+	public Collection<UserProfile> getByApiID(String api, String id) {
+		Collection<UserProfile> result = new ArrayList<UserProfile>();
+		for (UserProfile profile : this.getAll()) {
+			if (StringUtils.equals(id, profile.getApiIDs().get(api))) {
+				result.add(profile);
+			}
+		}
+		return result;
 	}
 	
 	public UserProfile update(String id, UserProfile profile) {

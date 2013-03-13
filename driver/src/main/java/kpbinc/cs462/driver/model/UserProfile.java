@@ -20,6 +20,8 @@ public class UserProfile {
 	
 	private String username;
 	private Map<String, String> apiIDs; // api -> api-ID
+	private Double lastKnownLatitude;
+	private Double lastKnownLongitude;
 	
 	
 	//= Initialization =================================================================================================
@@ -57,6 +59,22 @@ public class UserProfile {
 
 	public void addApiID(String api, String id) {
 		getApiIDs().put(api, id);
+	}
+
+	public Double getLastKnownLatitude() {
+		return lastKnownLatitude;
+	}
+
+	public void setLastKnownLatitude(Double lastKnownLatitude) {
+		this.lastKnownLatitude = lastKnownLatitude;
+	}
+
+	public Double getLastKnownLongitude() {
+		return lastKnownLongitude;
+	}
+
+	public void setLastKnownLongitude(Double lastKnownLongitude) {
+		this.lastKnownLongitude = lastKnownLongitude;
 	}
 	
 }
