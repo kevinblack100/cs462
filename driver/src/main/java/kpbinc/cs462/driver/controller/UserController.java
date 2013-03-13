@@ -87,6 +87,7 @@ public class UserController extends DriverBaseSiteContextController {
 			try {
 				String checkinJsonData = oauthServiceManager.callAPI("foursquare", retrieveCheckinsURL, username);
 				model.addAttribute("checkins", checkinJsonData);
+				// TODO update the UserProfile for the current user with the most recent check-in information
 			}
 			catch (OAuthConnectionException e) {
 				logger.info("Caught exception: " + e.getMessage());

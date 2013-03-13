@@ -24,7 +24,6 @@ import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonSerializable;
 
 public class UserProfileManager {
 

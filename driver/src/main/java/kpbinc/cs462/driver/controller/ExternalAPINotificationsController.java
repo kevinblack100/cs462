@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.UserProfile;
-import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.io.util.JavaJsonAccess;
 import kpbinc.io.util.JsonSerializer;
