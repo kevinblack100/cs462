@@ -9,12 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.DriverProfile;
+import kpbinc.cs462.driver.model.FlowerShopProfile;
+import kpbinc.cs462.driver.model.UserProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
+import kpbinc.cs462.driver.model.manage.FlowerShopProfileManager;
+import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
+import kpbinc.math.SphericalUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +49,12 @@ public class EventDispatchController {
 	
 	@Autowired
 	private DriverProfileManager driverProfileManager;
+	
+	@Autowired
+	private FlowerShopProfileManager flowerShopProfileManager;
+	
+	@Autowired
+	private UserProfileManager userProfileManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -103,12 +114,26 @@ public class EventDispatchController {
 						&& event.getName().equals("delivery_ready")) {
 						responsePayloadWriter.write("received");
 						
-						BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-						bidAvailableEvent.addAttribute("driver_name", driverUsername);
-						bidAvailableEvent.addAttribute("amount", new Float(5.0f));
+						FlowerShopProfile shopProfile = flowerShopProfileManager.get(shopProfileID);
+						UserProfile userProfile = userProfileManager.get(driverUsername);
 						
-						String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
-						eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
+						double distanceInMiles = SphericalUtils.greatCircleVincenty(
+								SphericalUtils.EARTH_RADIUS_mi,
+								shopProfile.getLatitude(), shopProfile.getLongitude(),
+								userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());
+						
+						if (distanceInMiles < 5.0) {
+							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
+							bidAvailableEvent.addAttribute("driver_name", driverUsername);
+							bidAvailableEvent.addAttribute("amount", new Float(5.0f));
+							bidAvailableEvent.addAttribute("amount_unit", "USD");
+							
+							String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
+							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
+						}
+						else {
+							logger.info("TODO: stash the event details and instead send the driver an SMS message");
+						}
 					}
 					else {
 						responsePayloadWriter.write("expected an rfq:delivery_ready event");
