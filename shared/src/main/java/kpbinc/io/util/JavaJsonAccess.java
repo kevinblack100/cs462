@@ -49,4 +49,16 @@ public class JavaJsonAccess {
 		return value;
 	}
 	
+	/**
+	 * @param object
+	 * @param keyPath
+	 * @throws ClassCastException if the value is not of the specified type
+	 * @return
+	 */
+	public static <T> T getValueAs(Map<String, Object> object, String... keyPath) {
+		Object value = getValue(object, keyPath);
+		@SuppressWarnings("unchecked")
+		T valueAsT = (T) value;
+		return valueAsT;
+	}
 }

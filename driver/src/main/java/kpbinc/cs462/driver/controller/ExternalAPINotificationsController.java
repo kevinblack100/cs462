@@ -69,14 +69,9 @@ public class ExternalAPINotificationsController {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> checkinObject = JsonSerializer.deserialize(checkin, Map.class);
 			
-			Object rawUserID = JavaJsonAccess.getValue(checkinObject, "user", "id");
-			String userID = rawUserID.toString();
-			
-			Object rawLatitude = JavaJsonAccess.getValue(checkinObject, "venue", "location", "lat");
-			Double latitude = (Double) rawLatitude;
-			
-			Object rawLongitude = JavaJsonAccess.getValue(checkinObject, "venue", "location", "lng");
-			Double longitude = (Double) rawLongitude;
+			String userID = JavaJsonAccess.getValueAs(checkinObject, "user", "id");
+			Double latitude = JavaJsonAccess.getValueAs(checkinObject, "venue", "location", "lat");
+			Double longitude = JavaJsonAccess.getValueAs(checkinObject, "venue", "location", "lng");
 			
 			logger.info(String.format("checkin for user %s at: %f lat, %f lng", userID, latitude, longitude));
 			
@@ -89,6 +84,10 @@ public class ExternalAPINotificationsController {
 		}
 		catch (IOException e) {
 			logger.warning("Unexpected IOException: " + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (ClassCastException e) {
+			logger.warning("ClassCastException: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
