@@ -2,6 +2,7 @@ package kpbinc.cs462.driver.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -30,6 +31,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.TwilioRestException;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
+
 @Controller
 @Scope(value = "request")
 @RequestMapping(value = "/event")
@@ -38,6 +44,11 @@ public class EventDispatchController {
 	//= Class Data =====================================================================================================
 	
 	private static final Logger logger = Logger.getLogger(EventDispatchController.class.getName());
+	
+	public static final String ACCOUNT_SID = "AC5f497520d983b14a8d1dd57851d5e85c";
+	public static final String AUTH_TOKEN = "759921c102d3e9a9a0d2b49c0ac88656";
+	public static final String TWILIO_PHONE_NUMBER = "+18014710490";
+	public static final String DEFAULT_SMS_DEST_NUMBER = "+18013618342";
 	
 	
 	//= Member Data ====================================================================================================
@@ -148,7 +159,28 @@ public class EventDispatchController {
 							Long eventID = eventManager.getNextID();							
 							eventManager.register(eventID, event);
 							
-							logger.info("TODO: send the driver an SMS message");
+							// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
+							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
+							 
+						    Map<String, String> params = new HashMap<String, String>();
+						    String messageContent = String.format("Flower Delivery Ready: shop: %s, pickup: %s, address: %s, time: %s",
+						    		event.getAttributes().get("shop_name").get(0),
+						    		event.getAttributes().get("pickup_time").get(0),
+						    		event.getAttributes().get("delivery_address").get(0),
+						    		event.getAttributes().get("delivery_time").get(0));
+						    params.put("Body", messageContent);
+						    params.put("To", DEFAULT_SMS_DEST_NUMBER);
+						    params.put("From", TWILIO_PHONE_NUMBER);
+							     
+						    SmsFactory messageFactory = client.getAccount().getSmsFactory();
+						    try {
+						    	Sms message = messageFactory.create(params);
+						    	logger.info("Sent SMS message: SID " + message.getSid());
+						    }
+						    catch (TwilioRestException e) {
+						    	logger.warning("TwilioRestException: " + e.getMessage());
+						    	e.printStackTrace();
+						    }
 						}
 					}
 					else {

@@ -25,6 +25,7 @@
 		<ScribeVersion>1.3.3</ScribeVersion>
 		<SpringFrameworkVersion>3.0.7.RELEASE</SpringFrameworkVersion>
 		<SpringSecurityVersion>3.1.3.RELEASE</SpringSecurityVersion>
+		<TwilioVersion>3.3.10</TwilioVersion>
 	</properties>
 	
 	<dependencies>
@@ -74,6 +75,11 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${JacksonVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio-java-sdk</artifactId>
+			<version>${TwilioVersion}</version>
 		</dependency>
 	</dependencies>
 
