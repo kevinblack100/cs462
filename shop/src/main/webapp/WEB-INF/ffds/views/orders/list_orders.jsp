@@ -10,6 +10,13 @@
 	<jsp:body>
 		<h1>Submitted Orders</h1>
 		
+		<c:if test="${orderPolicy.maySubmit(loggedInUserContext.signedInUserDetails)}">
+			<a href="${contextPaths.dynamicPath}/orders/submit">Submit New Order</a>
+		</c:if>
+		
+		<br>
+		<br>
+		
 		<table>
 			<thead>
 				<tr>
@@ -20,14 +27,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
 				<c:forEach items="${orders}" var="order">
+				<tr>
 					<td>${order.orderID}</td>
 					<td>${order.pickupTime}</td>
 					<td>${order.deliveryAddress}</td>
 					<td>${order.deliveryTime}</td>
-				</c:forEach>
 				</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 		

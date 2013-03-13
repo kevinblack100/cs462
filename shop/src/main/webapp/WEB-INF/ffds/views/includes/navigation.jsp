@@ -7,7 +7,7 @@
 	<a href="${contextPaths.dynamicPath}/users/">Users</a>
 	|
 	<c:if test="${orderPolicy.maySubmit(loggedInUserContext.signedInUserDetails)}">
-		<a href="${contextPaths.dynamicPath}/orders/submit">Submit Order</a>
+		<a href="${contextPaths.dynamicPath}/orders">Orders</a>
 		|
 		<a href="${contextPaths.dynamicPath}/shop/profile">Shop Profile</a>
 		|

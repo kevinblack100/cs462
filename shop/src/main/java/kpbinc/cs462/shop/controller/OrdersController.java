@@ -111,7 +111,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 			}
 		}
 		
-		return "redirect:/ffds/";
+		return "redirect:/ffds/orders";
 	}
 
 	//- Read -----------------------------------------------------------------------------------------------------------
