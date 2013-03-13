@@ -6,7 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import kpbinc.test.io.util.FileIOTestContext;
 import kpbinc.test.util.ActAndAssertJsonSerializer;
@@ -191,6 +194,116 @@ public class JsonSerializerTests {
 		
 		// ACT/ASSERT
 		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, user, UserDetails.class);
+	}
+	
+	//- Raw Type -------------------------------------------------------------------------------------------------------
+	
+	@Test
+	public void testObjectSerialization() {
+		// ARRANGE
+		Map<String, String> object = new TreeMap<String, String>();
+		String propAName = "propA";
+		String propAValue = "a";
+		String propBName = "propB";
+		String propBValue = "b";
+		object.put(propAName, propAValue);
+		object.put(propBName, propBValue);
+		
+		String serializationTemplate = new StringBuilder()
+			.append("{")
+				.append("\"%s\":\"%s\",")
+				.append("\"%s\":\"%s\"")
+			.append("}")
+			.toString();
+		String expectedJsonSerialization = String.format(serializationTemplate, propAName, propAValue, propBName, propBValue);
+		
+		// ACT/ASSERT
+		ActAndAssertJsonSerializer.assertJsonSerialization(object, expectedJsonSerialization);
+	}
+	
+	@Test
+	public void testObjectDeserialization() {
+		// ARRANGE
+		Map<String, String> object = new TreeMap<String, String>();
+		String propAName = "propA";
+		String propAValue = "a";
+		String propBName = "propB";
+		String propBValue = "b";
+		object.put(propAName, propAValue);
+		object.put(propBName, propBValue);
+		
+		String serializationTemplate = new StringBuilder()
+			.append("{")
+				.append("\"%s\":\"%s\",")
+				.append("\"%s\":\"%s\"")
+			.append("}")
+			.toString();
+		String jsonSerialization = String.format(serializationTemplate, propAName, propAValue, propBName, propBValue);
+		
+		// ACT/ASSERT
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, object, Map.class);
+	}
+	
+	@Test
+	public void testNestedObjectSerialization() {
+		// ARRANGE
+		Map<String, Object> object = new TreeMap<String, Object>();
+		String propAName = "propA";
+		String propAValue = "a";
+		object.put(propAName, propAValue);
+		
+		Map<String, String> nestedObject = new TreeMap<String, String>();
+		String propBName = "propB";
+		String propBValue = "b";
+		nestedObject.put(propBName, propBValue);
+		
+		String nestedObjectName = "nestedObject";
+		object.put(nestedObjectName, nestedObject);
+		
+		String serializationTemplate = new StringBuilder()
+			.append("{")
+				.append("\"%s\":{")
+					.append("\"%s\":\"%s\"")
+				.append("},")	
+				.append("\"%s\":\"%s\"")
+			.append("}")
+			.toString();
+		String expectedJsonSerialization = 
+				String.format(serializationTemplate, nestedObjectName, propBName, propBValue, propAName, propAValue);
+		
+		// ACT/ASSERT
+		ActAndAssertJsonSerializer.assertJsonSerialization(object, expectedJsonSerialization);
+	}
+	
+	@Test
+	public void testNestedObjectDeserialization() {
+		// ARRANGE
+		Map<String, Object> object = new TreeMap<String, Object>();
+		String propAName = "propA";
+		String propAValue = "a";
+		object.put(propAName, propAValue);
+		
+		Map<String, String> nestedObject = new TreeMap<String, String>();
+		String propBName = "propB";
+		String propBValue = "b";
+		nestedObject.put(propBName, propBValue);
+		
+		String nestedObjectName = "nestedObject";
+		object.put(nestedObjectName, nestedObject);
+		
+		String serializationTemplate = new StringBuilder()
+			.append("{")
+				.append("\"%s\":{")
+					.append("\"%s\":\"%s\"")
+				.append("},")	
+				.append("\"%s\":\"%s\"")
+			.append("}")
+			.toString();
+		String jsonSerialization = 
+				String.format(serializationTemplate, nestedObjectName, propBName, propBValue, propAName, propAValue);
+		
+		// ACT/ASSERT
+		ActAndAssertJsonSerializer.assertJsonDeserialization(jsonSerialization, object, Map.class);
 	}
 	
 }
