@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.model.manage.AuthorizationTokenManager;
 import kpbinc.cs462.shared.model.manage.OAuthServiceManager;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -40,6 +41,9 @@ public class OAuthController extends DriverBaseSiteContextController {
 	
 	@Autowired
 	private OAuthServiceManager oauthServiceManager;
+	
+	@Autowired
+	private UserProfileManager userProfileManager;
 
 	
 	//= Initialization =================================================================================================
@@ -86,6 +90,8 @@ public class OAuthController extends DriverBaseSiteContextController {
 				Verifier verifier = new Verifier(code);
 				Token accessToken = service.getAccessToken(null, verifier);
 				authorizationTokenManager.createOrUpdateAuthorizationToken(username, api, accessToken);
+				
+				userProfileManager.updateApiID(username, api);
 			}
 			catch (OAuthException e) {
 				// TODO set message
