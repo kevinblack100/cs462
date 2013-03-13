@@ -68,6 +68,7 @@ public class EventDispatchController {
 					responsePayloadWriter.write("received");
 				
 					Long orderID = Long.parseLong((String) event.getAttributes().get("delivery_id").get(0));
+					String driverName = (String) event.getAttributes().get("driver_name").get(0);
 					String estimatedDeliveryTime = (String) event.getAttributes().get("delivery_time_est").get(0);
 					Double amount = Double.parseDouble((String) event.getAttributes().get("amount").get(0));
 					String amountUnits = (String) event.getAttributes().get("amount_units").get(0);
@@ -76,6 +77,8 @@ public class EventDispatchController {
 					DeliveryBid bid = new DeliveryBid();
 					bid.setBidID(bidID);
 					bid.setOrderID(orderID);
+					bid.setUsername(username);
+					bid.setDriverName(driverName);
 					bid.setEstimatedDeliveryTime(estimatedDeliveryTime);
 					bid.setAmount(amount);
 					bid.setAmountUnits(amountUnits);

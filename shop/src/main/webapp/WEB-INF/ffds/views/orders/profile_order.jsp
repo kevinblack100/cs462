@@ -38,8 +38,8 @@
 				<c:forEach items="${bids}" var="bid">
 				<tr>
 					<td>${bid.bidID}</td>
-					<td>TODO</td>
-					<td>TODO</td>
+					<td>${bid.username}</td>
+					<td>${bid.driverName}</td>
 					<td>${bid.estimatedDeliveryTime}</td>
 					<td>${bid.amount}</td>
 					<td>${bid.amountUnits}</td>

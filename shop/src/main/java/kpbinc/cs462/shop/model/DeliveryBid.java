@@ -8,6 +8,8 @@ public class DeliveryBid {
 	
 	public Long bidID;
 	public Long orderID;
+	public String username;
+	public String driverName;
 	public String estimatedDeliveryTime;
 	public Double amount;
 	public String amountUnits;
@@ -36,6 +38,22 @@ public class DeliveryBid {
 
 	public void setOrderID(Long orderID) {
 		this.orderID = orderID;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getDriverName() {
+		return driverName;
+	}
+
+	public void setDriverName(String driverName) {
+		this.driverName = driverName;
 	}
 
 	public String getEstimatedDeliveryTime() {
