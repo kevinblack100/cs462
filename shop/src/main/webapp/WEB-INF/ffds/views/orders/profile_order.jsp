@@ -32,6 +32,7 @@
 					<td class="table-header">Estimated Delivery Time</td>
 					<td class="table-header">Amount</td>
 					<td class="table-header">Amount Unit</td>
+					<td class="table-header">Selected</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -43,6 +44,28 @@
 					<td>${bid.estimatedDeliveryTime}</td>
 					<td>${bid.amount}</td>
 					<td>${bid.amountUnits}</td>
+					<td>
+					<c:choose>
+						<c:when test="${order.selectedBidID != null}">
+						<c:choose>
+							<c:when test="${order.selectedBidID == bid.bidID}">
+							Yes
+							</c:when>
+							<c:otherwise>
+							No
+							</c:otherwise>
+						</c:choose>
+						</c:when>
+						<c:otherwise>
+						<form method="post" action="${contextPaths.dynamicPath}/orders/${order.orderID}/selectbid">
+							<fieldset>
+								<input type="hidden" name="selected-bid-id" value="${bid.bidID}" />
+								<input type="submit" name="submit" value="Select" />
+							</fieldset>
+						</form>
+						</c:otherwise>
+					</c:choose>
+					</td>
 				</tr>
 				</c:forEach>
 			</tbody>

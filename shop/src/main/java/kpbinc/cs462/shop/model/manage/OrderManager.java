@@ -82,6 +82,11 @@ public class OrderManager {
 		return orders;
 	}
 	
+	public Order update(Long orderID, Order order) {
+		Order previous = getIndex().put(orderID, order);
+		return previous;
+	}
+	
 	public Long getNextID() {
 		if (nextID == null) {
 			// find the max ID

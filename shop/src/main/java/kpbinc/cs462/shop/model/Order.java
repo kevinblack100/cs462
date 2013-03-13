@@ -10,6 +10,7 @@ public class Order {
 	private String pickupTime;
 	private String deliveryAddress;
 	private String deliveryTime;
+	private Long selectedBidID;
 	
 	
 	//= Initialization =================================================================================================
@@ -51,6 +52,14 @@ public class Order {
 
 	public void setDeliveryTime(String deliveryTime) {
 		this.deliveryTime = deliveryTime;
+	}
+
+	public Long getSelectedBidID() {
+		return selectedBidID;
+	}
+
+	public void setSelectedBidID(Long selectedBidID) {
+		this.selectedBidID = selectedBidID;
 	}
 
 }

@@ -133,12 +133,48 @@ public class OrdersController extends ShopBaseSiteContextController {
 	public String getOrderProfile(
 			@PathVariable(value = "order-id") Long orderID,
 			ModelMap model) {
+		prepareOrderProfile(model, orderID);
+		return "orders/profile_order";
+	}
+	
+	//- Update ---------------------------------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/{order-id}/selectbid", method = RequestMethod.POST)
+	public String setSelectedBid(
+			@PathVariable(value = "order-id") Long orderID,
+			@RequestParam(value = "selected-bid-id") Long selectedBidID,
+			ModelMap model) {
+		String redirectLocation = null;
+		
+		Order order = orderManager.get(orderID);
+		
+		if (order != null) {
+			DeliveryBid bid = deliveryBidManager.get(selectedBidID);	
+			
+			if (bid != null) {
+				order.setSelectedBidID(selectedBidID);
+				orderManager.update(orderID, order);
+			}
+			
+			prepareOrderProfile(model, orderID);
+			redirectLocation = "/" + getContextPaths().getDynamicRelativePath() + "/orders/" + orderID;
+		}
+		else {
+			redirectLocation = "/" + getContextPaths().getDynamicRelativePath() + "/orders";
+		}
+		
+		return "redirect:" + redirectLocation;
+	}
+	
+	
+	//= Support ========================================================================================================
+	
+	private void prepareOrderProfile(ModelMap model, Long orderID) {
 		Order order = orderManager.get(orderID);
 		model.put("order", order);
 		
 		Collection<DeliveryBid> bids = deliveryBidManager.getByOrderID(orderID);
 		model.put("bids", bids);
-		
-		return "orders/profile_order";
 	}
+	
 }
