@@ -7,9 +7,11 @@ import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventSerializer;
+import kpbinc.cs462.shop.model.DeliveryBid;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.ShopProfile;
+import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
 import kpbinc.cs462.shop.model.manage.OrderManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +50,9 @@ public class OrdersController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private OrderManager orderManager;
+	
+	@Autowired
+	private DeliveryBidManager deliveryBidManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -123,4 +129,16 @@ public class OrdersController extends ShopBaseSiteContextController {
 		return "orders/list_orders";
 	}
 	
+	@RequestMapping(value = "/{order-id}")
+	public String getOrderProfile(
+			@PathVariable(value = "order-id") Long orderID,
+			ModelMap model) {
+		Order order = orderManager.get(orderID);
+		model.put("order", order);
+		
+		Collection<DeliveryBid> bids = deliveryBidManager.getByOrderID(orderID);
+		model.put("bids", bids);
+		
+		return "orders/profile_order";
+	}
 }

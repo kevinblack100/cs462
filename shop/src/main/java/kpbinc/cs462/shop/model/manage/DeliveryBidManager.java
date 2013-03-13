@@ -1,6 +1,7 @@
 package kpbinc.cs462.shop.model.manage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -75,6 +76,16 @@ public class DeliveryBidManager {
 	public DeliveryBid get(Long id) {
 		DeliveryBid bid = getIndex().get(id);
 		return bid;
+	}
+	
+	public Collection<DeliveryBid> getByOrderID(Long orderID) {
+		Collection<DeliveryBid> bids = new ArrayList<DeliveryBid>();
+		for (DeliveryBid bid : getIndex().values()) {
+			if (bid.getOrderID().equals(orderID)) {
+				bids.add(bid);
+			}
+		}
+		return bids;
 	}
 	
 	public Collection<DeliveryBid> getAll() {
