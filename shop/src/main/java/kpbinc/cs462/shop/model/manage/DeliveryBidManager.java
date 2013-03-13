@@ -80,9 +80,11 @@ public class DeliveryBidManager {
 	
 	public Collection<DeliveryBid> getByOrderID(Long orderID) {
 		Collection<DeliveryBid> bids = new ArrayList<DeliveryBid>();
-		for (DeliveryBid bid : getIndex().values()) {
-			if (bid.getOrderID().equals(orderID)) {
-				bids.add(bid);
+		if (orderID != null) {
+			for (DeliveryBid bid : getIndex().values()) {
+				if (orderID.equals(bid.getOrderID())) {
+					bids.add(bid);
+				}
 			}
 		}
 		return bids;
