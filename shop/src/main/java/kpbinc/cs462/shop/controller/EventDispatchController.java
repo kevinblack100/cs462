@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
+import kpbinc.cs462.shop.model.DeliveryBid;
+import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class EventDispatchController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private DeliveryBidManager deliveryBidManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -57,7 +62,29 @@ public class EventDispatchController {
 				Map<String, String[]> parameters = request.getParameterMap();
 				
 				Event event = eventTransformer.transform(parameters);
-				responsePayloadWriter.write("received");
+				
+				if (   event.getDomain().equals("rfq")
+					&& event.getName().equals("bid_available")) {
+					responsePayloadWriter.write("received");
+				
+					Long orderID = Long.parseLong((String) event.getAttributes().get("delivery_id").get(0));
+					String estimatedDeliveryTime = (String) event.getAttributes().get("delivery_time_est").get(0);
+					Double amount = Double.parseDouble((String) event.getAttributes().get("amount").get(0));
+					String amountUnits = (String) event.getAttributes().get("amount_units").get(0);
+					
+					Long bidID = deliveryBidManager.getNextID();
+					DeliveryBid bid = new DeliveryBid();
+					bid.setBidID(bidID);
+					bid.setOrderID(orderID);
+					bid.setEstimatedDeliveryTime(estimatedDeliveryTime);
+					bid.setAmount(amount);
+					bid.setAmountUnits(amountUnits);
+					
+					deliveryBidManager.register(bidID, bid);
+				}
+				else {
+					responsePayloadWriter.write("expected an rfq:bid_available event");
+				}
 			}
 			catch (EventRenderingException e) {
 				responsePayloadWriter.write(e.getMessage());

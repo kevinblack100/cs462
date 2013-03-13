@@ -48,6 +48,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/orders.json" />	
 	</bean>
+	<bean id="deliveryBidManager"
+		class="kpbinc.cs462.shop.model.manage.DeliveryBidManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/bids.json" />	
+	</bean>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -129,8 +129,10 @@ public class EventDispatchController {
 						if (distanceInMiles < 5.0) {
 							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
 							bidAvailableEvent.addAttribute("driver_name", driverUsername);
+							bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
+							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
 							bidAvailableEvent.addAttribute("amount", new Float(5.0f));
-							bidAvailableEvent.addAttribute("amount_unit", "USD");
+							bidAvailableEvent.addAttribute("amount_units", "USD");
 							
 							String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
 							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
