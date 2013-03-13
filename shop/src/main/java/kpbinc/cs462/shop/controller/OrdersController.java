@@ -8,8 +8,10 @@ import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventSerializer;
 import kpbinc.cs462.shop.model.DriverProfile;
+import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
+import kpbinc.cs462.shop.model.manage.OrderManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -42,6 +44,9 @@ public class OrdersController extends ShopBaseSiteContextController {
 	@Autowired
 	private DriverProfileManager driverProfileManager;
 	
+	@Autowired
+	private OrderManager orderManager;
+	
 	
 	//= Initialization =================================================================================================
 	
@@ -63,7 +68,17 @@ public class OrdersController extends ShopBaseSiteContextController {
 			@RequestParam(value = "pickup-time", required = true) String pickupTimeRaw,
 			@RequestParam(value = "delivery-address", required = true) String deliveryAddressRaw,
 			@RequestParam(value = "delivery-time") String deliveryTimeRaw) {
+		// Create the Order
+		Long orderID = orderManager.getNextID();
+		Order order = new Order();
+		order.setOrderID(orderID);
+		order.setPickupTime(pickupTimeRaw);
+		order.setDeliveryAddress(deliveryAddressRaw);
+		order.setDeliveryTime(deliveryTimeRaw);
 		
+		orderManager.register(orderID, order);
+		
+		// Create the rfq:delivery_ready event
 		ShopProfile shopProfile = shopProfileManager.getProfile();
 		
 		BasicEventImpl event = null;
@@ -71,6 +86,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 			event = new BasicEventImpl("rfq", "delivery_ready");
 			event.addAttribute("shop_name", shopProfile.getName());
 			event.addAttribute("shop_address", shopProfile.getAddress());
+			event.addAttribute("delivery_id", orderID);
 			event.addAttribute("pickup_time", pickupTimeRaw);
 			event.addAttribute("delivery_address", deliveryAddressRaw);
 			if (StringUtils.isNotBlank(deliveryTimeRaw)) {
@@ -78,11 +94,12 @@ public class OrdersController extends ShopBaseSiteContextController {
 			}
 		}
 		catch (EventRenderingException e) {
-			// TODO change redirect location, and add error message
+			// TODO set message, change redirect location
 			logger.warning(e.getMessage());
 			e.printStackTrace();
 		}
 
+		// Send the event
 		if (event != null) {
 			Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
 			for (DriverProfile profile : driverProfiles) {

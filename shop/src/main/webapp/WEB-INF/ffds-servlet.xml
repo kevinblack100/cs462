@@ -43,6 +43,11 @@
 	<context:component-scan base-package="kpbinc.cs462.shop.model.manage" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
+	<bean id="orderManager"
+		class="kpbinc.cs462.shop.model.manage.OrderManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/orders.json" />	
+	</bean>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
