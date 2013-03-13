@@ -16,6 +16,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 public class EventManager {
 	
+	//= Class Data =====================================================================================================
+	
+	private static final Long seedID = 1L;
+
+	
 	//= Member Data ====================================================================================================
 	
 	@Autowired
@@ -58,10 +63,7 @@ public class EventManager {
 							new TypeReference<Map<Long, Event>>() {});
 			eventIndex = JsonFileStorePersistentMap.<Long, Event>buildWithDelegateFromFileStore(fileStore);
 			
-			// find the max ID
-			for (Long id : eventIndex.keySet()) {
-				updateNextID(id);
-			}
+			
 		}
 		return eventIndex;
 	}
@@ -77,6 +79,16 @@ public class EventManager {
 	}
 	
 	public Long getNextID() {
+		if (nextID == null) {
+			// find the max ID
+			for (Long id : getIndex().keySet()) {
+				updateNextID(id);
+			}
+			
+			if (nextID == null) {
+				nextID = seedID;
+			}
+		}
 		return nextID;
 	}
 	
@@ -85,8 +97,8 @@ public class EventManager {
 	
 	private void updateNextID(Long candidateID) {
 		if (   nextID == null
-			|| nextID < candidateID) {
-			nextID = new Long(candidateID.longValue() + 1l);
+			|| nextID <= candidateID) {
+			nextID = new Long(candidateID.longValue() + 1L);
 		}
 	}
 }

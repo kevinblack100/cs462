@@ -136,11 +136,7 @@ public class EventDispatchController {
 							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
 						}
 						else {
-							Long eventID = eventManager.getNextID();
-							if (eventID == null) {
-								eventID = new Long(1L);
-							}
-							
+							Long eventID = eventManager.getNextID();							
 							eventManager.register(eventID, event);
 							
 							logger.info("TODO: send the driver an SMS message");
