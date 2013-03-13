@@ -143,6 +143,17 @@ public class UserProfileManager {
 		return result;
 	}
 	
+	public UserProfile getByTextableNumber(String textableNumber) {
+		UserProfile result = null;
+		for (UserProfile profile : this.getAll()) {
+			if (StringUtils.equals(textableNumber, profile.getTextableNumber())) {
+				result = profile;
+				break;
+			}
+		}
+		return result;
+	}
+	
 	public UserProfile update(String id, UserProfile profile) {
 		UserProfile previous = registerOrUpdate(id, profile);
 		return previous;

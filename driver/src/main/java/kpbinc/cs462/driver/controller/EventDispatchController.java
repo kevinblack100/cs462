@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,12 +25,14 @@ import kpbinc.cs462.shared.model.manage.EventManager;
 import kpbinc.math.SphericalUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.TwilioRestException;
@@ -200,6 +203,62 @@ public class EventDispatchController {
 			}
 			
 			responsePayloadWriter.flush();
+		}
+		catch (IOException e) {
+			// problem in preparing the response
+			logger.warning("IOException occurred: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	//- Twilio Request Handling ----------------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/twiliorequest")
+	public void handleTwilioRequest(
+			HttpServletResponse response,
+			@RequestParam(value = "From", required = true) String fromNumber,
+			@RequestParam(value = "Body", required = true) String messageBody) {
+		try {
+			PrintWriter responsePayloadWriter = response.getWriter();
+			responsePayloadWriter.write("received");
+			responsePayloadWriter.flush();
+			
+			UserProfile profile = userProfileManager.getByTextableNumber(fromNumber);
+			
+			if (profile != null) {
+				DriverProfile driverProfile = driverProfileManager.get(profile.getUsername());
+				
+				StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");
+				String firstToken = tokenizer.nextToken();
+				Long eventID = Long.parseLong(firstToken);
+				Event event = eventManager.get(eventID);
+				
+				if (event != null) {
+					String command = messageBody.substring(messageBody.indexOf(" ") + 1);
+					if (   StringUtils.equalsIgnoreCase(command, "bid anyway")
+						&& event.getDomain().equals("rfq")
+						&& event.getName().equals("delivery_ready")) {
+						
+						BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
+						bidAvailableEvent.addAttribute("driver_name", profile.getUsername());
+						bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
+						bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
+						bidAvailableEvent.addAttribute("amount", new Float(6.0f));
+						bidAvailableEvent.addAttribute("amount_units", "USD");
+						
+//						String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
+//						eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
+					}
+				}
+			}
+		}
+		catch (EventRenderingException e) {
+			logger.warning("EventRenderingException: " + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (NumberFormatException e) {
+			logger.warning("NumberFormatException: " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (IOException e) {
 			// problem in preparing the response
