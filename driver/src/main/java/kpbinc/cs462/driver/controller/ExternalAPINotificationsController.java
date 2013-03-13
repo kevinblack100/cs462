@@ -2,12 +2,15 @@ package kpbinc.cs462.driver.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
+import kpbinc.io.util.JavaJsonAccess;
+import kpbinc.io.util.JsonSerializer;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +50,7 @@ public class ExternalAPINotificationsController {
 	//= Interface ======================================================================================================
 	
 	@RequestMapping(value = "/foursquare/checkin")
-	public void handleFoursquareChecking(
+	public void handleFoursquareCheckin(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "checkin") String checkin,
@@ -58,10 +61,19 @@ public class ExternalAPINotificationsController {
 			PrintWriter responseBodyWriter = response.getWriter();
 			responseBodyWriter.write("received");
 			
-			logger.info("checkin: " + checkin);
-			logger.info("user: " + user);
-			logger.info("secret: " + secret);
-			logger.info("end of fourquare checking data output");
+			// TODO check the given secret
+			
+			@SuppressWarnings("unchecked")
+			Map<String, Object> checkinObject = JsonSerializer.deserialize(checkin, Map.class);
+			
+			Object rawUserID = JavaJsonAccess.getValue(checkinObject, "user", "id");
+			String userID = rawUserID.toString();
+			
+			Object rawLatitude = JavaJsonAccess.getValue(checkinObject, "venue", "location", "lat");
+			
+			Object rawLongitude = JavaJsonAccess.getValue(checkinObject, "venue", "location", "lng");
+			
+			logger.info(String.format("checkin for user %s at: %s lat, %s lng", userID, rawLatitude.toString(), rawLongitude.toString()));
 		}
 		catch (IOException e) {
 			logger.warning("Unexpected IOException: " + e.getMessage());
