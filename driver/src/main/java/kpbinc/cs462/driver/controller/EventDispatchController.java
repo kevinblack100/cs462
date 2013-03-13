@@ -23,7 +23,6 @@ import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
-import kpbinc.cs462.shared.model.manage.EventManager;
 import kpbinc.math.SphericalUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 
