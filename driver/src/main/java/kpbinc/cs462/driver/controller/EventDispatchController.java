@@ -120,13 +120,20 @@ public class EventDispatchController {
 						
 						FlowerShopProfile shopProfile = flowerShopProfileManager.get(shopProfileID);
 						UserProfile userProfile = userProfileManager.get(driverUsername);
-						
-						double distanceInMiles = SphericalUtils.greatCircleVincenty(
+
+						double distanceInMiles = -1.0; // don't know where the user is
+						if (   userProfile != null
+							&& userProfile.getLastKnownLatitude() != null
+							&& userProfile.getLastKnownLongitude() != null) {
+							
+							distanceInMiles = SphericalUtils.greatCircleVincenty(
 								SphericalUtils.EARTH_RADIUS_mi,
 								shopProfile.getLatitude(), shopProfile.getLongitude(),
-								userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());
+								userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());	
+						}
 						
-						if (distanceInMiles < 5.0) {
+						if (   0.0 <= distanceInMiles
+							&& distanceInMiles <= 5.0) {
 							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
 							bidAvailableEvent.addAttribute("driver_name", driverUsername);
 							bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
