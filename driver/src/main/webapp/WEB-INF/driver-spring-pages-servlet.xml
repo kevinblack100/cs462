@@ -65,6 +65,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/user-profiles.json" />
 	</bean>
+	<bean id="eventManager"
+		class="kpbinc.cs462.shared.model.manage.EventManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/stashed-events.json" />	
+	</bean>
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

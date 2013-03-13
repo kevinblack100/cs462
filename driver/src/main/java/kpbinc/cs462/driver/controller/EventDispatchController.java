@@ -19,6 +19,7 @@ import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
+import kpbinc.cs462.shared.model.manage.EventManager;
 import kpbinc.math.SphericalUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -49,6 +50,9 @@ public class EventDispatchController {
 	
 	@Autowired
 	private DriverProfileManager driverProfileManager;
+	
+	@Autowired
+	private EventManager eventManager;
 	
 	@Autowired
 	private FlowerShopProfileManager flowerShopProfileManager;
@@ -132,7 +136,14 @@ public class EventDispatchController {
 							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
 						}
 						else {
-							logger.info("TODO: stash the event details and instead send the driver an SMS message");
+							Long eventID = eventManager.getNextID();
+							if (eventID == null) {
+								eventID = new Long(1L);
+							}
+							
+							eventManager.register(eventID, event);
+							
+							logger.info("TODO: send the driver an SMS message");
 						}
 					}
 					else {
