@@ -1,6 +1,7 @@
 package kpbinc.cs462.shop.model.manage;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -79,6 +80,11 @@ public class OrderManager {
 	public Order get(Long id) {
 		Order order = getIndex().get(id);
 		return order;
+	}
+	
+	public Collection<Order> getAll() {
+		Collection<Order> orders = getIndex().values();
+		return orders;
 	}
 	
 	public Long getNextID() {
