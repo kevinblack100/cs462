@@ -19,7 +19,7 @@ public class OrderManager {
 	
 	//= Class Data =====================================================================================================
 	
-	private static final Long seedID = new Long(0l);
+	private static final Long seedID = 1L;
 	
 	
 	//= Member Data ====================================================================================================
@@ -63,11 +63,6 @@ public class OrderManager {
 					new JsonFileStore<Map<Long, Order>>(authTokenStoreFile, 
 							new TypeReference<Map<Long, Order>>() {});
 			orderIndex = JsonFileStorePersistentMap.<Long, Order>buildWithDelegateFromFileStore(fileStore);
-			
-			// find the max ID
-			for (Long id : orderIndex.keySet()) {
-				updateNextID(id);
-			}
 		}
 		return orderIndex;
 	}
@@ -88,7 +83,16 @@ public class OrderManager {
 	}
 	
 	public Long getNextID() {
-		updateNextID(seedID);
+		if (nextID == null) {
+			// find the max ID
+			for (Long id : getIndex().keySet()) {
+				updateNextID(id);
+			}
+			
+			if (nextID == null) {
+				nextID = seedID;
+			}
+		}
 		return nextID;
 	}
 	
@@ -97,8 +101,8 @@ public class OrderManager {
 	
 	private void updateNextID(Long candidateID) {
 		if (   nextID == null
-			|| nextID < candidateID) {
-			nextID = new Long(candidateID.longValue() + 1l);
+			|| nextID <= candidateID) {
+			nextID = new Long(candidateID.longValue() + 1L);
 		}
 	}
 
