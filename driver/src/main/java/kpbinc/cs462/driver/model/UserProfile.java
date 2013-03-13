@@ -22,6 +22,7 @@ public class UserProfile {
 	private Map<String, String> apiIDs; // api -> api-ID
 	private Double lastKnownLatitude;
 	private Double lastKnownLongitude;
+	private String textableNumber;
 	
 	
 	//= Initialization =================================================================================================
@@ -75,6 +76,14 @@ public class UserProfile {
 
 	public void setLastKnownLongitude(Double lastKnownLongitude) {
 		this.lastKnownLongitude = lastKnownLongitude;
+	}
+
+	public String getTextableNumber() {
+		return textableNumber;
+	}
+
+	public void setTextableNumber(String textableNumber) {
+		this.textableNumber = textableNumber;
 	}
 	
 }

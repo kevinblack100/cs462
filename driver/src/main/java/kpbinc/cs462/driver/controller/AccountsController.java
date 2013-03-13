@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import kpbinc.cs462.driver.model.UserProfile;
+import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.cs462.shared.controller.context.LoggedInUserContext;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
@@ -45,6 +47,9 @@ public class AccountsController extends DriverBaseSiteContextController implemen
 	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
 	
+	@Autowired
+	private UserProfileManager userProfileManager;
+	
 	
 	//= Initialization =================================================================================================
 	
@@ -64,7 +69,8 @@ public class AccountsController extends DriverBaseSiteContextController implemen
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerAccount(
-			@RequestParam(value = "username", required = true) String username) {
+			@RequestParam(value = "username", required = true) String username,
+			@RequestParam(value = "textable-number", required = true) String textableNumber) {
 		String redirectLocation = null;
 		
 		try {
@@ -86,6 +92,11 @@ public class AccountsController extends DriverBaseSiteContextController implemen
 			
 			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
+			
+			// TODO validate the number
+			UserProfile profile = new UserProfile(username);
+			profile.setTextableNumber("+" + textableNumber);
+			userProfileManager.update(username, profile);
 			
 			redirectLocation = "/pages/secure/accounts/signin";
 		}

@@ -9,13 +9,18 @@
 			<fieldset>
 				<label for="username">Username:</label>
 				<input type="text" id="username" name="username" size="20" />
-				<br />
+				<br>
 				<!-- Disabling password usage for now
 				<label for="password">Password:</label>
 				<input id="password" name="password" type="password" size="20" />
-				<br />
-				 -->
-				<br />
+				<br>
+				-->
+				<label for="textable-number">Textable Number</label>
+				<input type="tel" name="textable-number" />
+				<br>
+				<span>Please make the number 10 digits long, with no spaces or other formatting.</span>
+				<br>
+				<br>
 				<input type="submit" id="submit" name="submit" value="Register" />
 			</fieldset>
 		</form>
