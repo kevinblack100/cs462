@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.DriverProfile;
 import kpbinc.cs462.driver.model.FlowerShopProfile;
+import kpbinc.cs462.driver.model.StashedEvent;
 import kpbinc.cs462.driver.model.UserProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.driver.model.manage.FlowerShopProfileManager;
+import kpbinc.cs462.driver.model.manage.StashedEventManager;
 import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
@@ -66,7 +68,7 @@ public class EventDispatchController {
 	private DriverProfileManager driverProfileManager;
 	
 	@Autowired
-	private EventManager eventManager;
+	private StashedEventManager stashedEventManager;
 	
 	@Autowired
 	private FlowerShopProfileManager flowerShopProfileManager;
@@ -160,15 +162,21 @@ public class EventDispatchController {
 						}
 						else if (   userProfile != null
 								 && userProfile.getTextableNumber() != null) {
-							Long eventID = eventManager.getNextID();							
-							eventManager.register(eventID, event);
+							Long stashID = stashedEventManager.getNextID();
+							StashedEvent stashed = new StashedEvent();
+							stashed.setID(stashID);
+							stashed.setEvent(event);
+							stashed.setShopProfileID(shopProfileID);
+							stashed.setDriverUsername(driverUsername);
+							stashedEventManager.register(stashID, stashed);
+							
 							
 							// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
 							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
 							 
 						    Map<String, String> params = new HashMap<String, String>();
 						    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s, time: %s",
-						    		eventID,
+						    		stashID,
 						    		event.getAttributes().get("shop_name").get(0),
 						    		event.getAttributes().get("pickup_time").get(0),
 						    		event.getAttributes().get("delivery_address").get(0),
@@ -228,26 +236,34 @@ public class EventDispatchController {
 			if (profile != null) {
 				DriverProfile driverProfile = driverProfileManager.get(profile.getUsername());
 				
-				StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");
-				String firstToken = tokenizer.nextToken();
-				Long eventID = Long.parseLong(firstToken);
-				Event event = eventManager.get(eventID);
-				
-				if (event != null) {
-					String command = messageBody.substring(messageBody.indexOf(" ") + 1);
-					if (   StringUtils.equalsIgnoreCase(command, "bid anyway")
-						&& event.getDomain().equals("rfq")
-						&& event.getName().equals("delivery_ready")) {
+				if (driverProfile != null) {
+					StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");
+					String firstToken = tokenizer.nextToken();
+					Long eventID = Long.parseLong(firstToken);
+					StashedEvent stashed = stashedEventManager.get(eventID);
+					
+					if (   stashed != null
+						&& stashed.getEvent() != null
+						&& StringUtils.equals(stashed.getDriverUsername(), profile.getUsername())
+						&& stashed.getShopProfileID() != null) {
+						Event event = stashed.getEvent();
 						
-						BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-						bidAvailableEvent.addAttribute("driver_name", profile.getUsername());
-						bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
-						bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
-						bidAvailableEvent.addAttribute("amount", new Float(6.0f));
-						bidAvailableEvent.addAttribute("amount_units", "USD");
-						
-//						String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
-//						eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
+						String command = messageBody.substring(messageBody.indexOf(" ") + 1);
+						if (   StringUtils.equalsIgnoreCase(command, "bid anyway")
+							&& event.getDomain().equals("rfq")
+							&& event.getName().equals("delivery_ready")) {
+							
+							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
+							bidAvailableEvent.addAttribute("driver_name", profile.getUsername());
+							bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
+							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
+							bidAvailableEvent.addAttribute("amount", new Float(6.0f));
+							bidAvailableEvent.addAttribute("amount_units", "USD");
+							
+							Long shopProfileID = stashed.getShopProfileID();
+							String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
+							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
+						}
 					}
 				}
 			}
