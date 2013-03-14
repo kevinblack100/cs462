@@ -103,7 +103,7 @@ public class EventDispatchController {
 		}
 		catch (EventRenderingException e) {
 			// TODO set message
-			logger.warning("EventRenderingException occurred: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("Can't parse Event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
 		
@@ -118,6 +118,8 @@ public class EventDispatchController {
 			HttpServletResponse response,
 			@PathVariable(value = "shop-profile-id") Long shopProfileID,
 			@PathVariable(value = "driver-username") String driverUsername) {
+		logger.entering(this.getClass().getName(), "handleDeliveryReady");
+		
 		try {
 			PrintWriter responsePayloadWriter = response.getWriter();
 			
@@ -159,10 +161,12 @@ public class EventDispatchController {
 							
 							String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
 							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
+							logger.info("EDC: send bid_available event");
 						}
 						else if (   userProfile != null
 								 && userProfile.getTextableNumber() != null) {
-							logger.info("EDC: stashing event");
+							logger.info("EDC: stashing event...");
+							
 							Long stashID = stashedEventManager.getNextID();
 							StashedEvent stashed = new StashedEvent();
 							stashed.setID(stashID);
@@ -171,8 +175,10 @@ public class EventDispatchController {
 							stashed.setDriverUsername(driverUsername);
 							stashedEventManager.register(stashID, stashed);
 							
+							logger.info("EDC: event stashed.");
 							
 							// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
+							logger.info("EDC: preparing twilio message");
 							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
 							
 						    Map<String, String> params = new HashMap<String, String>();
@@ -191,12 +197,15 @@ public class EventDispatchController {
 						    	logger.info(String.format("EDC: twilio: sending text to %s with message %s",
 						    			userProfile.getTextableNumber(), messageContent));
 						    	Sms message = messageFactory.create(params);
-						    	logger.info("Sent SMS message: SID " + message.getSid());
+						    	logger.info("EDC: Sent SMS message: SID " + message.getSid());
 						    }
 						    catch (TwilioRestException e) {
-						    	logger.warning("twilio: TwilioRestException: " + e.getMessage());
+						    	logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Couldn't send message", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 						    	e.printStackTrace();
 						    }
+						}
+						else {
+							logger.warning("EDC: Either no user, user not within distance, or has no textable number");
 						}
 					}
 					else {
@@ -205,7 +214,7 @@ public class EventDispatchController {
 				}
 				catch (EventRenderingException e) {
 					responsePayloadWriter.write(e.getMessage());
-					logger.warning("EventRenderingException occurred: " + e.getMessage());
+					logger.warning(GlobalLogUtils.formatHandledExceptionMessage("Can't parse Event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 					e.printStackTrace();
 				}
 			}
@@ -218,9 +227,11 @@ public class EventDispatchController {
 		}
 		catch (IOException e) {
 			// problem in preparing the response
-			logger.warning("IOException occurred: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Couldn't prepare response", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
+		
+		logger.exiting(this.getClass().getName(), "handleDeliveryReady");
 	}
 	
 	//- Twilio Request Handling ----------------------------------------------------------------------------------------
@@ -230,7 +241,9 @@ public class EventDispatchController {
 			HttpServletResponse response,
 			@RequestParam(value = "From", required = true) String fromNumber,
 			@RequestParam(value = "Body", required = true) String messageBody) {
-		logger.info(String.format("twilio: request received with parameters\n fromNumber: %s\n messageBody: %s\n", fromNumber, messageBody));
+		logger.entering(this.getClass().getName(), "handleTwilioRequest");
+		
+		logger.info(String.format("EDC: twilio: request received with parameters\n fromNumber: %s\n messageBody: %s\n", fromNumber, messageBody));
 		try {
 			PrintWriter responsePayloadWriter = response.getWriter();
 			responsePayloadWriter.write("received");
@@ -274,18 +287,20 @@ public class EventDispatchController {
 			}
 		}
 		catch (EventRenderingException e) {
-			logger.warning("EventRenderingException: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Can't parse Event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
 		catch (NumberFormatException e) {
-			logger.warning("NumberFormatException: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Can't parse Number", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
 		catch (IOException e) {
 			// problem in preparing the response
-			logger.warning("IOException occurred: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Couldn't prepare response", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
+		
+		logger.exiting(this.getClass().getName(), "handleTwilioRequest");
 	}
 	
 }
