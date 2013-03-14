@@ -182,12 +182,14 @@ public class EventDispatchController {
 							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
 							
 						    Map<String, String> params = new HashMap<String, String>();
-						    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s, time: %s",
+						    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s",
 						    		stashID,
-						    		event.getAttributes().get("shop_name").get(0),
-						    		event.getAttributes().get("pickup_time").get(0),
-						    		event.getAttributes().get("delivery_address").get(0),
-						    		event.getAttributes().get("delivery_time").get(0));
+						    		event.getAttribute("shop_name"),
+						    		event.getAttribute("pickup_time"),
+						    		event.getAttribute("delivery_address"));
+						    if (event.getAttribute("delivery_time") != null) {
+						    	messageContent += ", time: " + event.getAttribute("delivery_time");
+						    }
 						    params.put("Body", messageContent);
 						    params.put("To", userProfile.getTextableNumber());
 						    params.put("From", TWILIO_PHONE_NUMBER);

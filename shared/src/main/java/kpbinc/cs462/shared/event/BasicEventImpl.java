@@ -53,10 +53,22 @@ public class BasicEventImpl implements Event {
 	}
 
 	@Override
+	public Object getAttribute(String attribName) {
+		Object value = null;
+		if (getAttributes().containsKey(attribName)) {
+			List<Object> values = getAttributes().get(attribName);
+			if (!values.isEmpty()) {
+				value = values.get(0);
+			}
+		}
+		return value;
+	}
+	
+	@Override
 	public Map<String, List<Object>> getAttributes() {
 		return Collections.unmodifiableMap(attributes);
 	}
-
+	
 	/**
 	 * Adds the attribute name-value pair to this event.
 	 * 
