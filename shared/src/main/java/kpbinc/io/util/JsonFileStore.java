@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import kpbinc.util.logging.GlobalLogUtils;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
@@ -99,7 +101,7 @@ public class JsonFileStore<T> {
 		}
 		catch (IOException e) {
 			flag = false;
-			logger.warning("commit failed: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("Commit failed", e, GlobalLogUtils.DO_NOT_PRINT_STACKTRACE));
 		}
 		return flag;
 	}
@@ -128,8 +130,9 @@ public class JsonFileStore<T> {
 		}
 		catch (IOException e) {
 			// do nothing
-			logger.warning("read failed: " + e.getMessage());
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("Read failed", e, GlobalLogUtils.DO_NOT_PRINT_STACKTRACE));
 		}
+		logger.info(String.format("Returning: %s.", object));
 		return object;
 	}
 	
