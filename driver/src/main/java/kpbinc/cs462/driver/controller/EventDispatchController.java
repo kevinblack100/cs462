@@ -149,6 +149,7 @@ public class EventDispatchController {
 						
 						if (   0.0 <= distanceInMiles
 							&& distanceInMiles <= 5.0) {
+							logger.info("EDC: sending bid_available event");
 							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
 							bidAvailableEvent.addAttribute("driver_name", driverUsername);
 							bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
@@ -161,6 +162,7 @@ public class EventDispatchController {
 						}
 						else if (   userProfile != null
 								 && userProfile.getTextableNumber() != null) {
+							logger.info("EDC: stashing event");
 							Long stashID = stashedEventManager.getNextID();
 							StashedEvent stashed = new StashedEvent();
 							stashed.setID(stashID);
@@ -172,7 +174,7 @@ public class EventDispatchController {
 							
 							// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
 							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
-							 
+							
 						    Map<String, String> params = new HashMap<String, String>();
 						    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s, time: %s",
 						    		stashID,
@@ -186,11 +188,13 @@ public class EventDispatchController {
 							     
 						    SmsFactory messageFactory = client.getAccount().getSmsFactory();
 						    try {
+						    	logger.info(String.format("EDC: twilio: sending text to %s with message %s",
+						    			userProfile.getTextableNumber(), messageContent));
 						    	Sms message = messageFactory.create(params);
 						    	logger.info("Sent SMS message: SID " + message.getSid());
 						    }
 						    catch (TwilioRestException e) {
-						    	logger.warning("TwilioRestException: " + e.getMessage());
+						    	logger.warning("twilio: TwilioRestException: " + e.getMessage());
 						    	e.printStackTrace();
 						    }
 						}
@@ -207,6 +211,7 @@ public class EventDispatchController {
 			}
 			else {
 				responsePayloadWriter.write("channel is not registered");
+				logger.info(String.format("EDC: channel not registered: shopProfileID: %d, driverUsername: %s", shopProfileID, driverUsername));
 			}
 			
 			responsePayloadWriter.flush();
@@ -225,6 +230,7 @@ public class EventDispatchController {
 			HttpServletResponse response,
 			@RequestParam(value = "From", required = true) String fromNumber,
 			@RequestParam(value = "Body", required = true) String messageBody) {
+		logger.info(String.format("twilio: request received with parameters\n fromNumber: %s\n messageBody: %s\n", fromNumber, messageBody));
 		try {
 			PrintWriter responsePayloadWriter = response.getWriter();
 			responsePayloadWriter.write("received");
