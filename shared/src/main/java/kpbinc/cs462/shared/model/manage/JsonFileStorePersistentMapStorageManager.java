@@ -13,7 +13,7 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class JsonFileStorePersistentMapStorageManager<I, T extends HasID<I>> implements StorageManager<I, T> {
+public abstract class JsonFileStorePersistentMapStorageManager<K, I extends HasID<K>> implements StorageManager<K, I> {
 
 	//= Member Data ====================================================================================================
 	
@@ -22,7 +22,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<I, T extends HasI
 	
 	private String fileStoreRelativePath;
 	
-	private Map<I, T> itemMap;
+	private Map<K, I> itemMap;
 	
 	
 	//= Initialization =================================================================================================
@@ -39,85 +39,85 @@ public abstract class JsonFileStorePersistentMapStorageManager<I, T extends HasI
 	
 	//- Support --------------------------------------------------------------------------------------------------------
 	
-	protected Map<I, T> getItemMap() {
+	protected Map<K, I> getItemMap() {
 		if (itemMap == null) {
 			String fullPath = servletContext.getRealPath(fileStoreRelativePath);
 			File file = new File(fullPath);
-			JsonFileStore<Map<I, T>> fileStore = getJsonFileStore(file);
-			itemMap = JsonFileStorePersistentMap.<I, T>buildWithDelegateFromFileStore(fileStore);
+			JsonFileStore<Map<K, I>> fileStore = getJsonFileStore(file);
+			itemMap = JsonFileStorePersistentMap.<K, I>buildWithDelegateFromFileStore(fileStore);
 		}
 		return itemMap;
 	}
 	
-	protected abstract JsonFileStore<Map<I, T>> getJsonFileStore(File file);
+	protected abstract JsonFileStore<Map<K, I>> getJsonFileStore(File file);
 
 	
 	//= Interface ======================================================================================================
 	
 	@Override
-	public boolean register(T item) {
+	public boolean register(I item) {
 		boolean result = false;
-		I id = item.getID();
-		if (   id != null
-			&& !managesItemWithID(id)) {
-			getItemMap().put(id, item);
+		K key = item.getID();
+		if (   key != null
+			&& !managesItemWithKey(key)) {
+			getItemMap().put(key, item);
 			result = true;
 		}
 		return result;
 	}
 
 	@Override
-	public T retrieve(I id) {
-		T item = getItemMap().get(id);
+	public I retrieve(K key) {
+		I item = getItemMap().get(key);
 		return item;
 	}
 
 	@Override
-	public Collection<T> retrieveAll() {
-		Collection<T> items = getItemMap().values();
+	public Collection<I> retrieveAll() {
+		Collection<I> items = getItemMap().values();
 		return items;
 	}
 
 	@Override
-	public boolean manages(T item) {
-		I id = item.getID();
-		boolean result = managesItemWithID(id);
+	public boolean manages(I item) {
+		K key = item.getID();
+		boolean result = managesItemWithKey(key);
 		return result;
 	}
 
 	@Override
-	public boolean managesItemWithID(I id) {
-		boolean result = (   id != null
-						  && getItemMap().containsKey(id));
+	public boolean managesItemWithKey(K key) {
+		boolean result = (   key != null
+						  && getItemMap().containsKey(key));
 		return result;
 	}
 
 	@Override
-	public T update(T item) {
-		T previousItem = null;
-		I id = item.getID();
-		if (managesItemWithID(id)) {
-			previousItem = getItemMap().put(id, item);
+	public I update(I item) {
+		I previousItem = null;
+		K key = item.getID();
+		if (managesItemWithKey(key)) {
+			previousItem = getItemMap().put(key, item);
 		}
 		return previousItem;
 	}
 
 	@Override
-	public boolean unregister(T item) {
+	public boolean unregister(I item) {
 		boolean result = false;
-		I id = item.getID();
-		if (managesItemWithID(id)) {
-			getItemMap().remove(id);
+		K key = item.getID();
+		if (managesItemWithKey(key)) {
+			getItemMap().remove(key);
 			result = true;
 		}
 		return result;
 	}
 
 	@Override
-	public T unregisterItemWithID(I id) {
-		T item = null;
-		if (id != null) {
-			item = getItemMap().remove(id);
+	public I unregisterItemWithKey(K key) {
+		I item = null;
+		if (key != null) {
+			item = getItemMap().remove(key);
 		}
 		return item;
 	}
