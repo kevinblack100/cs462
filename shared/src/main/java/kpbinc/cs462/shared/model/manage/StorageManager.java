@@ -53,7 +53,7 @@ public interface StorageManager<I, T extends HasID<I>> {
 	 * @param id ID of the model object item being queried about
 	 * @return true if this StorageManager manages an item with the given ID, false if it does not.
 	 */
-	boolean manages(I id);
+	boolean managesItemWithID(I id);
 	
 	/**
 	 * Updates the given item as identified by its ID. Calling this method is necessary to accommodate storage
@@ -80,6 +80,6 @@ public interface StorageManager<I, T extends HasID<I>> {
 	 * @return the model object item that was unregistered if it had been managed, or null if there was no managed
 	 * item with the given ID.
 	 */
-	T unregister(I id);
+	T unregisterItemWithID(I id);
 	
 }
