@@ -85,7 +85,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 		order.setDeliveryAddress(deliveryAddressRaw);
 		order.setDeliveryTime(deliveryTimeRaw);
 		
-		orderManager.register(orderID, order);
+		orderManager.register(order);
 		
 		// Create the rfq:delivery_ready event
 		ShopProfile shopProfile = shopProfileManager.getProfile();
@@ -124,7 +124,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 	
 	@RequestMapping
 	public String getOrdersList(ModelMap model) {
-		Collection<Order> orders = orderManager.getAll();
+		Collection<Order> orders = orderManager.retrieveAll();
 		model.addAttribute("orders", orders);
 		return "orders/list_orders";
 	}
@@ -146,14 +146,14 @@ public class OrdersController extends ShopBaseSiteContextController {
 			ModelMap model) {
 		String redirectLocation = null;
 		
-		Order order = orderManager.get(orderID);
+		Order order = orderManager.retrieve(orderID);
 		
 		if (order != null) {
 			DeliveryBid bid = deliveryBidManager.get(selectedBidID);	
 			
 			if (bid != null) {
 				order.setSelectedBidID(selectedBidID);
-				orderManager.update(orderID, order);
+				orderManager.update(order);
 			}
 			
 			prepareOrderProfile(model, orderID);
@@ -170,7 +170,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 	//= Support ========================================================================================================
 	
 	private void prepareOrderProfile(ModelMap model, Long orderID) {
-		Order order = orderManager.get(orderID);
+		Order order = orderManager.retrieve(orderID);
 		model.put("order", order);
 		
 		Collection<DeliveryBid> bids = deliveryBidManager.getByOrderID(orderID);
