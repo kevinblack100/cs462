@@ -29,7 +29,7 @@
 			<tbody>
 				<c:forEach items="${orders}" var="order">
 				<tr>
-					<td><a href="${contextPaths.dynamicPath}/orders/${order.orderID}">${order.orderID}</a></td>
+					<td><a href="${contextPaths.dynamicPath}/orders/${order.id}">${order.id}</a></td>
 					<td>${order.pickupTime}</td>
 					<td>${order.deliveryAddress}</td>
 					<td>${order.deliveryTime}</td>

@@ -7,8 +7,8 @@ package kpbinc.cs462.shared.model.aspect;
  *
  * @param <I> ID type
  */
-public interface HasID<I> {
+public interface HasId<I> {
 
-	I getID();
+	I getId();
 	
 }

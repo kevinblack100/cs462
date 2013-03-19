@@ -8,7 +8,7 @@
 	</jsp:attribute>
 	<jsp:attribute name="title">Order Profile</jsp:attribute>
 	<jsp:body>
-		<h1>Order ${order.orderID}</h1>
+		<h1>Order ${order.id}</h1>
 		
 		<br>
 		
@@ -57,7 +57,7 @@
 						</c:choose>
 						</c:when>
 						<c:otherwise>
-						<form method="post" action="${contextPaths.dynamicPath}/orders/${order.orderID}/selectbid">
+						<form method="post" action="${contextPaths.dynamicPath}/orders/${order.id}/selectbid">
 							<fieldset>
 								<input type="hidden" name="selected-bid-id" value="${bid.bidID}" />
 								<input type="submit" name="submit" value="Select" />
