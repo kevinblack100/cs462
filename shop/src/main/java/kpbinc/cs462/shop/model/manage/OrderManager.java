@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Map;
 
 import kpbinc.cs462.shared.model.aspect.IDAccessor;
+import kpbinc.cs462.shared.model.aspect.IDGenerator;
+import kpbinc.cs462.shared.model.aspect.IncreasingLongIDGeneratorStrategy;
 import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.io.util.JsonFileStore;
@@ -21,7 +23,7 @@ public class OrderManager
 	
 	//= Member Data ====================================================================================================
 	
-	private Long nextID;
+	private IDGenerator<Long> idGenerator;
 	
 	
 	//= Initialization =================================================================================================
@@ -36,9 +38,10 @@ public class OrderManager
 	 */
 	public OrderManager(String fileStoreRelativePath) {
 		super(fileStoreRelativePath, new IDAccessor<Long>());
+		
 		GlobalLogUtils.logConstruction(this);
 		
-		this.nextID = null;
+		this.idGenerator = new IDGenerator<Long>(new IncreasingLongIDGeneratorStrategy(this, seedID));
 	}
 	
 	//- Support --------------------------------------------------------------------------------------------------------
@@ -55,32 +58,13 @@ public class OrderManager
 	@Override
 	public boolean register(Order item) {
 		boolean result = super.register(item);
-		updateNextID(item.getId());
+		idGenerator.claimID(item.getId());
 		return result;
 	}
 	
 	public Long getNextID() {
-		if (nextID == null) {
-			// find the max ID
-			for (Long id : getItemMap().keySet()) {
-				updateNextID(id);
-			}
-			
-			if (nextID == null) {
-				nextID = seedID;
-			}
-		}
+		Long nextID = idGenerator.getNextID();
 		return nextID;
-	}
-	
-	
-	//= Support ========================================================================================================
-	
-	private void updateNextID(Long candidateID) {
-		if (   nextID == null
-			|| nextID <= candidateID) {
-			nextID = new Long(candidateID.longValue() + 1L);
-		}
 	}
 
 }
