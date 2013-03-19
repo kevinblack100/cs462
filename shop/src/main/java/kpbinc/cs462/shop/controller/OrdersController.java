@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
-import kpbinc.cs462.shared.event.EventSerializer;
 import kpbinc.cs462.shop.model.DeliveryBid;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.cs462.shop.model.Order;
