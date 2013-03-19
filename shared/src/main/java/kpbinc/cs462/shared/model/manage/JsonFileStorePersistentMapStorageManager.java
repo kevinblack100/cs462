@@ -11,6 +11,7 @@ import kpbinc.io.util.JsonFileStorePersistentMap;
 import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements StorageManager<K, I> {
@@ -31,18 +32,21 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	
 	//- Constructors ---------------------------------------------------------------------------------------------------
 	
+	/**
+	 * @param fileStoreRelativePath path to the file store in which to persist the item map relative to the
+	 * ServletContext
+	 * @param keyAccessor strategy for deriving a unique key from a given item
+	 * 
+	 * @throws IllegalArgumentException if fileStoreRelativePath or keyAccessor are null
+	 */
 	public JsonFileStorePersistentMapStorageManager(
 			String fileStoreRelativePath,
 			PropertyAccessor<I, K> keyAccessor) {
 		
-		if (fileStoreRelativePath == null) {
-			throw new IllegalArgumentException("file store relative path must not be null");
-		}
+		Validate.notNull(fileStoreRelativePath, "file store relative path must not be null");
 		this.fileStoreRelativePath = fileStoreRelativePath;
 		
-		if (keyAccessor == null) {
-			throw new IllegalArgumentException("key accessor must not be null");
-		}
+		Validate.notNull(keyAccessor, "key accessor must not be null");
 		this.keyAccessor = keyAccessor;
 			
 		GlobalLogUtils.logConstruction(this);
