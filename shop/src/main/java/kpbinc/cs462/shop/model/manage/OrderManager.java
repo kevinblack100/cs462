@@ -14,12 +14,7 @@ import kpbinc.util.logging.GlobalLogUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class OrderManager 
-	extends JsonFileStorePersistentMapStorageManager<Long, Order> {
-	
-	//= Class Data =====================================================================================================
-	
-	private static final Long seedID = 1L;
-	
+	extends JsonFileStorePersistentMapStorageManager<Long, Order> {	
 	
 	//= Member Data ====================================================================================================
 	
@@ -41,7 +36,7 @@ public class OrderManager
 		
 		GlobalLogUtils.logConstruction(this);
 		
-		this.idGenerator = new IDGenerator<Long>(new IncreasingLongIDGeneratorStrategy(this, seedID));
+		this.idGenerator = new IDGenerator<Long>(new IncreasingLongIDGeneratorStrategy(this));
 	}
 	
 	//- Support --------------------------------------------------------------------------------------------------------
