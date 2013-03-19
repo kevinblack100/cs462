@@ -78,9 +78,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 			@RequestParam(value = "delivery-address", required = true) String deliveryAddressRaw,
 			@RequestParam(value = "delivery-time") String deliveryTimeRaw) {
 		// Create the Order
-//		Long orderID = orderManager.getNextID();
 		Order order = new Order();
-//		order.setId(orderID);
 		order.setPickupTime(pickupTimeRaw);
 		order.setDeliveryAddress(deliveryAddressRaw);
 		order.setDeliveryTime(deliveryTimeRaw);
