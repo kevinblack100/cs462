@@ -23,7 +23,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	
 	private String fileStoreRelativePath;
 	
-	private PropertyAccessor<I, K> keyAccessor;
+	private PropertyAccessor<? super I, K> keyAccessor;
 	
 	private Map<K, I> itemMap;
 	
@@ -41,7 +41,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	 */
 	public JsonFileStorePersistentMapStorageManager(
 			String fileStoreRelativePath,
-			PropertyAccessor<I, K> keyAccessor) {
+			PropertyAccessor<? super I, K> keyAccessor) {
 		GlobalLogUtils.logConstruction(this);
 		
 		Validate.notNull(fileStoreRelativePath, "file store relative path must not be null");

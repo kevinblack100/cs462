@@ -3,6 +3,7 @@ package kpbinc.cs462.shop.model.manage;
 import java.io.File;
 import java.util.Map;
 
+import kpbinc.cs462.shared.model.aspect.HasId;
 import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.io.util.JsonFileStore;
@@ -37,7 +38,7 @@ public class OrderManager
 	 * @throws NullPointerException if fileStoreRelativePath is null
 	 */
 	public OrderManager(String fileStoreRelativePath) {
-		super(fileStoreRelativePath, new PropertyAccessor<Order, Long>() {
+		super(fileStoreRelativePath, new PropertyAccessor<HasId<Long>, Long>() {
 
 			@Override
 			public String getPropertyName() {
@@ -45,14 +46,14 @@ public class OrderManager
 			}
 
 			@Override
-			public Long getPropertyValue(Order object) {
+			public Long getPropertyValue(HasId<Long> object) {
 				Validate.notNull(object, "object must not be null");
 				Long id = object.getId();
 				return id;
 			}
 
 			@Override
-			public void setPropertyValue(Order object, Long value) {
+			public void setPropertyValue(HasId<Long> object, Long value) {
 				Validate.notNull(object, "object must not be null");
 				object.setId(value);
 			}
