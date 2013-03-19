@@ -11,6 +11,7 @@ import kpbinc.io.util.JsonFileStore;
 import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,7 @@ public class InMemoryPersistentUserDetailsManager
 	 * @param fileStoreRelativePath path to the file store in which to persist the item map relative to the
 	 * ServletContext
 	 * 
-	 * @throws IllegalArgumentException if fileStoreRelativePath is null
+	 * @throws NullPointerException if fileStoreRelativePath is null
 	 */
 	public InMemoryPersistentUserDetailsManager(String fileStoreRelativePath) {
 		super(fileStoreRelativePath, new PropertyAccessor<UserDetails, String>() {
@@ -42,13 +43,16 @@ public class InMemoryPersistentUserDetailsManager
 
 			@Override
 			public String getPropertyValue(UserDetails object) {
+				Validate.notNull(object, "object must not be null");
 				String username = object.getUsername();
 				return username;
 			}
 
 			@Override
 			public void setPropertyValue(UserDetails object, String value) {
-				throw new UnsupportedOperationException(String.format("setPropertyValue '%s' not supported for objects of class '%s'",
+				Validate.notNull(object, "object must not be null");
+				throw new UnsupportedOperationException(
+					String.format("setPropertyValue setting '%s' property is not supported for objects of class '%s'",
 						getPropertyName(),
 						UserDetails.class.getName()));
 			}

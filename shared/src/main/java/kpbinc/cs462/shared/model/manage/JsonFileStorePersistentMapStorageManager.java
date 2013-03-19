@@ -37,7 +37,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	 * ServletContext
 	 * @param keyAccessor strategy for deriving a unique key from a given item
 	 * 
-	 * @throws IllegalArgumentException if fileStoreRelativePath or keyAccessor are null
+	 * @throws NullPointerException if either fileStoreRelativePath or keyAccessor are null
 	 */
 	public JsonFileStorePersistentMapStorageManager(
 			String fileStoreRelativePath,
