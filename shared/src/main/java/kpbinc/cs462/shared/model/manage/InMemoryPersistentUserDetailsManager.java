@@ -27,16 +27,16 @@ public class InMemoryPersistentUserDetailsManager
 	
 	//= Initialization =================================================================================================
 	
+	//- Constructors ---------------------------------------------------------------------------------------------------
 	/**
-	 * @param fileStoreRelativePath path to the file store in which to persist the item map relative to the
-	 * ServletContext
-	 * 
-	 * @throws NullPointerException if fileStoreRelativePath is null
+	 * @see JsonFileStorePersistentMapStorageManager
 	 */
 	public InMemoryPersistentUserDetailsManager(String fileStoreRelativePath) {
 		super(fileStoreRelativePath);
 		GlobalLogUtils.logConstruction(this);
 	}
+	
+	//- Support --------------------------------------------------------------------------------------------------------
 	
 	@Override
 	protected JsonFileStore<Map<String, UserDetails>> getJsonFileStore(File file) {
