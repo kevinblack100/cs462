@@ -3,14 +3,11 @@ package kpbinc.cs462.shop.model.manage;
 import java.io.File;
 import java.util.Map;
 
-import kpbinc.cs462.shared.model.aspect.HasId;
+import kpbinc.cs462.shared.model.aspect.IDAccessor;
 import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.io.util.JsonFileStore;
-import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
-
-import org.apache.commons.lang3.Validate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -38,27 +35,7 @@ public class OrderManager
 	 * @throws NullPointerException if fileStoreRelativePath is null
 	 */
 	public OrderManager(String fileStoreRelativePath) {
-		super(fileStoreRelativePath, new PropertyAccessor<HasId<Long>, Long>() {
-
-			@Override
-			public String getPropertyName() {
-				return "id";
-			}
-
-			@Override
-			public Long getPropertyValue(HasId<Long> object) {
-				Validate.notNull(object, "object must not be null");
-				Long id = object.getId();
-				return id;
-			}
-
-			@Override
-			public void setPropertyValue(HasId<Long> object, Long value) {
-				Validate.notNull(object, "object must not be null");
-				object.setId(value);
-			}
-			
-		});
+		super(fileStoreRelativePath, new IDAccessor<Long>());
 		GlobalLogUtils.logConstruction(this);
 		
 		this.nextID = null;
