@@ -1,7 +1,7 @@
 package kpbinc.cs462.shared.model.aspect;
 
 /**
- * Interface-derived aspect that indicates an object has an ID.
+ * Interface-derived aspect that indicates an object has an ID property.
  * 
  * @author Kevin Black
  *
@@ -9,6 +9,16 @@ package kpbinc.cs462.shared.model.aspect;
  */
 public interface HasId<I> {
 
+	/**
+	 * @return the ID of the object.
+	 */
 	I getId();
+	
+	/**
+	 * @param id new ID value
+	 * 
+	 * @throws UnsupportedOperationException if setting the ID property is not allowed (at least via this interface).
+	 */
+	void setId(I id);
 	
 }
