@@ -42,14 +42,13 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	public JsonFileStorePersistentMapStorageManager(
 			String fileStoreRelativePath,
 			PropertyAccessor<I, K> keyAccessor) {
+		GlobalLogUtils.logConstruction(this);
 		
 		Validate.notNull(fileStoreRelativePath, "file store relative path must not be null");
 		this.fileStoreRelativePath = fileStoreRelativePath;
 		
 		Validate.notNull(keyAccessor, "key accessor must not be null");
 		this.keyAccessor = keyAccessor;
-			
-		GlobalLogUtils.logConstruction(this);
 	}
 	
 	//- Support --------------------------------------------------------------------------------------------------------
