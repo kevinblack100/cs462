@@ -73,9 +73,7 @@ public class EventDispatchController {
 					Double amount = Double.parseDouble((String) event.getAttributes().get("amount").get(0));
 					String amountUnits = (String) event.getAttributes().get("amount_units").get(0);
 					
-					Long bidID = deliveryBidManager.getNextID();
 					DeliveryBid bid = new DeliveryBid();
-					bid.setId(bidID);
 					bid.setOrderID(orderID);
 					bid.setUsername(username);
 					bid.setDriverName(driverName);
@@ -83,7 +81,7 @@ public class EventDispatchController {
 					bid.setAmount(amount);
 					bid.setAmountUnits(amountUnits);
 					
-					deliveryBidManager.register(bidID, bid);
+					deliveryBidManager.register(bid);
 				}
 				else {
 					responsePayloadWriter.write("expected an rfq:bid_available event");

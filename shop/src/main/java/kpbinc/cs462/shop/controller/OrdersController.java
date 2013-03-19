@@ -148,7 +148,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 		Order order = orderManager.retrieve(orderID);
 		
 		if (order != null) {
-			DeliveryBid bid = deliveryBidManager.get(selectedBidID);	
+			DeliveryBid bid = deliveryBidManager.retrieve(selectedBidID);	
 			
 			if (bid != null) {
 				order.setSelectedBidID(selectedBidID);
@@ -172,7 +172,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 		Order order = orderManager.retrieve(orderID);
 		model.put("order", order);
 		
-		Collection<DeliveryBid> bids = deliveryBidManager.getByOrderID(orderID);
+		Collection<DeliveryBid> bids = deliveryBidManager.retrieveByOrderID(orderID);
 		model.put("bids", bids);
 	}
 	

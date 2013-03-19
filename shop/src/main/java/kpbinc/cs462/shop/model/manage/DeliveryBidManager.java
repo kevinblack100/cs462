@@ -5,118 +5,71 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
+import kpbinc.cs462.shared.model.aspect.IDGeneratingIDAccessor;
+import kpbinc.cs462.shared.model.aspect.IDGenerator;
+import kpbinc.cs462.shared.model.aspect.IncreasingLongIDGeneratorStrategy;
+import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.cs462.shop.model.DeliveryBid;
 import kpbinc.io.util.JsonFileStore;
-import kpbinc.io.util.JsonFileStorePersistentMap;
+import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.Validate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class DeliveryBidManager {
-
-	//= Class Data =====================================================================================================
-	
-	private static final Long seedID = 1L;
-	
-	
-	//= Member Data ====================================================================================================
-	
-	@Autowired
-	private ServletContext servletContext;
-	
-	private String fileStoreRelativePath;
-	
-	private JsonFileStorePersistentMap<Long, DeliveryBid> bidIndex;
-	
-	private Long nextID;
-	
+public class DeliveryBidManager
+	extends JsonFileStorePersistentMapStorageManager<Long, DeliveryBid> {
 	
 	//= Initialization =================================================================================================
 	
+	//- Constructors ---------------------------------------------------------------------------------------------------
+	
 	/**
-	 * @param fileStoreRelativePath
-	 * @throws IllegalArgumentException if fileStoreRelativePath is null
+	 * @see JsonFileStorePersistentMapStorageManager
 	 */
 	public DeliveryBidManager(String fileStoreRelativePath) {
+		super(fileStoreRelativePath);
 		GlobalLogUtils.logConstruction(this);
-		if (fileStoreRelativePath == null) {
-			throw new IllegalArgumentException("file store relative path must not be null");
-		}
-		this.fileStoreRelativePath = fileStoreRelativePath;
-		
-		this.bidIndex = null;
-		
-		this.nextID = null;
+	}
+	
+	//- Support --------------------------------------------------------------------------------------------------------
+	
+	@Override
+	protected JsonFileStore<Map<Long, DeliveryBid>> getJsonFileStore(File file) {
+		JsonFileStore<Map<Long, DeliveryBid>> jsonFileStore = 
+				new JsonFileStore<Map<Long, DeliveryBid>>(file, new TypeReference<Map<Long, DeliveryBid>>() {});
+		return jsonFileStore;
+	}
+	
+	@Override
+	protected PropertyAccessor<? super DeliveryBid, Long> initializeKeyAccessor() {
+		PropertyAccessor<? super DeliveryBid, Long> keyAccessor =
+				new IDGeneratingIDAccessor<Long>(new IDGenerator<Long>(new IncreasingLongIDGeneratorStrategy(this)));
+		return keyAccessor;
 	}
 	
 	
 	//= Interface ======================================================================================================
-	
-	private JsonFileStorePersistentMap<Long, DeliveryBid> getIndex() {
-		if (bidIndex == null) {
-			String fullPath = servletContext.getRealPath(fileStoreRelativePath);
-			File authTokenStoreFile = new File(fullPath);
-			JsonFileStore<Map<Long, DeliveryBid>> fileStore = 
-					new JsonFileStore<Map<Long, DeliveryBid>>(authTokenStoreFile, 
-							new TypeReference<Map<Long, DeliveryBid>>() {});
-			bidIndex = JsonFileStorePersistentMap.<Long, DeliveryBid>buildWithDelegateFromFileStore(fileStore);
-		}
-		return bidIndex;
-	}
 
-	public void register(Long id, DeliveryBid bid) {
-		getIndex().put(id, bid);
-		updateNextID(id);
-	}
-	
-	public DeliveryBid get(Long id) {
-		DeliveryBid bid = getIndex().get(id);
-		return bid;
-	}
-	
-	public Collection<DeliveryBid> getByOrderID(Long orderID) {
+	/**
+	 * @param orderID ID of the order to find the bids for
+	 * @return the bids for the order with the given ID
+	 * 
+	 * @throws NullPointerException if orderID is null
+	 */
+	public Collection<DeliveryBid> retrieveByOrderID(Long orderID) {
+		Validate.notNull(orderID, "order ID must not be null");
+		
 		Collection<DeliveryBid> bids = new ArrayList<DeliveryBid>();
-		if (orderID != null) {
-			for (DeliveryBid bid : getIndex().values()) {
-				if (orderID.equals(bid.getOrderID())) {
-					bids.add(bid);
-				}
+		
+		for (DeliveryBid bid : retrieveAll()) {
+			if (orderID.equals(bid.getOrderID())) {
+				bids.add(bid);
 			}
 		}
+		
 		return bids;
-	}
-	
-	public Collection<DeliveryBid> getAll() {
-		Collection<DeliveryBid> orders = getIndex().values();
-		return orders;
-	}
-	
-	public Long getNextID() {
-		if (nextID == null) {
-			// find the max ID
-			for (Long id : getIndex().keySet()) {
-				updateNextID(id);
-			}
-			
-			if (nextID == null) {
-				nextID = seedID;
-			}
-		}
-		return nextID;
-	}
-	
-	
-	//= Support ========================================================================================================
-	
-	private void updateNextID(Long candidateID) {
-		if (   nextID == null
-			|| nextID <= candidateID) {
-			nextID = new Long(candidateID.longValue() + 1L);
-		}
 	}
 
 }
