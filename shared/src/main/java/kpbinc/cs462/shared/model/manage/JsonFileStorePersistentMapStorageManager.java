@@ -35,20 +35,14 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	/**
 	 * @param fileStoreRelativePath path to the file store in which to persist the item map relative to the
 	 * ServletContext
-	 * @param keyAccessor strategy for deriving a unique key from a given item
 	 * 
-	 * @throws NullPointerException if either fileStoreRelativePath or keyAccessor are null
+	 * @throws NullPointerException if fileStoreRelativePath is null
 	 */
-	public JsonFileStorePersistentMapStorageManager(
-			String fileStoreRelativePath,
-			PropertyAccessor<? super I, K> keyAccessor) {
+	public JsonFileStorePersistentMapStorageManager(String fileStoreRelativePath) {
 		GlobalLogUtils.logConstruction(this);
 		
 		Validate.notNull(fileStoreRelativePath, "file store relative path must not be null");
 		this.fileStoreRelativePath = fileStoreRelativePath;
-		
-		Validate.notNull(keyAccessor, "key accessor must not be null");
-		this.keyAccessor = keyAccessor;
 	}
 	
 	//- Support --------------------------------------------------------------------------------------------------------
@@ -64,6 +58,16 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	}
 	
 	protected abstract JsonFileStore<Map<K, I>> getJsonFileStore(File file);
+	
+	protected PropertyAccessor<? super I, K> getKeyAccessor() {
+		if (keyAccessor == null) {
+			keyAccessor = initializeKeyAccessor();
+			Validate.notNull(keyAccessor, "initialized key accessor was null");
+		}
+		return keyAccessor;
+	}
+	
+	protected abstract PropertyAccessor<? super I, K> initializeKeyAccessor();
 
 	
 	//= Interface ======================================================================================================
@@ -71,7 +75,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	@Override
 	public boolean register(I item) {
 		boolean result = false;
-		K key = keyAccessor.getPropertyValue(item);
+		K key = getKeyAccessor().getPropertyValue(item);
 		if (   key != null
 			&& !managesItemWithKey(key)) {
 			getItemMap().put(key, item);
@@ -94,7 +98,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 
 	@Override
 	public boolean manages(I item) {
-		K key = keyAccessor.getPropertyValue(item);
+		K key = getKeyAccessor().getPropertyValue(item);
 		boolean result = managesItemWithKey(key);
 		return result;
 	}
@@ -109,7 +113,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	@Override
 	public I update(I item) {
 		I previousItem = null;
-		K key = keyAccessor.getPropertyValue(item);
+		K key = getKeyAccessor().getPropertyValue(item);
 		if (managesItemWithKey(key)) {
 			previousItem = getItemMap().put(key, item);
 		}
@@ -119,7 +123,7 @@ public abstract class JsonFileStorePersistentMapStorageManager<K, I> implements 
 	@Override
 	public boolean unregister(I item) {
 		boolean result = false;
-		K key = keyAccessor.getPropertyValue(item);
+		K key = getKeyAccessor().getPropertyValue(item);
 		if (managesItemWithKey(key)) {
 			getItemMap().remove(key);
 			result = true;

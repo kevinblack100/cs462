@@ -34,30 +34,7 @@ public class InMemoryPersistentUserDetailsManager
 	 * @throws NullPointerException if fileStoreRelativePath is null
 	 */
 	public InMemoryPersistentUserDetailsManager(String fileStoreRelativePath) {
-		super(fileStoreRelativePath, new PropertyAccessor<UserDetails, String>() {
-
-			@Override
-			public String getPropertyName() {
-				return "username";
-			}
-
-			@Override
-			public String getPropertyValue(UserDetails object) {
-				Validate.notNull(object, "object must not be null");
-				String username = object.getUsername();
-				return username;
-			}
-
-			@Override
-			public void setPropertyValue(UserDetails object, String value) {
-				Validate.notNull(object, "object must not be null");
-				throw new UnsupportedOperationException(
-					String.format("setPropertyValue setting '%s' property is not supported for objects of class '%s'",
-						getPropertyName(),
-						UserDetails.class.getName()));
-			}
-			
-		});
+		super(fileStoreRelativePath);
 		GlobalLogUtils.logConstruction(this);
 	}
 	
@@ -66,6 +43,36 @@ public class InMemoryPersistentUserDetailsManager
 		JsonFileStore<Map<String, UserDetails>> jsonFileStore = 
 				new JsonFileStore<Map<String, UserDetails>>(file, new TypeReference<Map<String, UserDetails>>() {});
 		return jsonFileStore;
+	}
+	
+	@Override
+	protected PropertyAccessor<? super UserDetails, String> initializeKeyAccessor() {
+		PropertyAccessor<? super UserDetails, String> keyAccessor =
+				new PropertyAccessor<UserDetails, String>() {
+		
+					@Override
+					public String getPropertyName() {
+						return "username";
+					}
+		
+					@Override
+					public String getPropertyValue(UserDetails object) {
+						Validate.notNull(object, "object must not be null");
+						String username = object.getUsername();
+						return username;
+					}
+		
+					@Override
+					public void setPropertyValue(UserDetails object, String value) {
+						Validate.notNull(object, "object must not be null");
+						throw new UnsupportedOperationException(
+							String.format("setPropertyValue setting '%s' property is not supported for objects of class '%s'",
+								getPropertyName(),
+								UserDetails.class.getName()));
+					}
+					
+				};
+		return keyAccessor;
 	}
 	
 	
