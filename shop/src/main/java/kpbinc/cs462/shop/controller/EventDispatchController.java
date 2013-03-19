@@ -75,7 +75,7 @@ public class EventDispatchController {
 					
 					Long bidID = deliveryBidManager.getNextID();
 					DeliveryBid bid = new DeliveryBid();
-					bid.setBidID(bidID);
+					bid.setId(bidID);
 					bid.setOrderID(orderID);
 					bid.setUsername(username);
 					bid.setDriverName(driverName);

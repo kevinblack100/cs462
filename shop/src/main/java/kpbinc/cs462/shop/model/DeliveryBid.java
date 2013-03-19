@@ -1,12 +1,13 @@
 package kpbinc.cs462.shop.model;
 
+import kpbinc.cs462.shared.model.aspect.HasId;
 import kpbinc.util.logging.GlobalLogUtils;
 
-public class DeliveryBid {
+public class DeliveryBid implements HasId<Long> {
 
 	//= Member Data ====================================================================================================
 	
-	public Long bidID;
+	public Long id;
 	public Long orderID;
 	public String username;
 	public String driverName;
@@ -24,12 +25,12 @@ public class DeliveryBid {
 	
 	//= Interface ======================================================================================================
 	
-	public Long getBidID() {
-		return bidID;
+	public Long getId() {
+		return id;
 	}
 
-	public void setBidID(Long bidID) {
-		this.bidID = bidID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getOrderID() {
