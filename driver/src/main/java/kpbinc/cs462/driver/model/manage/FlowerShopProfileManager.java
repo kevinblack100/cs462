@@ -15,7 +15,7 @@ import kpbinc.util.logging.GlobalLogUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class FlowerShopProfileManager 
-	extends JsonFileStorePersistentMapStorageManager<Long, FlowerShopProfile>{
+	extends JsonFileStorePersistentMapStorageManager<Long, FlowerShopProfile> {
 
 	//= Initialization =================================================================================================
 	

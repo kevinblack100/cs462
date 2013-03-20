@@ -123,7 +123,7 @@ public class EventDispatchController {
 		try {
 			PrintWriter responsePayloadWriter = response.getWriter();
 			
-			DriverProfile driverProfile = driverProfileManager.get(driverUsername);
+			DriverProfile driverProfile = driverProfileManager.retrieve(driverUsername);
 			if (   driverProfile.getRegisteredESLs().containsKey(shopProfileID)
 				&& driverProfile.getRegisteredESLs().get(shopProfileID).containsKey("rfq:delivery_ready")) {
 				try {
@@ -254,7 +254,7 @@ public class EventDispatchController {
 			UserProfile profile = userProfileManager.getByTextableNumber(fromNumber);
 			
 			if (profile != null) {
-				DriverProfile driverProfile = driverProfileManager.get(profile.getUsername());
+				DriverProfile driverProfile = driverProfileManager.retrieve(profile.getUsername());
 				
 				if (driverProfile != null) {
 					StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");

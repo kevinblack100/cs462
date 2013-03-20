@@ -105,7 +105,7 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 			UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 			if (loggedInUserDetails != null) {
 				String driverName = loggedInUserDetails.getUsername();
-				DriverProfile driverProfile = driverProfileManager.get(driverName);
+				DriverProfile driverProfile = driverProfileManager.retrieve(driverName);
 				if (driverProfile == null) {
 					driverProfile = new DriverProfile(driverName);
 				}
@@ -125,7 +125,7 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 					String bidAvailableFullName = "rfq:bid_available";
 					driverProfile.addRegisteredESL(shopProfileID, bidAvailableFullName, bidAvailableESL);
 					
-					driverProfileManager.update(driverName, driverProfile);
+					driverProfileManager.update(driverProfile);
 				}
 				// else ESL already generated, so the call to this method was erroneous
 			}
@@ -154,7 +154,7 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 		UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 		if (loggedInUserDetails != null) {
 			String username = loggedInUserDetails.getUsername();
-			DriverProfile profile = driverProfileManager.get(username);
+			DriverProfile profile = driverProfileManager.retrieve(username);
 			model.addAttribute("driverProfile", profile);
 		}
 	}
