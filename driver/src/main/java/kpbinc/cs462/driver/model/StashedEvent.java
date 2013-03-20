@@ -1,9 +1,10 @@
 package kpbinc.cs462.driver.model;
 
 import kpbinc.cs462.shared.event.Event;
+import kpbinc.cs462.shared.model.aspect.HasId;
 import kpbinc.util.logging.GlobalLogUtils;
 
-public class StashedEvent {
+public class StashedEvent implements HasId<Long> {
 
 	//= Member Data ====================================================================================================
 	
@@ -22,11 +23,13 @@ public class StashedEvent {
 	
 	//= Interface ======================================================================================================
 
-	public Long getID() {
+	@Override
+	public Long getId() {
 		return id;
 	}
 	
-	public void setID(Long id) {
+	@Override
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

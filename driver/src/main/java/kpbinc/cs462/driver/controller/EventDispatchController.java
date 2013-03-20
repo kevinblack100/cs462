@@ -167,13 +167,12 @@ public class EventDispatchController {
 								 && userProfile.getTextableNumber() != null) {
 							logger.info("EDC: stashing event...");
 							
-							Long stashID = stashedEventManager.getNextID();
 							StashedEvent stashed = new StashedEvent();
-							stashed.setID(stashID);
 							stashed.setEvent(event);
 							stashed.setShopProfileID(shopProfileID);
 							stashed.setDriverUsername(driverUsername);
-							stashedEventManager.register(stashID, stashed);
+							stashedEventManager.register(stashed);
+							Long stashID = stashed.getId();
 							
 							logger.info("EDC: event stashed.");
 							
@@ -260,7 +259,7 @@ public class EventDispatchController {
 					StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");
 					String firstToken = tokenizer.nextToken();
 					Long eventID = Long.parseLong(firstToken);
-					StashedEvent stashed = stashedEventManager.get(eventID);
+					StashedEvent stashed = stashedEventManager.retrieve(eventID);
 					
 					if (   stashed != null
 						&& stashed.getEvent() != null
