@@ -10,13 +10,9 @@ import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.Validate;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-@Repository
-@Scope(value = "singleton")
 public class DriverProfileManager 
 	extends JsonFileStorePersistentMapStorageManager<String, DriverProfile> {	
 	
