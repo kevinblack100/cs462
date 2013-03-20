@@ -7,17 +7,17 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletContext;
-
 import kpbinc.cs462.driver.model.UserProfile;
 import kpbinc.cs462.shared.model.manage.AuthorizationTokenManager;
+import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.cs462.shared.model.manage.OAuthServiceManager;
 import kpbinc.io.util.JavaJsonAccess;
 import kpbinc.io.util.JsonFileStore;
-import kpbinc.io.util.JsonFileStorePersistentMap;
 import kpbinc.io.util.JsonSerializer;
+import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang3.StringUtils;
 import org.scribe.exceptions.OAuthConnectionException;
 import org.scribe.model.Token;
@@ -25,7 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class UserProfileManager {
+public class UserProfileManager 
+	extends JsonFileStorePersistentMapStorageManager<String, UserProfile> {
 
 	//= Class Data =====================================================================================================
 	
@@ -35,48 +36,62 @@ public class UserProfileManager {
 	//= Member Data ====================================================================================================
 	
 	@Autowired
-	private ServletContext servletContext;
-	
-	private String fileStoreRelativePath;
-	
-	@Autowired
 	private AuthorizationTokenManager authorizationTokenManager;
 	
 	@Autowired
 	private OAuthServiceManager oauthServiceManager;
-	
-	private JsonFileStorePersistentMap<String, UserProfile> userProfiles = null;
-	
+
 	
 	//= Initialization =================================================================================================
 	
+	//- Constructor ----------------------------------------------------------------------------------------------------
+	
 	/**
-	 * @param fileStoreRelativePath
-	 * @throws IllegalArgumentException if fileStoreRelativePath is null
+	 * @see JsonFileStorePersistentMapStorageManager
 	 */
 	public UserProfileManager(String fileStoreRelativePath) {
+		super(fileStoreRelativePath);
 		GlobalLogUtils.logConstruction(this);
-		if (fileStoreRelativePath == null) {
-			throw new IllegalArgumentException("file store relative path must not be null");
-		}
-		this.fileStoreRelativePath = fileStoreRelativePath;
+	}
+	
+	//- Support --------------------------------------------------------------------------------------------------------
+	
+	@Override
+	protected JsonFileStore<Map<String, UserProfile>> getJsonFileStore(File file) {
+		JsonFileStore<Map<String, UserProfile>> jsonFileStore = 
+				new JsonFileStore<Map<String, UserProfile>>(file, new TypeReference<Map<String, UserProfile>>() {});
+		return jsonFileStore;
+	}
+	
+	@Override
+	protected PropertyAccessor<? super UserProfile, String> initializeKeyAccessor() {
+		PropertyAccessor<? super UserProfile, String> keyAccessor =
+				new PropertyAccessor<UserProfile, String>() {
+
+					@Override
+					public String getPropertyName() {
+						return "username";
+					}
+
+					@Override
+					public String getPropertyValue(UserProfile object) {
+						Validate.notNull(object, "object must not be null");
+						String username = object.getUsername();
+						return username;
+					}
+
+					@Override
+					public void setPropertyValue(UserProfile object, String value) {
+						Validate.notNull(object, "object must not be null");
+						object.setUsername(value);						
+					}
+			
+				};
+		return keyAccessor;
 	}
 	
 	
 	//= Interface ======================================================================================================
-	
-	private JsonFileStorePersistentMap<String, UserProfile> getUserProfiles() {
-		if (userProfiles == null) {
-			String fullPath = servletContext.getRealPath(fileStoreRelativePath);
-			File fileStoreFile = new File(fullPath);
-			JsonFileStore<Map<String, UserProfile>> fileStore = 
-					new JsonFileStore<Map<String, UserProfile>>(fileStoreFile, 
-							new TypeReference<Map<String, UserProfile>>() {});
-			userProfiles = JsonFileStorePersistentMap.
-					<String, UserProfile>buildWithDelegateFromFileStore(fileStore);
-		}
-		return userProfiles;
-	}
 	
 	public void updateApiID(String username, String api) {
 		// TODO move to a UserProfile service
@@ -96,12 +111,12 @@ public class UserProfileManager {
 					Object foursquareID = JavaJsonAccess.getValue(userInfo, "response", "user", "id");
 					if (foursquareID != null) {
 						String foursquareIDAsString = foursquareID.toString();
-						UserProfile profile = this.get(username);
+						UserProfile profile = this.retrieve(username);
 						if (profile == null) {
 							profile = new UserProfile(username);
 						}
 						profile.addApiID(api, foursquareIDAsString);
-						this.update(username, profile);
+						this.update(profile);
 					}
 					else {
 						logger.warning("User information object doesn't contain an id property as expected");
@@ -119,23 +134,9 @@ public class UserProfileManager {
 		}
 	}
 	
-	public void register(String id, UserProfile profile) {
-		registerOrUpdate(id, profile);
-	}
-	
-	public UserProfile get(String id) {
-		UserProfile profile = getUserProfiles().get(id);
-		return profile;
-	}
-	
-	public Collection<UserProfile> getAll() {
-		Collection<UserProfile> profiles = getUserProfiles().values();
-		return profiles;
-	}
-	
 	public Collection<UserProfile> getByApiID(String api, String id) {
 		Collection<UserProfile> result = new ArrayList<UserProfile>();
-		for (UserProfile profile : this.getAll()) {
+		for (UserProfile profile : this.retrieveAll()) {
 			if (StringUtils.equals(id, profile.getApiIDs().get(api))) {
 				result.add(profile);
 			}
@@ -145,36 +146,13 @@ public class UserProfileManager {
 	
 	public UserProfile getByTextableNumber(String textableNumber) {
 		UserProfile result = null;
-		for (UserProfile profile : this.getAll()) {
+		for (UserProfile profile : this.retrieveAll()) {
 			if (StringUtils.equals(textableNumber, profile.getTextableNumber())) {
 				result = profile;
 				break;
 			}
 		}
 		return result;
-	}
-	
-	public UserProfile update(String id, UserProfile profile) {
-		UserProfile previous = registerOrUpdate(id, profile);
-		return previous;
-	}
-	
-	// TODO unregister
-
-	
-	//= Support ========================================================================================================
-	
-	private UserProfile registerOrUpdate(String id, UserProfile profile) {
-		if (id == null) {
-			throw new IllegalArgumentException("id must not be null");
-		}
-		if (profile == null) {
-			throw new IllegalArgumentException("profile must not be null");
-		}
-		
-		UserProfile previous = getUserProfiles().put(id, profile);
-		
-		return previous;
 	}
 	
 }

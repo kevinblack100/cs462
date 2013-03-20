@@ -78,7 +78,7 @@ public class ExternalAPINotificationsController {
 			for (UserProfile profile : profiles) {
 				profile.setLastKnownLatitude(latitude);
 				profile.setLastKnownLongitude(longitude);
-				userProfileManager.update(profile.getUsername(), profile);
+				userProfileManager.update(profile);
 			}
 		}
 		catch (IOException e) {

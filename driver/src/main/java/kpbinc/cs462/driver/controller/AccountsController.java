@@ -96,7 +96,7 @@ public class AccountsController extends DriverBaseSiteContextController implemen
 			// TODO validate the number
 			UserProfile profile = new UserProfile(username);
 			profile.setTextableNumber("+" + textableNumber);
-			userProfileManager.update(username, profile);
+			userProfileManager.register(profile);
 			
 			redirectLocation = "/pages/secure/accounts/signin";
 		}
