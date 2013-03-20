@@ -1,8 +1,9 @@
 package kpbinc.cs462.driver.model;
 
+import kpbinc.cs462.shared.model.aspect.HasId;
 import kpbinc.util.logging.GlobalLogUtils;
 
-public class FlowerShopProfile {
+public class FlowerShopProfile implements HasId<Long> {
 
 	//= Member Data ====================================================================================================
 	

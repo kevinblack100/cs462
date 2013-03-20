@@ -135,7 +135,7 @@ public class EventDispatchController {
 						&& event.getName().equals("delivery_ready")) {
 						responsePayloadWriter.write("received");
 						
-						FlowerShopProfile shopProfile = flowerShopProfileManager.get(shopProfileID);
+						FlowerShopProfile shopProfile = flowerShopProfileManager.retrieve(shopProfileID);
 						UserProfile userProfile = userProfileManager.retrieve(driverUsername);
 
 						double distanceInMiles = -1.0; // don't know where the user is

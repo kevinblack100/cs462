@@ -50,7 +50,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${flowerShopProfilesController.flowerShopManager.all}" var="profile">
+			<c:forEach items="${flowerShopProfiles}" var="profile">
 				<tr>
 					<td class="profile-id">${profile.id}</td>
 					<td class="profile-name">${profile.name}</td>

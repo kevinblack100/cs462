@@ -2,6 +2,7 @@ package kpbinc.cs462.driver.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,8 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 	@RequestMapping
 	public String getShopsList(ModelMap model) {
 		setDriverProfile(model);
+		Collection<FlowerShopProfile> flowerShopProfiles = flowerShopProfileManager.retrieveAll();
+		model.addAttribute("flowerShopProfiles", flowerShopProfiles);
 		return "shops/list";
 	}
 	
@@ -74,18 +77,14 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 			&& latitude != null
 			&& longitude != null) {
 			
-			// ID hack
-			String combined = name + location;
-			Long id = (long) combined.hashCode();
 			
 			FlowerShopProfile profile = new FlowerShopProfile();
-			profile.setId(id);
 			profile.setName(name);
 			profile.setLocation(location);
 			profile.setLatitude(latitude);
 			profile.setLongitude(longitude);
 			
-			flowerShopProfileManager.register(id, profile);
+			flowerShopProfileManager.register(profile);
 		}
 		else {
 			// TODO set error message
@@ -101,7 +100,7 @@ public class FlowerShopProfilesController extends DriverBaseSiteContextControlle
 			@RequestParam(value = "bid-available-esl") String bidAvailableESL) {
 		
 		// check that the ID is valid
-		FlowerShopProfile shopProfile = flowerShopProfileManager.get(shopProfileID);
+		FlowerShopProfile shopProfile = flowerShopProfileManager.retrieve(shopProfileID);
 		if (shopProfile != null) {
 			UserDetails loggedInUserDetails = getLoggedInUserContext().getSignedInUserDetails();
 			if (loggedInUserDetails != null) {
