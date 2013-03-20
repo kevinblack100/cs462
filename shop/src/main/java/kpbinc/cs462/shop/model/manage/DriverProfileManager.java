@@ -1,16 +1,15 @@
 package kpbinc.cs462.shop.model.manage;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
+import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.cs462.shop.model.DriverProfile;
 import kpbinc.io.util.JsonFileStore;
-import kpbinc.io.util.JsonFileStorePersistentMap;
+import kpbinc.util.PropertyAccessor;
+import kpbinc.util.logging.GlobalLogUtils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.Validate;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -18,66 +17,53 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 @Repository
 @Scope(value = "singleton")
-public class DriverProfileManager {
+public class DriverProfileManager 
+	extends JsonFileStorePersistentMapStorageManager<String, DriverProfile> {	
+	
+	//= Initialization =================================================================================================
+	
+	//- Constructor ----------------------------------------------------------------------------------------------------
+	
+	/**
+	 * @see JsonFileStorePersistentMapStorageManager
+	 */
+	public DriverProfileManager(String fileStoreRelativePath) {
+		super(fileStoreRelativePath);
+		GlobalLogUtils.logConstruction(this);
+	}
+	
+	//- Support --------------------------------------------------------------------------------------------------------
+	
+	protected JsonFileStore<Map<String, DriverProfile>> getJsonFileStore(File file) {
+		JsonFileStore<Map<String, DriverProfile>> jsonFileStore =
+				new JsonFileStore<Map<String, DriverProfile>>(file, new TypeReference<Map<String, DriverProfile>>() {});
+		return jsonFileStore;
+	}
+	
+	protected PropertyAccessor<? super DriverProfile, String> initializeKeyAccessor() {
+		PropertyAccessor<? super DriverProfile, String> keyAccessor =
+				new PropertyAccessor<DriverProfile, String>() {
 
-	//==================================================================================================================
-	// Class Data
-	//==================================================================================================================
-	
-	private static final String DRIVER_PROFILES_STORE_FILEPATH = "/WEB-INF/ffds/stores/driverprofiles.json"; 
-	
-	
-	//==================================================================================================================
-	// Member Data
-	//==================================================================================================================
-	
-	@Autowired
-	private ServletContext servletContext;
-	
-	private JsonFileStorePersistentMap<String, DriverProfile> driverProfiles;
-	
-	
-	//==================================================================================================================
-	// Initialization
-	//==================================================================================================================
-	
-	public DriverProfileManager() {
-	}
+					@Override
+					public String getPropertyName() {
+						return "username";
+					}
 
-	private JsonFileStorePersistentMap<String, DriverProfile> getDriverProfiles() {
-		if (driverProfiles == null) {
-			String fullFileStorePath = servletContext.getRealPath(DRIVER_PROFILES_STORE_FILEPATH);
-			File fileStoreFile = new File(fullFileStorePath);
-			JsonFileStore<Map<String, DriverProfile>> fileStore =
-					new JsonFileStore<Map<String, DriverProfile>>(fileStoreFile,
-							new TypeReference<Map<String, DriverProfile>>() {});
-			driverProfiles = JsonFileStorePersistentMap.<String, DriverProfile>buildWithDelegateFromFileStore(fileStore);
-		}
-		return driverProfiles;
-	}
-	
-	//==================================================================================================================
-	// Interface
-	//==================================================================================================================
-	
-	public DriverProfile createOrUpdate(DriverProfile profile) {
-		DriverProfile formerProfile = getDriverProfiles().put(profile.getUsername(), profile);
-		return formerProfile;
-	}
-	
-	public Collection<DriverProfile> getAllProfiles() {
-		Collection<DriverProfile> profiles = getDriverProfiles().values();
-		return profiles;
-	}
-	
-	public DriverProfile getProfileFor(String username) {
-		DriverProfile profile = getDriverProfiles().get(username);
-		return profile;
-	}
-	
-	public DriverProfile deleteProfileFor(String username) {
-		DriverProfile profile = getDriverProfiles().remove(username);
-		return profile;
+					@Override
+					public String getPropertyValue(DriverProfile object) {
+						Validate.notNull(object, "object must not be null");
+						String username = object.getUsername();
+						return username;
+					}
+
+					@Override
+					public void setPropertyValue(DriverProfile object, String value) {
+						Validate.notNull(object, "object must not be null");
+						throw new UnsupportedOperationException("setPropertyValue not supported (yet)");
+					}
+			
+				};
+		return keyAccessor;
 	}
 	
 }

@@ -108,7 +108,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 
 		// Send the event
 		if (event != null) {
-			Collection<DriverProfile> driverProfiles = driverProfileManager.getAllProfiles();
+			Collection<DriverProfile> driverProfiles = driverProfileManager.retrieveAll();
 			for (DriverProfile profile : driverProfiles) {
 				boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), event);
 				logger.info(String.format("rfq:delivery_ready sent to %s successfully?: %s", profile.getEventSignalURL(), Boolean.toString(success)));

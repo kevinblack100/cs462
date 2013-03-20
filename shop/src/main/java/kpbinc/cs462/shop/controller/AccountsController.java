@@ -152,7 +152,7 @@ public class AccountsController extends ShopBaseSiteContextController {
 		
 		// Prepare Driver ESL
 		String driverESL = "";
-		DriverProfile profile = driverProfileManager.getProfileFor(username);
+		DriverProfile profile = driverProfileManager.retrieve(username);
 		if (profile != null) {
 			driverESL = profile.getEventSignalURL();
 		}
@@ -195,7 +195,7 @@ public class AccountsController extends ShopBaseSiteContextController {
 			
 			DriverProfile profile = new DriverProfile(username);
 			profile.setEventSignalURL(driverESL);
-			driverProfileManager.createOrUpdate(profile);
+			driverProfileManager.register(profile);
 		}
 		else {
 			if (loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER)) {
@@ -204,7 +204,7 @@ public class AccountsController extends ShopBaseSiteContextController {
 				
 				updateAuthorities(username, modifiedAuthorities);
 			}
-			driverProfileManager.deleteProfileFor(username);
+			driverProfileManager.unregisterItemWithKey(username);
 		}
 		
 		return "redirect:/ffds/users/" + username;
