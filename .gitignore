@@ -3,4 +3,5 @@
 shop/target/*
 driver/target/*
 shared/target/*
+guild/target/*
 tmp/*
