@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app
+	xmlns="http://java.sun.com/xml/ns/javee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+
+	<!-- SERVLETS ================================================================================================== -->
+	<!-- By default Spring uses /WEB-INF/${servlet-name}-servlet.xml as the servlet context. Can override with an
+	init-param entity -->
+		
+	<servlet>
+		<servlet-name>driver-spring-pages</servlet-name>
+		<jsp-file>/index.jsp</jsp-file>
+    	<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	
+	<!-- SERVLET-MAPPINGS ========================================================================================== -->
+
+	<servlet-mapping>
+		<servlet-name>driver-spring-pages</servlet-name>
+		<url-pattern>/guild/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

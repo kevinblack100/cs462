@@ -1,11 +1,54 @@
 got maven for Eclipse (m2e)
+
 created a maven webapp project in Eclipse
-couldn't create a server with the war
-experimented with packaging the war
-still couldn't create a server
-had to make the Eclipse project faceted, and mark it as being/having a Dynamic Web Module
+- GroupId org.apache.maven.archetypes
+- ArtifactId maven-archetype-webapp
+- Vertion RELEASE
+
+make the project faceted with the follower facets
+- Dynamic Web Module (required to be able to run a dev server)
+- Java 1.6
+- JavaScript (if desired)
+
+update the project's Deployment Assembly so that can run a Tomcat dev server from a maven structured project
+- add the Maven Dependencies -> WEB-INF/lib (Java Build Path Entries type)
+- add src/main/webapp -> / (Folder type)
+- remove the WebContent folder (both in the deployment assembly and in the actual project structure)
+
+update web.xml to have a jsp-file in the servlet spec for /index.jsp, and a servlet-mapping that points all urls to the index. i.e.
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app
+	xmlns="http://java.sun.com/xml/ns/javee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+
+	<!-- SERVLETS ================================================================================================== -->
+	<!-- By default Spring uses /WEB-INF/${servlet-name}-servlet.xml as the servlet context. Can override with an
+	init-param entity -->
+		
+	<servlet>
+		<servlet-name>[servlet-name]</servlet-name>
+		<jsp-file>/index.jsp</jsp-file>
+    	<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	
+	<!-- SERVLET-MAPPINGS ========================================================================================== -->
+
+	<servlet-mapping>
+		<servlet-name>[servlet-name]</servlet-name>
+		<url-pattern>/guild/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>
+
+
+
 updated the web.xml to have a jsp-file in the servlet spec for index.jsp, all /cs462/* pages go to the index page (the cs462 context is set in the server properties, not in the war, need to figure out how this is controlled via cmd ln tools)
-the Deployment Assembly property has to include /src/main/webapp/ going to / so that Tomcat can find the content where maven puts it
+
 
 following notes on LDS Stack training set up spring mvc project
 had to change the Eclipse project properties in order to run a tomcat server for the eclipse project
