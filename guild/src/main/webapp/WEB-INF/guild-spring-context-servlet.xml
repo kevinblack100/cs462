@@ -34,10 +34,17 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
 	
+	
 	<!-- Model Beans -->
 	<context:component-scan base-package="kpbinc.cs462.guild.model.manage" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
+	<bean id="flowerShopProfileManager"
+		class="kpbinc.cs462.shared.model.manage.FlowerShopProfileManager"
+		scope="request">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/flower-shop-profiles.json" />
+	</bean>
+	
 	
 	<!-- View Resolution Rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
