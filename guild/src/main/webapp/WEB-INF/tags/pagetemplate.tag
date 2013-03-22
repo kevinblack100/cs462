@@ -10,7 +10,7 @@
 		<title>${title}</title>
 	</head>
 	<body>
-<%-- 		<%@ include file="/WEB-INF/views/includes/navigation.jsp" %> --%>
+		<%@ include file="/WEB-INF/views/includes/navigation.jsp" %>
 		<div id="main-content-panel">
 			<jsp:doBody />
 		</div>
