@@ -11,11 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.DriverProfile;
-import kpbinc.cs462.driver.model.FlowerShopProfile;
 import kpbinc.cs462.driver.model.StashedEvent;
 import kpbinc.cs462.driver.model.UserProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
-import kpbinc.cs462.driver.model.manage.FlowerShopProfileManager;
 import kpbinc.cs462.driver.model.manage.StashedEventManager;
 import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
@@ -23,6 +21,8 @@ import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
+import kpbinc.cs462.shared.model.FlowerShopProfile;
+import kpbinc.cs462.shared.model.manage.FlowerShopProfileManager;
 import kpbinc.math.SphericalUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 

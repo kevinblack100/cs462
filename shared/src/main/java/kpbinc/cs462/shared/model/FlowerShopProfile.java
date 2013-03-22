@@ -1,4 +1,4 @@
-package kpbinc.cs462.driver.model;
+package kpbinc.cs462.shared.model;
 
 import kpbinc.cs462.shared.model.aspect.HasId;
 import kpbinc.util.logging.GlobalLogUtils;

@@ -51,7 +51,7 @@
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/config/apiclientconfig.json" />	
 	</bean>
 	<bean id="flowerShopProfileManager"
-		class="kpbinc.cs462.driver.model.manage.FlowerShopProfileManager"
+		class="kpbinc.cs462.shared.model.manage.FlowerShopProfileManager"
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/flower-shop-profiles.json" />
 	</bean>

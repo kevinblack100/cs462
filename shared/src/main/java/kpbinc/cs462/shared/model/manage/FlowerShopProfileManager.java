@@ -1,20 +1,19 @@
-package kpbinc.cs462.driver.model.manage;
+package kpbinc.cs462.shared.model.manage;
 
 import java.io.File;
 import java.util.Map;
 
-import kpbinc.cs462.driver.model.FlowerShopProfile;
+import kpbinc.cs462.shared.model.FlowerShopProfile;
 import kpbinc.cs462.shared.model.aspect.IDGeneratingIDAccessor;
 import kpbinc.cs462.shared.model.aspect.IDGenerator;
 import kpbinc.cs462.shared.model.aspect.IncreasingLongIDGeneratorStrategy;
-import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
 import kpbinc.io.util.JsonFileStore;
 import kpbinc.util.PropertyAccessor;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public class FlowerShopProfileManager 
+public class FlowerShopProfileManager
 	extends JsonFileStorePersistentMapStorageManager<Long, FlowerShopProfile> {
 
 	//= Initialization =================================================================================================

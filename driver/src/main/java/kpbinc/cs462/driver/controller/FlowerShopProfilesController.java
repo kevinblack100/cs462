@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import kpbinc.cs462.driver.model.DriverProfile;
-import kpbinc.cs462.driver.model.FlowerShopProfile;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
-import kpbinc.cs462.driver.model.manage.FlowerShopProfileManager;
 import kpbinc.cs462.shared.event.ESLGenerator;
+import kpbinc.cs462.shared.model.FlowerShopProfile;
+import kpbinc.cs462.shared.model.manage.FlowerShopProfileManager;
 import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
