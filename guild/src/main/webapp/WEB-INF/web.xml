@@ -11,6 +11,24 @@
 	<display-name>Kevin Black's CS 462 Driver Guild Webapp</display-name>
 
 
+	<!-- CONTEXT-PARAMS ============================================================================================ -->
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/*.xml</param-value>
+	</context-param>
+
+	
+	<!-- LISTENERS ================================================================================================= -->
+	
+	<listener>
+		<!-- Requires context-param contextConfigLocation -->
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+
 	<!-- SERVLETS ================================================================================================== -->
 	<!-- By default Spring uses /WEB-INF/${servlet-name}-servlet.xml as the servlet context. Can override with an
 	init-param entity -->
@@ -28,5 +46,25 @@
 		<servlet-name>guild-spring-context</servlet-name>
 		<url-pattern>/dynamic/*</url-pattern>
 	</servlet-mapping>
+	
+	
+	<!-- FILTERS =================================================================================================== -->
+	
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+			<!-- delegates to the spring bean with name of ${filter-name} -->
+		</filter-class>
+	</filter>
+	
+	
+	<!-- FILTER-MAPPINGS =========================================================================================== -->
+	<!-- Note: spring security filter mapping is generally first since anything before it would not be secured. -->
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 </web-app>
