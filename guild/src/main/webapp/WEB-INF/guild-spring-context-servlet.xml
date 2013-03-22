@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Based on examples in the LDS Stack Training: http://tech.lds.org/wiki/Introduction_to_Spring_MVC -->
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://code.lds.org/schema/spring/web http://code.lds.org/schema/spring/web/stack-web-3.0.xsd"
+	default-lazy-init="true">
+
+	<context:annotation-config />
+
+	<!-- If beans are annotation driven -->
+	<mvc:annotation-driven />
+
+	<!-- Controller Beans -->
+	<context:component-scan base-package="kpbinc.cs462.guild.controller" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	<context:component-scan base-package="kpbinc.cs462.shared.controller.context" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	<bean id="contextPaths"
+		class="kpbinc.cs462.shared.controller.context.ContextPaths"
+		scope="request">
+		<property name="dynamicRelativePath" value="dynamic" />	
+	</bean>
+	<context:component-scan base-package="kpbinc.cs462.shared.event" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	
+	<!-- Model Beans -->
+	<context:component-scan base-package="kpbinc.cs462.guild.model.manage" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+	
+	<!-- View Resolution Rules -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+</beans>

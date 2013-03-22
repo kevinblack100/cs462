@@ -1,4 +1,10 @@
+--- Step 0 Eclipse configuration
+
 got maven for Eclipse (m2e)
+
+
+
+--- Step 1 Setup Webapp Project and verify that it runs
 
 created a maven webapp project in Eclipse
 - GroupId org.apache.maven.archetypes
@@ -11,6 +17,8 @@ make the project faceted with the follower facets
 - JavaScript (if desired)
 
 update the project's Deployment Assembly so that can run a Tomcat dev server from a maven structured project
+- see http://stackoverflow.com/questions/10046654/maven-spring-dynamic-web-module-eclipse-java-lang-classnotfoundexcepti/12600686#12600686
+- Project > Properties > Deployment Assembly > Add then
 - add the Maven Dependencies -> WEB-INF/lib (Java Build Path Entries type)
 - add src/main/webapp -> / (Folder type)
 - remove the WebContent folder (both in the deployment assembly and in the actual project structure)
@@ -40,19 +48,152 @@ update web.xml to have a jsp-file in the servlet spec for /index.jsp, and a serv
 
 	<servlet-mapping>
 		<servlet-name>[servlet-name]</servlet-name>
-		<url-pattern>/guild/*</url-pattern>
+		<url-pattern>/[spring-context-pathname]/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>
 
 
+if you can access the webapp then commit the changes
 
-updated the web.xml to have a jsp-file in the servlet spec for index.jsp, all /cs462/* pages go to the index page (the cs462 context is set in the server properties, not in the war, need to figure out how this is controlled via cmd ln tools)
 
 
-following notes on LDS Stack training set up spring mvc project
-had to change the Eclipse project properties in order to run a tomcat server for the eclipse project
-see http://stackoverflow.com/questions/10046654/maven-spring-dynamic-web-module-eclipse-java-lang-classnotfoundexcepti/12600686#12600686
-particularly Project > Properties > Deployment Assembly > Add then select "Java Build Path Entries" and select the maven dependencies
+--- Step 2 Setup Spring MVC
+(based on LDS Stack training for setting up a Spring MVC webapp, which uses mvc:view-controller)
 
-swapped out the mvc:view-controller mapping for a HelloController without problems
+- now change the jsp-file attribute of the servlet spec to servlet-class like so
+
+<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+- then create a file at the same level as web.xml named ${servlet-name}-servlet.xml. This file defines the MVC context, for example:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Based on examples in the LDS Stack Training: http://tech.lds.org/wiki/Introduction_to_Spring_MVC -->
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://code.lds.org/schema/spring/web http://code.lds.org/schema/spring/web/stack-web-3.0.xsd"
+	default-lazy-init="true">
+
+	<context:annotation-config />
+
+	<!-- If beans are annotation driven -->
+	<mvc:annotation-driven />
+
+	<!-- Controller Beans -->
+	<context:component-scan base-package="kpbinc.cs462.guild.controller" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	<context:component-scan base-package="kpbinc.cs462.shared.controller.context" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	<bean id="contextPaths"
+		class="kpbinc.cs462.shared.controller.context.ContextPaths"
+		scope="request">
+		<property name="dynamicRelativePath" value="dynamic" />	
+	</bean>
+	<context:component-scan base-package="kpbinc.cs462.shared.event" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	
+	<!-- Model Beans -->
+	<context:component-scan base-package="kpbinc.cs462.guild.model.manage" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+	
+	<!-- View Resolution Rules -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+</beans>
+
+
+- Now update the pom.xml file to include the following dependencies (G, A, V)
+-- kpbinc.cs462, shared, 0.5 (or latest)
+-- junit, junit, 4.11
+-- javax.servlet, servlet-api, 3.0-alpha-1
+-- javax.servlet, jstl, 1.2
+-- org.springframework, spring-webmvc, 3.0.7.RELEASE
+-- com.fasterxml.jackson.core, jackson-databind, 2.1.3
+
+
+- Add classes in kpbinc.cs462.<project-name>.controller
+-- <project-name>BaseSiteContextController that extends SharedBaseSiteContextController
+-- DefaultController that maps the url "/" (corresponding to /[spring-context-pathname]/) to the welcome page, for example
+
+package kpbinc.cs462.guild.controller;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kpbinc.util.logging.GlobalLogUtils;
+
+@Controller
+@Scope(value = "request")
+@RequestMapping(value = "/")
+public class DefaultController extends GuildBaseSiteContextController {
+
+	//= Initialization =================================================================================================
+	
+	public DefaultController() {
+		GlobalLogUtils.logConstruction(this);
+	}
+
+	
+	//= Interface ======================================================================================================
+	
+	@RequestMapping
+	public String getWelcomePage() {
+		return "welcome";
+	}
+	
+}
+
+
+- Create a taglib directory WEB-INF/tags and add a pagetemplate.tag, for example
+
+<!-- Based on template.tag file example in the LDS Stack training on Intermediate JSP -->
+<%@ tag description="Site Template Taglet" pageEncoding="UTF-8" %>
+<!-- could include initialization code/scriptlets -->
+<%@ attribute name="header" required="false" fragment="true" %>
+<%@ attribute name="title" required="true" rtexprvalue="true" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<jsp:invoke fragment="header" />
+		<title>${title}</title>
+	</head>
+	<body>
+<%-- 		<%@ include file="/WEB-INF/views/includes/navigation.jsp" %> --%>
+		<div id="main-content-panel">
+			<jsp:doBody />
+		</div>
+	</body>
+</html>
+
+
+- Create a welcome.jsp page in WEB-INF/views/, for example
+
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="customtags" tagdir="/WEB-INF/tags" %>
+
+<customtags:pagetemplate>
+	<jsp:attribute name="title">Welcome!</jsp:attribute>
+	<jsp:body>
+		<h1>Fast Flower Delivery Service: Driver Guild Site</h1>
+		<p>Welcome to the Fast Flower Delivery Service Driver Guild site.</p>
+		<a href="https://github.com/windley/CS462-Event-Edition/tree/master/project">Project Specifications</a>
+	</jsp:body>
+</customtags:pagetemplate>
+
+
