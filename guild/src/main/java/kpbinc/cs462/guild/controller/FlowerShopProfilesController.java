@@ -3,6 +3,8 @@ package kpbinc.cs462.guild.controller;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
+import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.shared.model.FlowerShopProfile;
 import kpbinc.cs462.shared.model.manage.FlowerShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -29,6 +31,9 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 
 	@Autowired
 	private FlowerShopProfileManager flowerShopProfileManager;
+	
+	@Autowired
+	private GuildFlowerShopEventChannelManager guildFlowerShopEventChannelManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -61,6 +66,7 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 			&& latitude != null
 			&& longitude != null) {	
 			
+			// Create the profile
 			FlowerShopProfile profile = new FlowerShopProfile();
 			profile.setName(name);
 			profile.setLocation(location);
@@ -68,6 +74,12 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 			profile.setLongitude(longitude);
 			
 			flowerShopProfileManager.register(profile);
+			
+			// Create the channel stub
+			GuildFlowerShopEventChannel channel = new GuildFlowerShopEventChannel();
+			channel.setRemoteEntityId(profile.getId());
+			
+			guildFlowerShopEventChannelManager.register(channel);
 		}
 		else {
 			// TODO set error message

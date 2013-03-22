@@ -6,16 +6,16 @@ import kpbinc.util.logging.GlobalLogUtils;
 /**
  * @author Kevin Black
  *
- * @param <L> local entity ID type
- * @param <R> remote entity ID type
+ * @param <X> local entity ID type
+ * @param <Y> remote entity ID type
  */
-public class EventChannel<L, R> implements HasId<Long> {
+public abstract class EventChannel<X, Y> implements HasId<Long> {
 
 	//= Member Data ====================================================================================================
 	
 	private Long id;
-	private L localEntityId;
-	private R remoteEntityId;
+	private X localEntityId;
+	private Y remoteEntityId;
 	private String sendESL;
 	private String receiveESL;
 	
@@ -38,35 +38,35 @@ public class EventChannel<L, R> implements HasId<Long> {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public L getLocalEntityId() {
+	
+	public X getLocalEntityId() {
 		return localEntityId;
 	}
+	
+	public void setLocalEntityId(X localEntityId) {
+		this.localEntityId = localEntityId;
+	}
 
-	public R getRemoteEntityId() {
+	public Y getRemoteEntityId() {
 		return remoteEntityId;
 	}
 
+	public void setRemoteEntityId(Y remoteEntityId) {
+		this.remoteEntityId = remoteEntityId;
+	}
+	
 	public String getSendESL() {
 		return sendESL;
+	}
+	
+	public void setSendESL(String sendESL) {
+		this.sendESL = sendESL;
 	}
 
 	public String getReceiveESL() {
 		return receiveESL;
 	}
-
-	public void setLocalEntityId(L localEntityId) {
-		this.localEntityId = localEntityId;
-	}
-
-	public void setRemoteEntityId(R remoteEntityId) {
-		this.remoteEntityId = remoteEntityId;
-	}
-
-	public void setSendESL(String sendESL) {
-		this.sendESL = sendESL;
-	}
-
+	
 	public void setReceiveESL(String receiveESL) {
 		this.receiveESL = receiveESL;
 	}

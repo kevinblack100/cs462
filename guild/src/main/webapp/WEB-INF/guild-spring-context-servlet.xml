@@ -41,8 +41,13 @@
 	</context:component-scan>
 	<bean id="flowerShopProfileManager"
 		class="kpbinc.cs462.shared.model.manage.FlowerShopProfileManager"
-		scope="request">
+		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/flower-shop-profiles.json" />
+	</bean>
+	<bean id="guildFlowerShopEventChannelManager"
+		class="kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/guild-flower-shop-event-channels.json" />
 	</bean>
 	
 	
