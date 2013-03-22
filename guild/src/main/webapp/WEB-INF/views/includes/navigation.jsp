@@ -4,6 +4,8 @@
 <div id="navigation">
 	<a href="${contextPaths.dynamicPath}/">Home</a>
 	|
+	<a href="${contextPaths.dynamicPath}/users">Users</a>
+	|
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
 			<a href="${contextPaths.dynamicPath}/secure/accounts/signout">Sign Out</a>

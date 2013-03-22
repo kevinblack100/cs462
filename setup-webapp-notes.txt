@@ -503,3 +503,123 @@ public class AccountsController extends GuildBaseSiteContextController implement
 - add line to pagetemplate.tag and add the following to the body
 
 <%@ include file="/WEB-INF/views/includes/navigation.jsp" %>
+
+
+
+--- Step 5 Add User list and profile pages
+
+- add UserController to kpbinc.cs462.<project-name>.controller
+
+package kpbinc.cs462.guild.controller;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletContext;
+
+import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
+import kpbinc.util.logging.GlobalLogUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@Scope(value = "request")
+@RequestMapping("/users")
+public class UserController extends GuildBaseSiteContextController {
+	
+	//= Class Data =====================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(UserController.class.getName());
+	
+	
+	//= Member Data ====================================================================================================
+
+	@Autowired
+	private ServletContext servletContext;
+	
+	@Autowired
+	private InMemoryPersistentUserDetailsManager userDetailsManager;
+	
+	
+	//= Initialization =================================================================================================
+	
+	public UserController() {
+		GlobalLogUtils.logConstruction(this);
+	}
+	
+	
+	//= Interface ======================================================================================================
+	
+	@RequestMapping
+	public String listAll(ModelMap model) {
+		List<String> allUsernames = getAllUsernames();
+		model.addAttribute("usernames", allUsernames);
+		return "users/users_list";
+	}
+	
+	@RequestMapping("/{username}")
+	public String viewProfile(
+			ModelMap model,
+			@PathVariable("username") String username) {
+		model.addAttribute("username", username);
+		return "users/user_profile";
+	}
+	
+	public List<String> getAllUsernames() {
+		List<String> usernames = new ArrayList<String>(userDetailsManager.getAllUsernames());
+		Collections.sort(usernames);
+		return usernames;
+	}
+	
+}
+
+
+
+- add users_list.jsp and user_profile.jsp to WEB-INF/views/users, for example
+
+[users_list.jsp]
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="customtags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<customtags:pagetemplate>
+	<jsp:attribute name="title">User List</jsp:attribute>
+	<jsp:body>
+		<h1>Users</h1>
+		<ul>
+		<c:forEach items="${usernames}" var="username">
+			<li>
+				<a href="${contextPaths.dynamicPath}/users/${username}">${username}</a>
+			</li>
+		</c:forEach>
+		</ul>
+	</jsp:body>
+</customtags:pagetemplate>
+
+
+[user_profile.jsp]
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="customtags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<customtags:pagetemplate>
+	<jsp:attribute name="title">User Profile</jsp:attribute>
+	<jsp:body>
+		<h1>${username} Profile</h1>
+		<p> 
+		TODO display interesting an relevant details here
+		</p>
+	</jsp:body>
+</customtags:pagetemplate>
+
+
+- update navigation.jsp to include a link to the users list page, for example
+
+<a href="${contextPaths.dynamicPath}/users">Users</a>
