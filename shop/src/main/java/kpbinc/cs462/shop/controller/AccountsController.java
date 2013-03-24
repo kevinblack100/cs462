@@ -193,9 +193,16 @@ public class AccountsController extends ShopBaseSiteContextController {
 				updateAuthorities(username, modifiedAuthorities);
 			}
 			
-			DriverProfile profile = new DriverProfile(username);
-			profile.setEventSignalURL(driverESL);
-			driverProfileManager.register(profile);
+			DriverProfile profile = driverProfileManager.retrieve(username);
+			if (profile == null) {
+				profile = new DriverProfile(username);
+				profile.setEventSignalURL(driverESL);
+				driverProfileManager.register(profile);
+			}
+			else {
+				profile.setEventSignalURL(driverESL);
+				driverProfileManager.update(profile);
+			}
 		}
 		else {
 			if (loggedInUserDetails.getAuthorities().contains(GrantedAuthorityRoles.ROLE_DRIVER)) {
