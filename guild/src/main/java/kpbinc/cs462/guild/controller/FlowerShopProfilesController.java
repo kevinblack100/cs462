@@ -1,12 +1,18 @@
 package kpbinc.cs462.guild.controller;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
+import kpbinc.cs462.shared.event.ESLGenerator;
 import kpbinc.cs462.shared.model.FlowerShopProfile;
 import kpbinc.cs462.shared.model.manage.FlowerShopProfileManager;
+import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +35,9 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 	
 	//= Member Data ====================================================================================================
 
+	@Autowired
+	private ESLGenerator eslGenerator;
+	
 	@Autowired
 	private FlowerShopProfileManager flowerShopProfileManager;
 	
@@ -56,6 +65,7 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createShop(
+			HttpServletRequest request,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "location", required = true) String location,
 			@RequestParam(value = "latitude", required = true) Double latitude,
@@ -80,6 +90,19 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 			channel.setRemoteEntityId(profile.getId());
 			
 			guildFlowerShopEventChannelManager.register(channel);
+			
+			// Generate and store the receive ESL
+			try {
+				String receiveESLPath = URLPathBuilder.build("esl", "shop", "channel", channel.getId().toString());
+				URL receiveESL = eslGenerator.generate(request, receiveESLPath);
+				channel.setReceiveESL(receiveESL.toString());
+				guildFlowerShopEventChannelManager.update(channel);
+			}
+			catch (MalformedURLException e) {
+				logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+						"Receive ESL for Flower Shop to Guild", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+				e.printStackTrace();
+			}
 		}
 		else {
 			// TODO set error message
