@@ -2,6 +2,7 @@ package kpbinc.cs462.guild.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -32,6 +33,36 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 	
 	private static final Logger logger = Logger.getLogger(FlowerShopProfilesController.class.getName());
 	
+	public static class FlowerShopDataContainer {
+		private FlowerShopProfile profile;
+		private GuildFlowerShopEventChannel channel;
+		
+		public FlowerShopDataContainer(
+				FlowerShopProfile profile,
+				GuildFlowerShopEventChannel channel) {
+			GlobalLogUtils.logConstruction(this);
+			setProfile(profile);
+			setChannel(channel);
+		}
+
+		public FlowerShopProfile getProfile() {
+			return profile;
+		}
+
+		public void setProfile(FlowerShopProfile profile) {
+			this.profile = profile;
+		}
+
+		public GuildFlowerShopEventChannel getChannel() {
+			return channel;
+		}
+
+		public void setChannel(GuildFlowerShopEventChannel channel) {
+			this.channel = channel;
+		}
+		
+	}
+	
 	
 	//= Member Data ====================================================================================================
 
@@ -58,8 +89,15 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 	
 	@RequestMapping
 	public String getShopsList(ModelMap model) {
+		Collection<FlowerShopDataContainer> containers = new ArrayList<FlowerShopDataContainer>();
 		Collection<FlowerShopProfile> flowerShopProfiles = flowerShopProfileManager.retrieveAll();
-		model.addAttribute("flowerShopProfiles", flowerShopProfiles);
+		for (FlowerShopProfile profile : flowerShopProfiles) {
+			GuildFlowerShopEventChannel channel = guildFlowerShopEventChannelManager.retrieveByFlowerShopId(profile.getId());
+			FlowerShopDataContainer container = new FlowerShopDataContainer(profile, channel);
+			containers.add(container);
+		}
+		model.addAttribute("flowerShopDataContainers", containers);
+		
 		return "shops/shops_list";
 	}
 	
@@ -111,4 +149,17 @@ public class FlowerShopProfilesController extends GuildBaseSiteContextController
 		return "redirect:/" + getContextPaths().getDynamicRelativePath() + "/shops/";
 	}
 	
+	@RequestMapping(value = "/update-send-esl")
+	public String updateSendESL(
+			@RequestParam(value = "channel-id", required = true) Long channelId, 
+			@RequestParam(value = "send-esl", required = true) String sendESL) {
+		
+		GuildFlowerShopEventChannel channel = guildFlowerShopEventChannelManager.retrieve(channelId);
+		if (channel != null) {
+			channel.setSendESL(sendESL);
+			guildFlowerShopEventChannelManager.update(channel);
+		}
+		
+		return "redirect:/" + getContextPaths().getDynamicRelativePath() + "/shops/";
+	}
 }

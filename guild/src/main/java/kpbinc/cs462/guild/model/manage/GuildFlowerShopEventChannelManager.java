@@ -42,5 +42,19 @@ public class GuildFlowerShopEventChannelManager extends
 				new IDGeneratingIDAccessor<Long>(new IDGenerator<Long>(new IncreasingLongIDGeneratorStrategy(this)));
 		return keyAccessor;
 	}
+	
+	
+	//= Interface ======================================================================================================
+	
+	public GuildFlowerShopEventChannel retrieveByFlowerShopId(Long id) {
+		GuildFlowerShopEventChannel result = null;
+		for (GuildFlowerShopEventChannel channel : retrieveAll()) {
+			if (channel.getRemoteEntityId().equals(id)) {
+				result = channel;
+				break;
+			}
+		}
+		return result;
+	}
 
 }

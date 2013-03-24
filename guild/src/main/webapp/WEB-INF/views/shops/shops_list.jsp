@@ -39,21 +39,36 @@
 		<table id="shop-profiles-table">
 			<thead>
 				<tr>
-					<td id="profile-id-header" class="table-header">ID</td>
-					<td id="profile-name-header" class="table-header">Name</td>
-					<td id="profile-location-header" class="table-header">Location</td>
-					<td id="profile-latitude-header" class="table-header">Latitude</td>
-					<td id="profile-longitude-header" class="table-header">Longitude</td>
+					<td class="table-header">ID</td>
+					<td class="table-header">Name</td>
+					<td class="table-header">Location</td>
+					<td class="table-header">Latitude</td>
+					<td class="table-header">Longitude</td>
+					<td class="table-header">Channel ID</td>
+					<td class="table-header">Send ESL (Guild to Flower Shop)</td>
+					<td class="table-header">Receive ESL (Flower Shop to Guild)</td>
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${flowerShopProfiles}" var="profile">
+			<c:forEach items="${flowerShopDataContainers}" var="container">
 				<tr>
-					<td class="profile-id">${profile.id}</td>
-					<td class="profile-name">${profile.name}</td>
-					<td class="profile-location">${profile.location}</td>
-					<td class="profile-latitude">${profile.latitude}</td>
-					<td class="profile-longitude">${profile.longitude}</td>
+					<td>${container.profile.id}</td>
+					<td>${container.profile.name}</td>
+					<td>${container.profile.location}</td>
+					<td>${container.profile.latitude}</td>
+					<td>${container.profile.longitude}</td>
+					<td>${container.channel.id}</td>
+					<td>
+						<form method="post" action="${contextPaths.dynamicPath}/shops/update-send-esl">
+							<fieldset>
+								<input type="hidden" name="channel-id" value="${container.channel.id}" />
+								<input type="text" name="send-esl" value="${container.channel.sendESL}" />
+								<br>
+								<input type="submit" name="submit" value="Save" />
+							</fieldset>
+						</form>
+					</td>
+					<td>${container.channel.receiveESL}</td>
 				</tr>
 			</c:forEach>
 			</tbody>
