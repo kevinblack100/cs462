@@ -2,6 +2,7 @@ package kpbinc.cs462.guild.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
+import kpbinc.cs462.shared.event.Event;
+import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -60,7 +63,20 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 		GuildFlowerShopEventChannel channel = guildFlowerShopEventChannelManager.retrieve(channelId);
 		if (channel != null) {
 			if (StringUtils.isNotBlank(channel.getSendESL())) {
-				// TODO process the event
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, String[]> parameters = request.getParameterMap();
+					
+					Event event = eventTransformer.transform(parameters);
+					
+					logger.info(String.format("processing event: %s:%s", event.getDomain(), event.getName()));
+				}
+				catch (EventRenderingException e) {
+					responseString = "Could not render event: " + e.getMessage();
+					logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+							"dispatch shop event: could not render event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+					e.printStackTrace();
+				}
 			}
 			else {
 				responseString = "Channel not fully configured. Has no send ESL.";
