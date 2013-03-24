@@ -39,9 +39,9 @@ public abstract class SingleEventTypeHandler implements EventHandler {
 	}
 
 	@Override
-	public void handle(Event event) {
+	public void handle(Event event, EventChannel<?, ?> channel) {
 		if (handles(event)) {
-			handleImpl(event);
+			handleImpl(event, channel);
 		}
 		// else ignore the event
 	}
@@ -77,6 +77,6 @@ public abstract class SingleEventTypeHandler implements EventHandler {
 	
 	//= Support/Handler Implementation =================================================================================
 	
-	protected abstract void handleImpl(Event event);
+	protected abstract void handleImpl(Event event, EventChannel<?, ?> channel);
 	
 }

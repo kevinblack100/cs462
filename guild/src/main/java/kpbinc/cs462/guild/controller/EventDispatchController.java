@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
+import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
+import kpbinc.cs462.shared.event.EventChannel;
+import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
@@ -37,6 +40,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	
 	//= Member Data ====================================================================================================
+	
+	@Autowired
+	private EventGenerator eventGenerator;
 	
 	@Autowired
 	private EventTransformer eventTransformer;
@@ -107,7 +113,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 		
 		// Process Event
 		for (EventHandler handler : getShopChannelEventHandlers()) {
-			handler.handle(event);
+			handler.handle(event, channel);
 		}
 	}
 	
@@ -122,9 +128,30 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 			shopChannelEventHandlers.add(new SingleEventTypeHandler("rfq", "delivery_ready") {
 				
 				@Override
-				protected void handleImpl(Event event) {
+				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
 					logger.info(String.format("processing %s:%s event...", event.getDomain(), event.getName()));
-					logger.info("done");
+					
+					// TODO replace temporary implementation of sending back an rfq:bid_available event
+					if (   channel != null
+						&& StringUtils.isNotBlank(channel.getSendESL())) {
+						try {
+							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
+							bidAvailableEvent.addAttribute("driver_name", "guild master");
+							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
+							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
+							bidAvailableEvent.addAttribute("amount", new Float(7.0f));
+							bidAvailableEvent.addAttribute("amount_units", "USD");
+							
+							eventGenerator.sendEvent(channel.getSendESL(), bidAvailableEvent);
+						}
+						catch (EventRenderingException e) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									"shop channel rfq:delivery_ready handler", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e.printStackTrace();
+						}
+					}
+					
+					logger.info(String.format("done processing %s:%s event...", event.getDomain(), event.getName()));
 				}
 				
 			});
