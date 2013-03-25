@@ -32,8 +32,6 @@ public class ShopProfileController extends ShopBaseSiteContextController {
 	
 	private static final Logger logger = Logger.getLogger(ShopProfileController.class.getName());
 	
-	private static final Long FLOWER_SHOP_GUILD_EVENT_CHANNEL_ID = 1L;
-	
 	
 	//= Member Data ====================================================================================================
 	
