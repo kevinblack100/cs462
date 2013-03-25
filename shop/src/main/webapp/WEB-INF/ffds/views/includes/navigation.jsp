@@ -14,8 +14,6 @@
 	</c:if>
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
-			<a href="${contextPaths.dynamicPath}/secure/accounts/manage">Manage Account</a>
-			/
 			<a href="${contextPaths.dynamicPath}/secure/accounts/signout">Sign Out</a>
 		</c:when>
 		<c:otherwise>

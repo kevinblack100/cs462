@@ -11,7 +11,6 @@ import kpbinc.cs462.shop.model.FlowerShopGuildEventChannel;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
-import kpbinc.cs462.shop.model.manage.DriverProfileManager;
 import kpbinc.cs462.shop.model.manage.FlowerShopGuildEventChannelManager;
 import kpbinc.cs462.shop.model.manage.OrderManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
@@ -44,9 +43,6 @@ public class OrdersController extends ShopBaseSiteContextController {
 		
 	@Autowired
 	private ShopProfileManager shopProfileManager;
-	
-	@Autowired
-	private DriverProfileManager driverProfileManager;
 	
 	@Autowired
 	private FlowerShopGuildEventChannelManager flowerShopGuildEventChannelManager;
