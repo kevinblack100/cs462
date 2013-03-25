@@ -17,4 +17,18 @@ public class URLPathBuilder {
 		return path;
 	}
 
+	public static String append(String basePath, String... pathParts) {
+		String toAppend = build(pathParts);
+		StringBuilder builder = new StringBuilder(basePath);
+		if (!toAppend.isEmpty()) {
+			if (basePath.endsWith(URLKeySymbols.PATH_SEPARATOR)) {
+				builder.append(toAppend.substring(1));
+			}
+			else {
+				builder.append(toAppend);
+			}
+		}
+		String path = builder.toString();
+		return path;
+	}
 }

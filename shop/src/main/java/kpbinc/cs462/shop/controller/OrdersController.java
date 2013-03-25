@@ -14,6 +14,7 @@ import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
 import kpbinc.cs462.shop.model.manage.FlowerShopGuildEventChannelManager;
 import kpbinc.cs462.shop.model.manage.OrderManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
+import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -146,26 +147,24 @@ public class OrdersController extends ShopBaseSiteContextController {
 	
 	@RequestMapping(value = "/{order-id}/selectbid", method = RequestMethod.POST)
 	public String setSelectedBid(
-			@PathVariable(value = "order-id") Long orderID,
-			@RequestParam(value = "selected-bid-id") Long selectedBidID,
+			@PathVariable(value = "order-id") Long orderId,
+			@RequestParam(value = "selected-bid-id") Long selectedBidId,
 			ModelMap model) {
-		String redirectLocation = null;
+		// redirect to the orders list by default
+		String redirectLocation = URLPathBuilder.build(getContextPaths().getDynamicRelativePath(), "orders");
 		
-		Order order = orderManager.retrieve(orderID);
+		Order order = orderManager.retrieve(orderId);
 		
 		if (order != null) {
-			DeliveryBid bid = deliveryBidManager.retrieve(selectedBidID);	
+			DeliveryBid bid = deliveryBidManager.retrieve(selectedBidId);	
 			
-			if (bid != null) {
-				order.setSelectedBidID(selectedBidID);
+			if (   bid != null
+				&& bid.getOrderID().equals(orderId)) {
+				order.setSelectedBidID(selectedBidId);
 				orderManager.update(order);
 			}
 			
-			prepareOrderProfile(model, orderID);
-			redirectLocation = "/" + getContextPaths().getDynamicRelativePath() + "/orders/" + orderID;
-		}
-		else {
-			redirectLocation = "/" + getContextPaths().getDynamicRelativePath() + "/orders";
+			redirectLocation = URLPathBuilder.append(redirectLocation, orderId.toString());
 		}
 		
 		return "redirect:" + redirectLocation;
