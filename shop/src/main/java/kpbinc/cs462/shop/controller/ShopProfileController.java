@@ -97,10 +97,11 @@ public class ShopProfileController extends ShopBaseSiteContextController {
 	
 	private FlowerShopGuildEventChannel ensureChannelInitialized(HttpServletRequest request) {
 		// Get/Create Channel
-		FlowerShopGuildEventChannel channel = flowerShopGuildEventChannelManager.retrieve(FLOWER_SHOP_GUILD_EVENT_CHANNEL_ID);
+		FlowerShopGuildEventChannel channel = 
+				flowerShopGuildEventChannelManager.retrieve(FlowerShopGuildEventChannelManager.DEFAULT_EVENT_CHANNEL_ID);
 		if (channel == null) {
 			channel = new FlowerShopGuildEventChannel();
-			channel.setId(FLOWER_SHOP_GUILD_EVENT_CHANNEL_ID);
+			channel.setId(FlowerShopGuildEventChannelManager.DEFAULT_EVENT_CHANNEL_ID);
 			flowerShopGuildEventChannelManager.register(channel);
 		}
 		

@@ -17,6 +17,11 @@ import kpbinc.util.logging.GlobalLogUtils;
 public class FlowerShopGuildEventChannelManager
 		extends JsonFileStorePersistentMapStorageManager<Long, FlowerShopGuildEventChannel> {
 
+	//= Class Data =====================================================================================================
+	
+	public static final Long DEFAULT_EVENT_CHANNEL_ID = 1L;
+	
+	
 	//= Initialization =================================================================================================
 	
 	//- Constructor ----------------------------------------------------------------------------------------------------

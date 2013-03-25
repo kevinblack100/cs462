@@ -7,11 +7,12 @@ import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shop.model.DeliveryBid;
-import kpbinc.cs462.shop.model.DriverProfile;
+import kpbinc.cs462.shop.model.FlowerShopGuildEventChannel;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
 import kpbinc.cs462.shop.model.manage.DriverProfileManager;
+import kpbinc.cs462.shop.model.manage.FlowerShopGuildEventChannelManager;
 import kpbinc.cs462.shop.model.manage.OrderManager;
 import kpbinc.cs462.shop.model.manage.ShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -46,6 +47,9 @@ public class OrdersController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private DriverProfileManager driverProfileManager;
+	
+	@Autowired
+	private FlowerShopGuildEventChannelManager flowerShopGuildEventChannelManager;
 	
 	@Autowired
 	private OrderManager orderManager;
@@ -108,11 +112,18 @@ public class OrdersController extends ShopBaseSiteContextController {
 
 		// Send the event
 		if (event != null) {
-			Collection<DriverProfile> driverProfiles = driverProfileManager.retrieveAll();
-			for (DriverProfile profile : driverProfiles) {
-				boolean success = eventGenerator.sendEvent(profile.getEventSignalURL(), event);
-				logger.info(String.format("rfq:delivery_ready sent to %s successfully?: %s", profile.getEventSignalURL(), Boolean.toString(success)));
+			FlowerShopGuildEventChannel channel =
+					flowerShopGuildEventChannelManager.retrieve(FlowerShopGuildEventChannelManager.DEFAULT_EVENT_CHANNEL_ID);
+			if (   channel != null
+				&& StringUtils.isNotBlank(channel.getSendESL())) {
+				boolean success = eventGenerator.sendEvent(channel.getSendESL(), event);
+				logger.info(String.format("%s:%s sent to %s: %s", 
+						event.getDomain(),
+						event.getName(),
+						channel.getSendESL(),
+						(success ? "SUCCESS" : "FAILED")));
 			}
+			// else TODO set message
 		}
 		
 		return "redirect:/ffds/orders";
