@@ -1,13 +1,21 @@
 package kpbinc.cs462.guild.controller;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
+import kpbinc.cs462.guild.model.GuildUserEventChannel;
+import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
 import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.cs462.shared.controller.context.LoggedInUserContext;
+import kpbinc.cs462.shared.event.ESLGenerator;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
+import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +51,13 @@ public class AccountsController extends GuildBaseSiteContextController implement
 	private CommonApplicationConstants applicationConstants;
 	
 	@Autowired
+	private ESLGenerator eslGenerator;
+	
+	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
+	
+	@Autowired
+	private GuildUserEventChannelManager guildUserEventChannelManager;
 
 	
 	//= Initialization =================================================================================================
@@ -64,6 +78,7 @@ public class AccountsController extends GuildBaseSiteContextController implement
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerAccount(
+			HttpServletRequest request,
 			@RequestParam(value = "username", required = true) String username) {
 		String redirectLocation = null;
 		
@@ -87,6 +102,24 @@ public class AccountsController extends GuildBaseSiteContextController implement
 			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
 			
+			// Create a channel for the user
+			GuildUserEventChannel channel = new GuildUserEventChannel();
+			channel.setRemoteEntityId(username);
+			guildUserEventChannelManager.register(channel);
+						
+			// Generate and store the receive ESL
+			try {
+				String receiveESLPath = URLPathBuilder.build("esl", "user", "channel", channel.getId().toString());
+				URL receiveESL = eslGenerator.generate(request, receiveESLPath);
+				channel.setReceiveESL(receiveESL.toString());
+				guildUserEventChannelManager.update(channel);
+			}
+			catch (MalformedURLException e) {
+				logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+						"Receive ESL for User to Guild", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+				e.printStackTrace();
+			}
+			
 			redirectLocation = "/" + getContextPaths().getDynamicRelativePath() + "/secure/accounts/signin";
 		}
 		
@@ -105,5 +138,5 @@ public class AccountsController extends GuildBaseSiteContextController implement
 		String redirectLocation = "/" + getContextPaths().getDynamicRelativePath() + "/";
 		return "redirect:" + redirectLocation;
 	}
-	
+
 }

@@ -49,6 +49,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/guild-flower-shop-event-channels.json" />
 	</bean>
+	<bean id="guildUserEventChannelManager"
+		class="kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/guild-user-event-channels.json" />
+	</bean>
 	
 	
 	<!-- View Resolution Rules -->

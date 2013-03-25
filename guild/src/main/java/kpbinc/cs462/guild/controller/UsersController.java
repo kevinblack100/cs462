@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.cs462.guild.model.GuildUserEventChannel;
+import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -35,10 +37,14 @@ public class UsersController extends GuildBaseSiteContextController {
 	@Autowired
 	private InMemoryPersistentUserDetailsManager userDetailsManager;
 	
+	@Autowired
+	private GuildUserEventChannelManager guildUserEventChannelManager;
+	
 	
 	//= Initialization =================================================================================================
 	
 	public UsersController() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 	
@@ -57,6 +63,10 @@ public class UsersController extends GuildBaseSiteContextController {
 			ModelMap model,
 			@PathVariable("username") String username) {
 		model.addAttribute("username", username);
+		
+		GuildUserEventChannel channel = guildUserEventChannelManager.retrieveByUsername(username);
+		model.addAttribute("channel", channel);
+		
 		return "users/user_profile";
 	}
 	
