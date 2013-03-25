@@ -1,5 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="customtags" tagdir="/WEB-INF/tags/ffds" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <customtags:pagetemplate>
 	<jsp:attribute name="title">Flower Shop Profile</jsp:attribute>
@@ -18,6 +19,21 @@
 				<br>
 				<label for="shop-longitude">Longitude</label>
 				<input type="text" id="shop-longitude" name="shop-longitude" value="${profile.longitude}" />
+				<br>
+				<h3>Flower Shop &lt;=&gt; Guild Channel Details</h3>
+				<label for="channel-send-esl">Send ESL:</label>
+				<input type="text" id="channel-send-esl" name="channel-send-esl" value="${channel.sendESL}" size=60 />
+				<br>
+				<span>Receive ESL: 
+				<c:choose>
+					<c:when test="${channel.receiveESL ne null}">
+						${channel.receiveESL}
+					</c:when>
+					<c:otherwise>
+						Not specified
+					</c:otherwise>
+				</c:choose>
+				</span>
 				<br>
 				<br>
 				<input type="submit" id="submit" name="submit" value="Submit" />

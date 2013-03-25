@@ -58,6 +58,12 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/bids.json" />	
 	</bean>
+	<bean id="flowerShopGuildEventChannelManager"
+		class="kpbinc.cs462.shop.model.manage.FlowerShopGuildEventChannelManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/ffds/stores/shop-guild-event-channels.json" />
+	</bean>
+	
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
