@@ -1,20 +1,17 @@
 package kpbinc.cs462.guild.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventChannel;
+import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventRenderingException;
@@ -69,52 +66,14 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable(value = "channel-id") Long channelId) {
-		// Parse/Render Event and Prepare the Response
-		Event event = null;
-		String responseString = "Received.";
-		
-		GuildFlowerShopEventChannel channel = guildFlowerShopEventChannelManager.retrieve(channelId);
-		if (channel != null) {
-			if (StringUtils.isNotBlank(channel.getSendESL())) {
-				try {
-					@SuppressWarnings("unchecked")
-					Map<String, String[]> parameters = request.getParameterMap();
-					
-					event = eventTransformer.transform(parameters);
-					
-					logger.info(String.format("parsed %s:%s event", event.getDomain(), event.getName()));
-				}
-				catch (EventRenderingException e) {
-					responseString = "Could not render event: " + e.getMessage();
-					logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-							"dispatch shop event: could not render event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-					e.printStackTrace();
-				}
-			}
-			else {
-				responseString = "Channel not fully configured. Has no send ESL.";
-			}
-		}
-		else {
-			responseString = "Channel invalid.";
-		}
-		
-		// Send the response
-		try {
-			PrintWriter responsePayloadWriter = response.getWriter();
-			responsePayloadWriter.write(responseString);
-			responsePayloadWriter.flush();
-		}
-		catch (IOException e) {
-			logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-					"dispatch shop event: may not have sent response", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-			e.printStackTrace();
-		}
-		
-		// Process Event
-		for (EventHandler handler : getShopChannelEventHandlers()) {
-			handler.handle(event, channel);
-		}
+		EventDispatcher.dispatchEvent(
+				"dispatch shop event",
+				request,
+				response,
+				eventTransformer,
+				channelId,
+				guildFlowerShopEventChannelManager,
+				getShopChannelEventHandlers());
 	}
 	
 	
