@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
+import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventChannel;
@@ -47,6 +48,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	@Autowired
 	private GuildFlowerShopEventChannelManager guildFlowerShopEventChannelManager;
+	
+	@Autowired
+	private GuildUserEventChannelManager guildUserEventChannelManager;
 	
 	private Collection<EventHandler> shopChannelEventHandlers;
 	
@@ -89,7 +93,12 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					// TODO replace temporary implementation of sending back an rfq:bid_available event
+					// TODO stash the event for later reference?
+					
+					// TODO send only to the top three drivers
+					EventChannelUtils.notify(event, guildUserEventChannelManager.retrieveAll(), eventGenerator);
+					
+					// TODO remove temporary implementation of sending back an rfq:bid_available event
 					if (   channel != null
 						&& StringUtils.isNotBlank(channel.getSendESL())) {
 						try {
