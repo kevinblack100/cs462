@@ -32,5 +32,13 @@ public interface Event {
 	 * constructors or specialized methods.
 	 */
 	public void addAttribute(String attribName, Object value) throws EventRenderingException;
+
+	/**
+	 * Removes the attribute name-value pair from this event if it exists. Removes all values if attribute is
+	 * multi-valued. Does not remove reserved attributes.
+	 * 
+	 * @param attribName name of the attribute
+	 */
+	public void removeAttribute(String attribName);
 	
 }

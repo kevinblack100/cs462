@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
@@ -193,7 +194,15 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info("will send to shop now");
+					Long shopChannelID = Long.parseLong((String) event.getAttribute("shop_key"));
+					GuildFlowerShopEventChannel shopChannel = guildFlowerShopEventChannelManager.retrieve(shopChannelID);
+					assert(shopChannel != null);
+					if (shopChannel != null) {
+						Event forwardedEvent = event.clone();
+						forwardedEvent.removeAttribute("shop_key");
+						// TODO enhance with driver ranking
+						EventChannelUtils.notify(forwardedEvent, shopChannel, eventGenerator);
+					}
 				}
 				
 			});

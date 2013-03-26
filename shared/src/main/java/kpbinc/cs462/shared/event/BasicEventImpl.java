@@ -96,15 +96,6 @@ public class BasicEventImpl implements Event {
 		return Collections.unmodifiableMap(attributes);
 	}
 	
-	/**
-	 * Adds the attribute name-value pair to this event.
-	 * 
-	 * @param attribName name of the attribute
-	 * @param value value of the attribute, or a value of the attribute if multi-valued
-	 * 
-	 * @throws EventRenderingException if attribName is reserved. Reserved event attributes are set through the
-	 * constructor.
-	 */
 	@Override
 	public void addAttribute(String attribName, Object value) throws EventRenderingException {
 		// TODO validate that the name and value are not null
@@ -116,6 +107,11 @@ public class BasicEventImpl implements Event {
 			attributes.put(attribName, new ArrayList<Object>());
 		}
 		attributes.get(attribName).add(value);
+	}
+	
+	@Override
+	public void removeAttribute(String attribName) {
+		attributes.remove(attribName);
 	}
 	
 }
