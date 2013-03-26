@@ -23,6 +23,14 @@
 		<br>
 		<br>
 		
+		<c:choose>
+			<c:when test="${orderPolicy.maySignalPickup(loggedInUserContext.signedInUserDetails, order)}">
+				<form method="post" action="${contextPaths.dynamicPath}/orders/${order.id}/pickedup">
+					<input type="submit" name="submit" value="Picked Up" />
+				</form>
+			</c:when>
+		</c:choose>
+		
 		<h3>Bids</h3>
 		
 		<table>

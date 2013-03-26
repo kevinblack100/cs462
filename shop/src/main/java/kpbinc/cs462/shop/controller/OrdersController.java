@@ -186,4 +186,24 @@ public class OrdersController extends ShopBaseSiteContextController {
 		return "redirect:" + redirectLocation;
 	}
 	
+	@RequestMapping(value = "/{order-id}/pickedup", method = RequestMethod.POST)
+	public String signalPickedUp(
+			@PathVariable(value = "order-id") Long orderId) {
+		// redirect to the orders list by default
+		String redirectLocation = URLPathBuilder.build(getContextPaths().getDynamicRelativePath(), "orders");
+		
+		Order order = orderManager.retrieve(orderId);
+		
+		if (order != null) {
+			order.setState(Order.State.WAITING_FOR_DELIVERY);
+			orderManager.update(order);
+			
+			// TODO send delivery:picked_up event
+			
+			redirectLocation = URLPathBuilder.append(redirectLocation, orderId.toString());
+		}
+		
+		return "redirect:" + redirectLocation;
+	}
+	
 }

@@ -36,6 +36,12 @@ public class OrderPolicy {
 		return result;
 	}
 	
+	public boolean maySignalPickup(UserDetails user, Order order) {
+		boolean result = (   isAdmin(user)
+						  && orderStateIs(order, Order.State.WAITING_FOR_PICKUP));
+		return result;
+	}
+	
 	
 	//= Support ========================================================================================================
 	
