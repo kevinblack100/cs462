@@ -48,23 +48,23 @@
 					<td>${bid.amountUnits}</td>
 					<td>
 					<c:choose>
-						<c:when test="${order.selectedBidID != null}">
-						<c:choose>
-							<c:when test="${order.selectedBidID == bid.id}">
-							Yes
-							</c:when>
-							<c:otherwise>
-							No
-							</c:otherwise>
-						</c:choose>
+						<c:when test="${orderPolicy.maySelectBid(loggedInUserContext.signedInUserDetails, order)}">
+							<form method="post" action="${contextPaths.dynamicPath}/orders/${order.id}/selectbid">
+								<fieldset>
+									<input type="hidden" name="selected-bid-id" value="${bid.id}" />
+									<input type="submit" name="submit" value="Select" />
+								</fieldset>
+							</form>
 						</c:when>
 						<c:otherwise>
-						<form method="post" action="${contextPaths.dynamicPath}/orders/${order.id}/selectbid">
-							<fieldset>
-								<input type="hidden" name="selected-bid-id" value="${bid.id}" />
-								<input type="submit" name="submit" value="Select" />
-							</fieldset>
-						</form>
+							<c:choose>
+								<c:when test="${order.selectedBidID == bid.id}">
+								Yes
+								</c:when>
+								<c:otherwise>
+								No
+								</c:otherwise>
+							</c:choose>
 						</c:otherwise>
 					</c:choose>
 					</td>
