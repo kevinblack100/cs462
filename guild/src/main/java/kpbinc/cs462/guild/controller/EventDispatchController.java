@@ -88,7 +88,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info(String.format("processing %s:%s event...", event.getDomain(), event.getName()));
+					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
 					
 					// TODO replace temporary implementation of sending back an rfq:bid_available event
 					if (   channel != null
@@ -106,12 +106,45 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 						}
 						catch (EventRenderingException e) {
 							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-									"shop channel rfq:delivery_ready handler", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+									String.format("shop channel %s:%s handler", getDomain(), getName()),
+									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 							e.printStackTrace();
 						}
 					}
 					
-					logger.info(String.format("done processing %s:%s event...", event.getDomain(), event.getName()));
+					logger.info(String.format("done processing %s:%s event.", getDomain(), getName()));
+				}
+				
+			});
+			
+			// delivery:picked_up handler
+			shopChannelEventHandlers.add(new SingleEventTypeHandler("delivery", "picked_up") {
+				
+				@Override
+				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
+					
+					// TODO replace temporary implementation of sending back a delivery:complete event
+					if (   channel != null
+						&& StringUtils.isNotBlank(channel.getSendESL())) {
+						try {
+							BasicEventImpl bidAvailableEvent = new BasicEventImpl("delivery", "complete");
+							bidAvailableEvent.addAttribute("driver_id", "guildmaster");
+							bidAvailableEvent.addAttribute("driver_name", "Guild Master");
+							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
+							bidAvailableEvent.addAttribute("delivery_time_act", "5:10 PM");
+							
+							eventGenerator.sendEvent(channel.getSendESL(), bidAvailableEvent);
+						}
+						catch (EventRenderingException e) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									String.format("shop channel %s:%s handler", getDomain(), getName()),
+									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e.printStackTrace();
+						}
+					}
+					
+					logger.info(String.format("done processing %s:%s event.", getDomain(), getName()));
 				}
 				
 			});
