@@ -95,7 +95,8 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 						&& StringUtils.isNotBlank(channel.getSendESL())) {
 						try {
 							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-							bidAvailableEvent.addAttribute("driver_name", "guild master");
+							bidAvailableEvent.addAttribute("driver_id", "guildmaster");
+							bidAvailableEvent.addAttribute("driver_name", "Guild Master");
 							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
 							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
 							bidAvailableEvent.addAttribute("amount", new Float(7.0f));

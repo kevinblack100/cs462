@@ -88,6 +88,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 					logger.info(String.format("processing %s:%s event...", event.getDomain(), event.getName()));
 					
 					Long orderID = Long.parseLong((String) event.getAttribute("delivery_id"));
+					String driverId = (String) event.getAttribute("driver_id");
 					String driverName = (String) event.getAttribute("driver_name");
 					String estimatedDeliveryTime = (String) event.getAttribute("delivery_time_est");
 					Double amount = Double.parseDouble((String) event.getAttribute("amount"));
@@ -95,7 +96,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 					
 					DeliveryBid bid = new DeliveryBid();
 					bid.setOrderID(orderID);
-					bid.setUsername("unknown");
+					bid.setDriverId(driverId);
 					bid.setDriverName(driverName);
 					bid.setEstimatedDeliveryTime(estimatedDeliveryTime);
 					bid.setAmount(amount);

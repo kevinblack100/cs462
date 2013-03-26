@@ -9,7 +9,7 @@ public class DeliveryBid implements HasId<Long> {
 	
 	public Long id;
 	public Long orderID;
-	public String username;
+	public String driverId;
 	public String driverName;
 	public String estimatedDeliveryTime;
 	public Double amount;
@@ -41,12 +41,12 @@ public class DeliveryBid implements HasId<Long> {
 		this.orderID = orderID;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getDriverId() {
+		return driverId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setDriverId(String driverId) {
+		this.driverId = driverId;
 	}
 
 	public String getDriverName() {

@@ -165,7 +165,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 				try {
 					event = new BasicEventImpl("rfq", "bid_awarded");
 					event.addAttribute("delivery_id", orderId);
-					event.addAttribute("driver_id", bid.getDriverName());
+					event.addAttribute("driver_id", bid.getDriverId());
 				}
 				catch (EventRenderingException e) {
 					logger.warning(GlobalLogUtils.formatHandledExceptionMessage(

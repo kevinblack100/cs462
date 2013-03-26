@@ -27,7 +27,7 @@
 			<thead>
 				<tr>
 					<td class="table-header">Bid ID</td>
-					<td class="table-header">Username</td>
+					<td class="table-header">Driver ID</td>
 					<td class="table-header">Driver Name</td>
 					<td class="table-header">Estimated Delivery Time</td>
 					<td class="table-header">Amount</td>
@@ -39,7 +39,7 @@
 				<c:forEach items="${bids}" var="bid">
 				<tr>
 					<td>${bid.id}</td>
-					<td>${bid.username}</td>
+					<td>${bid.driverId}</td>
 					<td>${bid.driverName}</td>
 					<td>${bid.estimatedDeliveryTime}</td>
 					<td>${bid.amount}</td>
