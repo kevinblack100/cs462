@@ -128,28 +128,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					
 					// TODO send only to the top three drivers
 					EventChannelUtils.notify(enhancedEvent, guildUserEventChannelManager.retrieveAll(), eventGenerator);
-					
-					// TODO remove temporary implementation of sending back an rfq:bid_available event
-					if (   channel != null
-						&& StringUtils.isNotBlank(channel.getSendESL())) {
-						try {
-							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-							bidAvailableEvent.addAttribute("driver_id", "guildmaster");
-							bidAvailableEvent.addAttribute("driver_name", "Guild Master");
-							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
-							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
-							bidAvailableEvent.addAttribute("amount", new Float(7.0f));
-							bidAvailableEvent.addAttribute("amount_units", "USD");
-							
-							EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
-						}
-						catch (EventRenderingException e) {
-							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-									String.format("shop channel %s:%s handler", getDomain(), getName()),
-									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-							e.printStackTrace();
-						}
-					}
 				}
 				
 			});
