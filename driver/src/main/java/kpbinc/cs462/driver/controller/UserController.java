@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
+import kpbinc.cs462.driver.model.DriverGuildEventChannel;
+import kpbinc.cs462.driver.model.manage.DriverGuildEventChannelManager;
 import kpbinc.cs462.shared.model.manage.AuthorizationTokenManager;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
 import kpbinc.cs462.shared.model.manage.OAuthServiceManager;
@@ -45,6 +47,9 @@ public class UserController extends DriverBaseSiteContextController {
 	@Autowired
 	private AuthorizationTokenManager authorizationTokenManager;
 	
+	@Autowired
+	private DriverGuildEventChannelManager driverGuildEventChannelManager;
+	
 	
 	//= Initialization =================================================================================================
 	
@@ -68,6 +73,9 @@ public class UserController extends DriverBaseSiteContextController {
 			@PathVariable("user-name") String username) {
 		
 		model.addAttribute("username", username);
+		
+		DriverGuildEventChannel channel = driverGuildEventChannelManager.retrieveByUsername(username);
+		model.addAttribute("channel", channel);
 		
 		boolean hasFoursquareAuthToken = authorizationTokenManager.hasAuthorizationToken(username, "foursquare");
 		model.addAttribute("hasFoursquareAuthToken", hasFoursquareAuthToken);

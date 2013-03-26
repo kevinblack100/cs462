@@ -36,26 +36,57 @@
 	<jsp:attribute name="title">User Profile</jsp:attribute>
 	<jsp:body>
 		<h1>${username} Profile</h1>
-		<p> 
-			<c:choose>
-				<c:when test="${hasFoursquareAuthToken}">
-					<div id="checkins-data" class="hidden">${checkins}</div>
-					<div id="checkins-detail">
-					</div>
-				</c:when>
-				<c:otherwise>
-					<c:choose>
-						<c:when test="${userLoggedIn}">
-						<a href="${contextPaths.dynamicPath}/oauth/v2/authorize/${username}/foursquare">
-							Authorize FFDS to use your Foursquare Account
-						</a>
-						</c:when>
-						<c:otherwise>
-						Has not Authorized FFDS to use Foursquare Account
-						</c:otherwise>
-					</c:choose>
-				</c:otherwise>
-			</c:choose>
-		</p>
+		<div id="user-detials"> 
+			<div id="channel-details">
+				<h3>Guild Channel Details</h3>
+	
+				<dl>
+					<dt>ID:</dt>
+					<dd>${channel.id}</dd>
+				</dl>
+				<dl>
+					<dt>Send ESL:</dt>
+					<dd>
+						<c:choose>
+							<c:when test="${channel.sendESL ne null}">
+								${channel.sendESL}
+							</c:when>
+							<c:otherwise>
+								Not specified
+							</c:otherwise>
+						</c:choose>
+					</dd>
+				</dl>
+				<dl>
+					<dt>Receive ESL:</dt>
+					<dd>${channel.receiveESL}<dd>
+				</dl>
+			</div> <!-- channel-details -->
+			
+			<br>
+			
+			<div id="foursquare-checkin-details">
+				<h3>Foursquare Checkin Details</h3>
+				<c:choose>
+					<c:when test="${hasFoursquareAuthToken}">
+						<div id="checkins-data" class="hidden">${checkins}</div>
+						<div id="checkins-detail">
+						</div>
+					</c:when>
+					<c:otherwise>
+						<c:choose>
+							<c:when test="${userLoggedIn}">
+							<a href="${contextPaths.dynamicPath}/oauth/v2/authorize/${username}/foursquare">
+								Authorize FFDS to use your Foursquare Account
+							</a>
+							</c:when>
+							<c:otherwise>
+							Has not Authorized FFDS to use Foursquare Account
+							</c:otherwise>
+						</c:choose>
+					</c:otherwise>
+				</c:choose>
+			</div> <!-- #foursquare-checkin-details -->
+		</div> <!-- user-details -->
 	</jsp:body>
 </customtags:pagetemplate>
