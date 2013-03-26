@@ -61,6 +61,8 @@ public class EventDispatchController {
 	public static final String TWILIO_PHONE_NUMBER = "+18014710490";
 	public static final String DEFAULT_SMS_DEST_NUMBER = "+18013618342";
 	
+	public static final boolean doDistanceCheck = false;
+	
 	
 	//= Member Data ====================================================================================================
 	
@@ -233,8 +235,9 @@ public class EventDispatchController {
 								userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());	
 						}
 						
-						if (   0.0 <= distanceInMiles
-							&& distanceInMiles <= 5.0) {
+						if (	!doDistanceCheck
+							||  (   0.0 <= distanceInMiles
+							     && distanceInMiles <= 5.0)) {
 							BasicEventImpl bidAvailableEvent = null;
 							try {
 								bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
@@ -251,7 +254,9 @@ public class EventDispatchController {
 								e.printStackTrace();
 							}
 							
-							EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
+							if (bidAvailableEvent != null) {
+								EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
+							}
 						}
 						else if (   userProfile != null
 								 && userProfile.getTextableNumber() != null) {
