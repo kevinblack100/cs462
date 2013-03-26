@@ -6,8 +6,6 @@
 	|
 	<a href="${contextPaths.dynamicPath}/users">Users</a>
 	|
-	<a href="${contextPaths.dynamicPath}/shops">Shops</a>
-	|
 	<c:choose>
 		<c:when test="${loggedInUserContext.signedInUserDetails ne null}">
 			<a href="${contextPaths.dynamicPath}/secure/accounts/signout">Sign Out</a>
