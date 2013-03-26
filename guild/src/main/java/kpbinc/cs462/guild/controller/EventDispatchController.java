@@ -54,6 +54,8 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	private Collection<EventHandler> shopChannelEventHandlers;
 	
+	private Collection<EventHandler> userChannelEventHandlers;
+	
 	
 	//= Initialization =================================================================================================
 	
@@ -79,6 +81,21 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				channelId,
 				guildFlowerShopEventChannelManager,
 				getShopChannelEventHandlers());
+	}
+	
+	@RequestMapping(value = "/user/channel/{channel-id}")
+	public void dispatchEventFromUser(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable(value = "channel-id") Long channelId) {
+		EventDispatcher.dispatchEvent(
+				"dispatch user (driver) event",
+				request,
+				response,
+				eventTransformer,
+				channelId,
+				guildUserEventChannelManager,
+				getUserChannelEventHandlers());
 	}
 	
 	
@@ -154,4 +171,20 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 		return shopChannelEventHandlers;
 	}
 	
+	private Collection<EventHandler> getUserChannelEventHandlers() {
+		if (userChannelEventHandlers == null) {
+			userChannelEventHandlers = new ArrayList<EventHandler>();
+			
+			// rfq:bid_available handler
+			userChannelEventHandlers.add(new SingleEventTypeHandler("rfq", "bid_available") {
+				
+				@Override
+				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+					logger.info("will send to shop now");
+				}
+				
+			});
+		}
+		return userChannelEventHandlers;
+	}
 }
