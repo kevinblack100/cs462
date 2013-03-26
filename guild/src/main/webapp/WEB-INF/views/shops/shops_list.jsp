@@ -44,7 +44,7 @@
 					<td class="table-header">Location</td>
 					<td class="table-header">Latitude</td>
 					<td class="table-header">Longitude</td>
-					<td class="table-header">Channel ID</td>
+					<td class="table-header">Shop Channel ID</td>
 					<td class="table-header">Send ESL (Guild to Flower Shop)</td>
 					<td class="table-header">Receive ESL (Flower Shop to Guild)</td>
 				</tr>
@@ -62,7 +62,7 @@
 						<form method="post" action="${contextPaths.dynamicPath}/shops/update-send-esl">
 							<fieldset>
 								<input type="hidden" name="channel-id" value="${container.channel.id}" />
-								<input type="text" name="send-esl" value="${container.channel.sendESL}" />
+								<input type="text" name="send-esl" value="${container.channel.sendESL}" size=60 />
 								<br>
 								<input type="submit" name="submit" value="Save" />
 							</fieldset>

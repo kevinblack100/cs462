@@ -11,7 +11,7 @@
 				<dt>Username:</dt>
 				<dd>${username}</dd>
 			</dl>
-			<h4>Channel Details</h4>
+			<h4>User Channel Details</h4>
 			<dl>
 				<dt>ID:</dt>
 				<dd>
