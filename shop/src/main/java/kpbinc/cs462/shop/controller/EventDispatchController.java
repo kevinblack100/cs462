@@ -14,8 +14,10 @@ import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeHandler;
 import kpbinc.cs462.shop.model.DeliveryBid;
+import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
 import kpbinc.cs462.shop.model.manage.FlowerShopGuildEventChannelManager;
+import kpbinc.cs462.shop.model.manage.OrderManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,9 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 	
 	@Autowired
 	private DeliveryBidManager deliveryBidManager;
+	
+	@Autowired
+	private OrderManager orderManager;
 	
 	Collection<EventHandler> guildChannelEventHandlers;
 	
@@ -85,8 +90,9 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info(String.format("processing %s:%s event...", event.getDomain(), event.getName()));
+					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
 					
+					// TODO validate orderId
 					Long orderID = Long.parseLong((String) event.getAttribute("delivery_id"));
 					String driverId = (String) event.getAttribute("driver_id");
 					String driverName = (String) event.getAttribute("driver_name");
@@ -104,7 +110,29 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 					
 					deliveryBidManager.register(bid);
 					
-					logger.info(String.format("done processing %s:%s event...", event.getDomain(), event.getName()));
+					logger.info(String.format("done processing %s:%s event...", getDomain(), getName()));
+				}
+				
+			});
+			
+			// delivery:complete handler
+			guildChannelEventHandlers.add(new SingleEventTypeHandler("delivery", "complete") {
+				
+				@Override
+				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
+					
+					Long orderId = Long.parseLong((String) event.getAttribute("delivery_id"));
+					
+					Order order = orderManager.retrieve(orderId);
+					if (order != null) {
+						// TODO read and set actual delivery time?
+						
+						order.setState(Order.State.DELIVERED);
+						orderManager.update(order);
+					}
+					
+					logger.info(String.format("done processing %s:%s event...", getDomain(), getName()));
 				}
 				
 			});
