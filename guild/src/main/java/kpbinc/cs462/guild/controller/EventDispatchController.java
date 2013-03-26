@@ -181,7 +181,18 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					if (shopChannel != null) {
 						Event forwardedEvent = event.clone();
 						forwardedEvent.removeAttribute("shop_key");
-						// TODO enhance with driver ranking
+						
+						try {
+							forwardedEvent.addAttribute("driver_id", channel.getRemoteEntityId());
+							// TODO enhance with driver ranking
+						}
+						catch (EventRenderingException e) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									String.format("Forwarding %s:%s event", getDomain(), getName()),
+									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e.printStackTrace();
+						}
+
 						EventChannelUtils.notify(forwardedEvent, shopChannel, eventGenerator);
 					}
 				}
