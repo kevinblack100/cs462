@@ -8,7 +8,6 @@ import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shop.model.DeliveryBid;
-import kpbinc.cs462.shop.model.FlowerShopGuildEventChannel;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.ShopProfile;
 import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
