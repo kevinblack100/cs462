@@ -48,11 +48,24 @@
 					<dt>Send ESL:</dt>
 					<dd>
 						<c:choose>
-							<c:when test="${channel.sendESL ne null}">
-								${channel.sendESL}
+							<c:when test="${isLoggedInUserProfile}">
+								<form method="post" action="${contextPaths.dynamicPath}/users/${username}/set-send-esl">
+									<fieldset>
+										<input type="text" name="send-esl" value="${channel.sendESL}" size=60 />
+										<br>
+										<input type="submit" name="submit" value="Save" />
+									</fieldset>
+								</form>
 							</c:when>
 							<c:otherwise>
-								Not specified
+								<c:choose>
+									<c:when test="${channel.sendESL ne null}">
+										${channel.sendESL}
+									</c:when>
+									<c:otherwise>
+										Not specified
+									</c:otherwise>
+								</c:choose>
 							</c:otherwise>
 						</c:choose>
 					</dd>
@@ -61,7 +74,7 @@
 					<dt>Receive ESL:</dt>
 					<dd>${channel.receiveESL}<dd>
 				</dl>
-			</div> <!-- channel-details -->
+			</div> <!-- #channel-details -->
 			
 			<br>
 			
@@ -75,7 +88,7 @@
 					</c:when>
 					<c:otherwise>
 						<c:choose>
-							<c:when test="${userLoggedIn}">
+							<c:when test="${isLoggedInUserProfile}">
 							<a href="${contextPaths.dynamicPath}/oauth/v2/authorize/${username}/foursquare">
 								Authorize FFDS to use your Foursquare Account
 							</a>
@@ -87,6 +100,6 @@
 					</c:otherwise>
 				</c:choose>
 			</div> <!-- #foursquare-checkin-details -->
-		</div> <!-- user-details -->
+		</div> <!-- #user-details -->
 	</jsp:body>
 </customtags:pagetemplate>

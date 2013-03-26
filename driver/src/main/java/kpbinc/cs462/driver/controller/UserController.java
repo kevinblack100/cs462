@@ -12,16 +12,20 @@ import kpbinc.cs462.driver.model.manage.DriverGuildEventChannelManager;
 import kpbinc.cs462.shared.model.manage.AuthorizationTokenManager;
 import kpbinc.cs462.shared.model.manage.InMemoryPersistentUserDetailsManager;
 import kpbinc.cs462.shared.model.manage.OAuthServiceManager;
+import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.scribe.exceptions.OAuthConnectionException;
 import org.scribe.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Scope(value = "request")
@@ -60,6 +64,8 @@ public class UserController extends DriverBaseSiteContextController {
 	
 	//= Interface ======================================================================================================
 	
+	//- Read -----------------------------------------------------------------------------------------------------------
+	
 	@RequestMapping
 	public String listAll(ModelMap model) {
 		List<String> allUsernames = getAllUsernames();
@@ -80,15 +86,15 @@ public class UserController extends DriverBaseSiteContextController {
 		boolean hasFoursquareAuthToken = authorizationTokenManager.hasAuthorizationToken(username, "foursquare");
 		model.addAttribute("hasFoursquareAuthToken", hasFoursquareAuthToken);
 		
-		boolean userLoggedIn = getLoggedInUserContext().isUserLoggedIn(username);
-		model.addAttribute("userLoggedIn", userLoggedIn);
+		boolean isLoggedInUserProfile = getLoggedInUserContext().isUserLoggedIn(username);
+		model.addAttribute("isLoggedInUserProfile", isLoggedInUserProfile);
 		
 		if (hasFoursquareAuthToken) {
 			String retrieveCheckinsURL = "https://api.foursquare.com/v2/users/self/checkins?oauth_token=";
 			Token accessToken = authorizationTokenManager.getAuthorizationToken(username, "foursquare");
 			retrieveCheckinsURL += accessToken.getToken();
 			retrieveCheckinsURL += "&sort=newestfirst";
-			if (!userLoggedIn) {
+			if (!isLoggedInUserProfile) {
 				retrieveCheckinsURL += "&limit=1";
 			}
 			
@@ -110,6 +116,31 @@ public class UserController extends DriverBaseSiteContextController {
 		List<String> usernames = new ArrayList<String>(userDetailsManager.getAllUsernames());
 		Collections.sort(usernames);
 		return usernames;
+	}
+	
+	//- Update ---------------------------------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/{username}/set-send-esl", method = RequestMethod.POST)
+	public String setSendESL(
+			@PathVariable(value = "username") String username,
+			@RequestParam(value = "send-esl", required = true) String sendESL) {
+		String redirectLocation = URLPathBuilder.build(getContextPaths().getDynamicRelativePath(), "users");
+		
+		// TODO validate that logged-in user may perform operation
+		UserDetails userDetails = userDetailsManager.retrieve(username);
+		if (userDetails != null) {
+			redirectLocation = URLPathBuilder.append(redirectLocation, username);
+			
+			DriverGuildEventChannel channel = driverGuildEventChannelManager.retrieveByUsername(username);
+			assert(channel != null);
+			if (channel != null) {
+				channel.setSendESL(sendESL);
+				driverGuildEventChannelManager.update(channel);
+			}
+			// else TODO set message
+		}
+		
+		return "redirect:" + redirectLocation;
 	}
 	
 }
