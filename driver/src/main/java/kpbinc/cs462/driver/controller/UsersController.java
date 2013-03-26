@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Scope(value = "request")
 @RequestMapping("/users")
-public class UserController extends DriverBaseSiteContextController {
+public class UsersController extends DriverBaseSiteContextController {
 	
 	//= Class Data =====================================================================================================
 	
-	private static final Logger logger = Logger.getLogger(UserController.class.getName());
+	private static final Logger logger = Logger.getLogger(UsersController.class.getName());
 	
 	
 	//= Member Data ====================================================================================================
@@ -57,7 +57,7 @@ public class UserController extends DriverBaseSiteContextController {
 	
 	//= Initialization =================================================================================================
 	
-	public UserController() {
+	public UsersController() {
 		GlobalLogUtils.logConstruction(this);
 	}
 	
