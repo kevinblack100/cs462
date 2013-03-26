@@ -111,9 +111,22 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
 					// TODO stash the event for later reference?
+
+					// enhance event
+					Event enhancedEvent = event.clone();
+					try {
+						// TODO add shop lat/lng coordinates
+						enhancedEvent.addAttribute("shop_key", channel.getId());
+					}
+					catch (EventRenderingException e) {
+						logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+								String.format("Ehancing %s:%s event", getDomain(), getName()),
+								e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+						e.printStackTrace();
+					}
 					
 					// TODO send only to the top three drivers
-					EventChannelUtils.notify(event, guildUserEventChannelManager.retrieveAll(), eventGenerator);
+					EventChannelUtils.notify(enhancedEvent, guildUserEventChannelManager.retrieveAll(), eventGenerator);
 					
 					// TODO remove temporary implementation of sending back an rfq:bid_available event
 					if (   channel != null

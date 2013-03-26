@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface Event {
 
+	Event clone();
+	
 	String getDomain();
 	
 	String getName();
@@ -20,6 +22,15 @@ public interface Event {
 	 */
 	Map<String, List<Object>> getAttributes();
 	
-	// TODO define addAttribute method
+	/**
+	 * Adds the attribute name-value pair to this event.
+	 * 
+	 * @param attribName name of the attribute
+	 * @param value value of the attribute, or a value of the attribute if multi-valued
+	 * 
+	 * @throws EventRenderingException if attribName is reserved. Reserved event attributes are set through
+	 * constructors or specialized methods.
+	 */
+	public void addAttribute(String attribName, Object value) throws EventRenderingException;
 	
 }

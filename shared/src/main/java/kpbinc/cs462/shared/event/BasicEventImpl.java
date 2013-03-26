@@ -5,11 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
+
+import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class BasicEventImpl implements Event {
 
+	//= Class Data =====================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(BasicEventImpl.class.getName());
+	
+	
 	//= Member Data ====================================================================================================
 	
 	private String domain;
@@ -38,10 +46,29 @@ public class BasicEventImpl implements Event {
 		this.name = name;
 		this.attributes = new TreeMap<String, List<Object>>();
 	}
-	
+		
 	
 	//= Interface ======================================================================================================
 
+	@Override
+	public Event clone() {
+		Event copy = null;
+		try {
+			copy = new BasicEventImpl(getDomain(), getName());
+			for (Map.Entry<String, List<Object>> attribute : this.getAttributes().entrySet()) {
+				for (Object value : attribute.getValue()) {
+					copy.addAttribute(attribute.getKey(), value);
+				}
+			}
+		}
+		catch (EventRenderingException e) {
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+					"cloning event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+			e.printStackTrace();
+		}
+		return copy;
+	}
+	
 	@Override
 	public String getDomain() {
 		return domain;
@@ -78,6 +105,7 @@ public class BasicEventImpl implements Event {
 	 * @throws EventRenderingException if attribName is reserved. Reserved event attributes are set through the
 	 * constructor.
 	 */
+	@Override
 	public void addAttribute(String attribName, Object value) throws EventRenderingException {
 		// TODO validate that the name and value are not null
 		if (CommonEventSerializationConstants.isReservedAttributeName(attribName)) {

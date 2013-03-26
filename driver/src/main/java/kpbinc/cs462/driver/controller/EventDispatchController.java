@@ -242,6 +242,7 @@ public class EventDispatchController {
 							try {
 								bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
 								bidAvailableEvent.addAttribute("driver_name", driverUsername);
+								bidAvailableEvent.addAttribute("shop_key", event.getAttribute("shop_key"));
 								bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
 								bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
 								bidAvailableEvent.addAttribute("amount", new Float(5.0f));
