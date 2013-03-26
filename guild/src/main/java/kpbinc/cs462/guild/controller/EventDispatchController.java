@@ -11,6 +11,7 @@ import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventChannel;
+import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventHandler;
@@ -100,7 +101,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 							bidAvailableEvent.addAttribute("amount", new Float(7.0f));
 							bidAvailableEvent.addAttribute("amount_units", "USD");
 							
-							eventGenerator.sendEvent(channel.getSendESL(), bidAvailableEvent);
+							EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
 						}
 						catch (EventRenderingException e) {
 							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
@@ -122,13 +123,13 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					if (   channel != null
 						&& StringUtils.isNotBlank(channel.getSendESL())) {
 						try {
-							BasicEventImpl bidAvailableEvent = new BasicEventImpl("delivery", "complete");
-							bidAvailableEvent.addAttribute("driver_id", "guildmaster");
-							bidAvailableEvent.addAttribute("driver_name", "Guild Master");
-							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
-							bidAvailableEvent.addAttribute("delivery_time_act", "5:10 PM");
+							BasicEventImpl deliveryCompleteEvent = new BasicEventImpl("delivery", "complete");
+							deliveryCompleteEvent.addAttribute("driver_id", "guildmaster");
+							deliveryCompleteEvent.addAttribute("driver_name", "Guild Master");
+							deliveryCompleteEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
+							deliveryCompleteEvent.addAttribute("delivery_time_act", "5:10 PM");
 							
-							eventGenerator.sendEvent(channel.getSendESL(), bidAvailableEvent);
+							EventChannelUtils.notify(deliveryCompleteEvent, channel, eventGenerator);
 						}
 						catch (EventRenderingException e) {
 							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
