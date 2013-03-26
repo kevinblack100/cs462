@@ -195,12 +195,29 @@ public class OrdersController extends ShopBaseSiteContextController {
 		Order order = orderManager.retrieve(orderId);
 		
 		if (order != null) {
+			// Prepare redirect
+			redirectLocation = URLPathBuilder.append(redirectLocation, orderId.toString());
+			
+			// Update Order
 			order.setState(Order.State.WAITING_FOR_DELIVERY);
 			orderManager.update(order);
 			
-			// TODO send delivery:picked_up event
+			// Prepare delivery:picked_up event
+			BasicEventImpl event = null;
+			try {
+				event = new BasicEventImpl("delivery", "picked_up");
+				event.addAttribute("delivery_id", orderId);
+			}
+			catch (EventRenderingException e) {
+				logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+						"preparing delivery:picked_up event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+				e.printStackTrace();
+			}
 			
-			redirectLocation = URLPathBuilder.append(redirectLocation, orderId.toString());
+			// Send event
+			if (event != null) {
+				EventChannelUtils.notify(event, flowerShopGuildEventChannelManager.retrieveAll(), eventGenerator);
+			}
 		}
 		
 		return "redirect:" + redirectLocation;
