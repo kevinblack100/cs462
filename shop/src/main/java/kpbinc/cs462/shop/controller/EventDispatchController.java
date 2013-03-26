@@ -90,8 +90,6 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
-					
 					// TODO validate orderId
 					Long orderID = Long.parseLong((String) event.getAttribute("delivery_id"));
 					String driverId = (String) event.getAttribute("driver_id");
@@ -109,8 +107,6 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 					bid.setAmountUnits(amountUnits);
 					
 					deliveryBidManager.register(bid);
-					
-					logger.info(String.format("done processing %s:%s event...", getDomain(), getName()));
 				}
 				
 			});
@@ -120,8 +116,6 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
-					
 					Long orderId = Long.parseLong((String) event.getAttribute("delivery_id"));
 					
 					Order order = orderManager.retrieve(orderId);
@@ -131,8 +125,6 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 						order.setState(Order.State.DELIVERED);
 						orderManager.update(order);
 					}
-					
-					logger.info(String.format("done processing %s:%s event...", getDomain(), getName()));
 				}
 				
 			});

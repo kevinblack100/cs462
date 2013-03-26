@@ -88,8 +88,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
-					
 					// TODO replace temporary implementation of sending back an rfq:bid_available event
 					if (   channel != null
 						&& StringUtils.isNotBlank(channel.getSendESL())) {
@@ -111,8 +109,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 							e.printStackTrace();
 						}
 					}
-					
-					logger.info(String.format("done processing %s:%s event.", getDomain(), getName()));
 				}
 				
 			});
@@ -122,8 +118,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
-					logger.info(String.format("processing %s:%s event...", getDomain(), getName()));
-					
 					// TODO replace temporary implementation of sending back a delivery:complete event
 					if (   channel != null
 						&& StringUtils.isNotBlank(channel.getSendESL())) {
@@ -143,8 +137,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 							e.printStackTrace();
 						}
 					}
-					
-					logger.info(String.format("done processing %s:%s event.", getDomain(), getName()));
 				}
 				
 			});

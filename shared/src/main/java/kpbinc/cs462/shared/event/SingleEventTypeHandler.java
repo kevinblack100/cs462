@@ -1,5 +1,7 @@
 package kpbinc.cs462.shared.event;
 
+import java.util.logging.Logger;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -7,6 +9,11 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 public abstract class SingleEventTypeHandler implements EventHandler {
 
+	//= Class Data =====================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(SingleEventTypeHandler.class.getName());
+	
+	
 	//= Member Data ====================================================================================================
 	
 	private String domain;
@@ -41,7 +48,14 @@ public abstract class SingleEventTypeHandler implements EventHandler {
 	@Override
 	public void handle(Event event, EventChannel<?, ?> channel) {
 		if (handles(event)) {
+			String coreMessage = String.format("handling %s:%s event received on channel %d.",
+					getDomain(), getName(), (channel != null ? channel.getId() : -1));
+			
+			logger.info(coreMessage + "..");
+			
 			handleImpl(event, channel);
+			
+			logger.info("done " + coreMessage);
 		}
 		// else ignore the event
 	}
