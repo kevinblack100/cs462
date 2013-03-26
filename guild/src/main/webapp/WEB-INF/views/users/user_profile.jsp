@@ -29,11 +29,24 @@
 				<dt>Send ESL:</dt>
 				<dd>
 				<c:choose>
-					<c:when test="${channel.sendESL ne null}">
-						${channel.sendESL}
+					<c:when test="${isLoggedInUserProfile}">
+						<form method="post" action="${contextPaths.dynamicPath}/users/${username}/set-send-esl">
+							<fieldset>
+								<input type="text" name="send-esl" value="${channel.sendESL}" size=60 />
+								<br>
+								<input type="submit" name="submit" value="Save" />
+							</fieldset>
+						</form>
 					</c:when>
 					<c:otherwise>
-						Not specified
+						<c:choose>
+							<c:when test="${channel.sendESL ne null}">
+								${channel.sendESL}
+							</c:when>
+							<c:otherwise>
+								Not specified
+							</c:otherwise>
+						</c:choose>
 					</c:otherwise>
 				</c:choose>
 				</dd>
