@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import kpbinc.cs462.shared.event.BasicEventImpl;
+import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shop.model.DeliveryBid;
@@ -109,18 +110,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 
 		// Send the event
 		if (event != null) {
-			FlowerShopGuildEventChannel channel =
-					flowerShopGuildEventChannelManager.retrieve(FlowerShopGuildEventChannelManager.DEFAULT_EVENT_CHANNEL_ID);
-			if (   channel != null
-				&& StringUtils.isNotBlank(channel.getSendESL())) {
-				boolean success = eventGenerator.sendEvent(channel.getSendESL(), event);
-				logger.info(String.format("%s:%s sent to %s: %s", 
-						event.getDomain(),
-						event.getName(),
-						channel.getSendESL(),
-						(success ? "SUCCESS" : "FAILED")));
-			}
-			// else TODO set message
+			EventChannelUtils.notify(event, flowerShopGuildEventChannelManager.retrieveAll(), eventGenerator);
 		}
 		
 		return "redirect:/ffds/orders";
@@ -160,8 +150,26 @@ public class OrdersController extends ShopBaseSiteContextController {
 			
 			if (   bid != null
 				&& bid.getOrderID().equals(orderId)) {
+				// Update the bid
 				order.setSelectedBidID(selectedBidId);
 				orderManager.update(order);
+				
+				// Send rfq:bid_awarded event
+				BasicEventImpl event = null;
+				try {
+					event = new BasicEventImpl("rfq", "bid_awarded");
+					event.addAttribute("delivery_id", orderId);
+					event.addAttribute("driver_id", bid.getDriverName());
+				}
+				catch (EventRenderingException e) {
+					logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+							"setting selected bid", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+					e.printStackTrace();
+				}
+				
+				if (event != null) {
+					EventChannelUtils.notify(event, flowerShopGuildEventChannelManager.retrieveAll(), eventGenerator);
+				}
 			}
 			
 			redirectLocation = URLPathBuilder.append(redirectLocation, orderId.toString());
