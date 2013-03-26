@@ -85,7 +85,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 		order.setDeliveryTime(deliveryTimeRaw);
 		
 		orderManager.register(order);
-		Long orderID = order.getId();
+		Long orderId = order.getId();
 		
 		// Create the rfq:delivery_ready event
 		ShopProfile shopProfile = shopProfileManager.getProfile();
@@ -95,7 +95,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 			event = new BasicEventImpl("rfq", "delivery_ready");
 			event.addAttribute("shop_name", shopProfile.getName());
 			event.addAttribute("shop_address", shopProfile.getAddress());
-			event.addAttribute("delivery_id", orderID);
+			event.addAttribute("delivery_id", orderId);
 			event.addAttribute("pickup_time", pickupTimeRaw);
 			event.addAttribute("delivery_address", deliveryAddressRaw);
 			if (StringUtils.isNotBlank(deliveryTimeRaw)) {
@@ -113,7 +113,9 @@ public class OrdersController extends ShopBaseSiteContextController {
 			EventChannelUtils.notify(event, flowerShopGuildEventChannelManager.retrieveAll(), eventGenerator);
 		}
 		
-		return "redirect:/ffds/orders";
+		String redirectLocation = 
+				URLPathBuilder.build(getContextPaths().getDynamicRelativePath(), "orders", orderId.toString());
+		return "redirect:" + redirectLocation;
 	}
 
 	//- Read -----------------------------------------------------------------------------------------------------------
@@ -129,7 +131,12 @@ public class OrdersController extends ShopBaseSiteContextController {
 	public String getOrderProfile(
 			@PathVariable(value = "order-id") Long orderID,
 			ModelMap model) {
-		prepareOrderProfile(model, orderID);
+		Order order = orderManager.retrieve(orderID);
+		model.put("order", order);
+		
+		Collection<DeliveryBid> bids = deliveryBidManager.retrieveByOrderID(orderID);
+		model.put("bids", bids);
+		
 		return "orders/profile_order";
 	}
 	
@@ -176,17 +183,6 @@ public class OrdersController extends ShopBaseSiteContextController {
 		}
 		
 		return "redirect:" + redirectLocation;
-	}
-	
-	
-	//= Support ========================================================================================================
-	
-	private void prepareOrderProfile(ModelMap model, Long orderID) {
-		Order order = orderManager.retrieve(orderID);
-		model.put("order", order);
-		
-		Collection<DeliveryBid> bids = deliveryBidManager.retrieveByOrderID(orderID);
-		model.put("bids", bids);
 	}
 	
 }
