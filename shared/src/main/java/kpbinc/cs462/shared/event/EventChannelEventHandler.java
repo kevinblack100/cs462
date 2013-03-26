@@ -1,6 +1,6 @@
 package kpbinc.cs462.shared.event;
 
-public interface EventHandler {
+public interface EventChannelEventHandler {
 
 	/**
 	 * @param event
@@ -14,7 +14,6 @@ public interface EventHandler {
 	 * @param event
 	 * @param channel channel on which the event was received, may be null if the channel is unknown or the event should
 	 * be processed in a free-standing fashion
-	 * @return
 	 * 
 	 * @throws NullPointerException if event is null
 	 */

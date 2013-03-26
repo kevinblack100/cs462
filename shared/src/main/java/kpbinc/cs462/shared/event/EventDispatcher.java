@@ -30,7 +30,7 @@ public class EventDispatcher {
 			EventTransformer eventTransformer,
 			Long channelId,
 			StorageManager<Long, T> channelManager,
-			Collection<EventHandler> channelEventHandlers) {
+			Collection<EventChannelEventHandler> channelEventHandlers) {
 		// Parse/Render Event and Prepare the Response
 		Event event = null;
 		String responseString = "Received.";
@@ -75,7 +75,7 @@ public class EventDispatcher {
 		}
 		
 		// Process Event
-		for (EventHandler handler : channelEventHandlers) {
+		for (EventChannelEventHandler handler : channelEventHandlers) {
 			handler.handle(event, channel);
 		}
 	}

@@ -16,10 +16,10 @@ import kpbinc.cs462.shared.event.EventChannel;
 import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
-import kpbinc.cs462.shared.event.EventHandler;
+import kpbinc.cs462.shared.event.EventChannelEventHandler;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
-import kpbinc.cs462.shared.event.SingleEventTypeHandler;
+import kpbinc.cs462.shared.event.SingleEventTypeEventChannelEventHandler;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,9 +53,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	@Autowired
 	private GuildUserEventChannelManager guildUserEventChannelManager;
 	
-	private Collection<EventHandler> shopChannelEventHandlers;
+	private Collection<EventChannelEventHandler> shopChannelEventHandlers;
 	
-	private Collection<EventHandler> userChannelEventHandlers;
+	private Collection<EventChannelEventHandler> userChannelEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -102,12 +102,12 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	//= Support ========================================================================================================
 	
-	private Collection<EventHandler> getShopChannelEventHandlers() {
+	private Collection<EventChannelEventHandler> getShopChannelEventHandlers() {
 		if (shopChannelEventHandlers == null) {
-			shopChannelEventHandlers = new ArrayList<EventHandler>();
+			shopChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
 			
 			// rfq:delivery_ready handler
-			shopChannelEventHandlers.add(new SingleEventTypeHandler("rfq", "delivery_ready") {
+			shopChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "delivery_ready") {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
@@ -133,7 +133,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 			});
 			
 			// delivery:picked_up handler
-			shopChannelEventHandlers.add(new SingleEventTypeHandler("delivery", "picked_up") {
+			shopChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("delivery", "picked_up") {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
@@ -163,12 +163,12 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 		return shopChannelEventHandlers;
 	}
 	
-	private Collection<EventHandler> getUserChannelEventHandlers() {
+	private Collection<EventChannelEventHandler> getUserChannelEventHandlers() {
 		if (userChannelEventHandlers == null) {
-			userChannelEventHandlers = new ArrayList<EventHandler>();
+			userChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
 			
 			// rfq:bid_available handler
-			userChannelEventHandlers.add(new SingleEventTypeHandler("rfq", "bid_available") {
+			userChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "bid_available") {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {

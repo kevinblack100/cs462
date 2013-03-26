@@ -26,10 +26,10 @@ import kpbinc.cs462.shared.event.EventChannel;
 import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
-import kpbinc.cs462.shared.event.EventHandler;
+import kpbinc.cs462.shared.event.EventChannelEventHandler;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
-import kpbinc.cs462.shared.event.SingleEventTypeHandler;
+import kpbinc.cs462.shared.event.SingleEventTypeEventChannelEventHandler;
 import kpbinc.math.SphericalUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -84,7 +84,7 @@ public class EventDispatchController {
 	@Autowired
 	private DriverGuildEventChannelManager driverGuildEventChannelManager;
 	
-	private Collection<EventHandler> guildChannelEventHandlers;
+	private Collection<EventChannelEventHandler> guildChannelEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -210,12 +210,12 @@ public class EventDispatchController {
 	
 	//= Support ========================================================================================================
 
-	private Collection<EventHandler> getGuildChannelEventHandlers() {
+	private Collection<EventChannelEventHandler> getGuildChannelEventHandlers() {
 		if (guildChannelEventHandlers == null) {
-			guildChannelEventHandlers = new ArrayList<EventHandler>();
+			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
 			
 			// rfq:delivery_ready event handler
-			guildChannelEventHandlers.add(new SingleEventTypeHandler("rfq", "delivery_ready") {
+			guildChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "delivery_ready") {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> rawChannel) {

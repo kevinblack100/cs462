@@ -7,11 +7,11 @@ import org.apache.commons.lang3.Validate;
 
 import kpbinc.util.logging.GlobalLogUtils;
 
-public abstract class SingleEventTypeHandler implements EventHandler {
+public abstract class SingleEventTypeEventChannelEventHandler implements EventChannelEventHandler {
 
 	//= Class Data =====================================================================================================
 	
-	private static final Logger logger = Logger.getLogger(SingleEventTypeHandler.class.getName());
+	private static final Logger logger = Logger.getLogger(SingleEventTypeEventChannelEventHandler.class.getName());
 	
 	
 	//= Member Data ====================================================================================================
@@ -28,7 +28,7 @@ public abstract class SingleEventTypeHandler implements EventHandler {
 	 * 
 	 * @throws IllegalArgumentException if domain or name are blank (null, empty, or just whitespace)
 	 */
-	public SingleEventTypeHandler(String domain, String name) {
+	public SingleEventTypeEventChannelEventHandler(String domain, String name) {
 		GlobalLogUtils.logConstruction(this);
 		setDomain(domain);
 		setName(name);

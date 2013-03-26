@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventChannel;
 import kpbinc.cs462.shared.event.EventDispatcher;
-import kpbinc.cs462.shared.event.EventHandler;
+import kpbinc.cs462.shared.event.EventChannelEventHandler;
 import kpbinc.cs462.shared.event.EventTransformer;
-import kpbinc.cs462.shared.event.SingleEventTypeHandler;
+import kpbinc.cs462.shared.event.SingleEventTypeEventChannelEventHandler;
 import kpbinc.cs462.shop.model.DeliveryBid;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
@@ -50,7 +50,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 	@Autowired
 	private OrderManager orderManager;
 	
-	Collection<EventHandler> guildChannelEventHandlers;
+	Collection<EventChannelEventHandler> guildChannelEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -81,12 +81,12 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 	
 	//= Support ========================================================================================================
 	
-	private Collection<EventHandler> getGuildChannelEventHandlers() {
+	private Collection<EventChannelEventHandler> getGuildChannelEventHandlers() {
 		if (guildChannelEventHandlers == null) {
-			guildChannelEventHandlers = new ArrayList<EventHandler>();
+			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
 			
 			// rfq:bid_available handler
-			guildChannelEventHandlers.add(new SingleEventTypeHandler("rfq", "bid_available") {
+			guildChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "bid_available") {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
@@ -112,7 +112,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 			});
 			
 			// delivery:complete handler
-			guildChannelEventHandlers.add(new SingleEventTypeHandler("delivery", "complete") {
+			guildChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("delivery", "complete") {
 				
 				@Override
 				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
