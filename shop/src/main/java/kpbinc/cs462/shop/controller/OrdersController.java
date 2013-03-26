@@ -79,6 +79,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 			@RequestParam(value = "delivery-time") String deliveryTimeRaw) {
 		// Create the Order
 		Order order = new Order();
+		order.setState(Order.State.WAITING_FOR_BIDS);
 		order.setPickupTime(pickupTimeRaw);
 		order.setDeliveryAddress(deliveryAddressRaw);
 		order.setDeliveryTime(deliveryTimeRaw);
@@ -157,6 +158,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 			if (   bid != null
 				&& bid.getOrderID().equals(orderId)) {
 				// Update the bid
+				order.setState(Order.State.WAITING_FOR_PICKUP);
 				order.setSelectedBidID(selectedBidId);
 				orderManager.update(order);
 				

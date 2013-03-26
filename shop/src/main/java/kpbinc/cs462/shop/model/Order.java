@@ -5,9 +5,20 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 public class Order implements HasId<Long> {
 
+	//= Class Data =====================================================================================================
+	
+	public enum State {
+		WAITING_FOR_BIDS,
+		WAITING_FOR_PICKUP,
+		WAITING_FOR_DELIVERY,
+		DELIVERED;
+	}
+	
+	
 	//= Member Data ====================================================================================================
 	
 	private Long id;
+	private State state;
 	private String pickupTime;
 	private String deliveryAddress;
 	private String deliveryTime;
@@ -31,6 +42,14 @@ public class Order implements HasId<Long> {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	public String getPickupTime() {

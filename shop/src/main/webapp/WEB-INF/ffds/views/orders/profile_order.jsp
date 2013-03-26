@@ -12,6 +12,8 @@
 		
 		<br>
 		
+		<span>State: ${order.state}</span>
+		<br>
 		<span>Requested Pickup Time: ${order.pickupTime}</span>
 		<br>
 		<span>Delivery Address: ${order.deliveryAddress}</span>

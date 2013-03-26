@@ -21,6 +21,7 @@
 			<thead>
 				<tr>
 					<td class="table-header">Order ID</td>
+					<td class="table-header">State</td>
 					<td class="table-header">Requested Pickup Time</td>
 					<td class="table-header">Delivery Address</td>
 					<td class="table-header">Requested Delivery Time</td>
@@ -30,6 +31,7 @@
 				<c:forEach items="${orders}" var="order">
 				<tr>
 					<td><a href="${contextPaths.dynamicPath}/orders/${order.id}">${order.id}</a></td>
+					<td>${order.state}</td>
 					<td>${order.pickupTime}</td>
 					<td>${order.deliveryAddress}</td>
 					<td>${order.deliveryTime}</td>
