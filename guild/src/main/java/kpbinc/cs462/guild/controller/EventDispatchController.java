@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
+import kpbinc.cs462.guild.model.GuildUserEventChannel;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
-import kpbinc.cs462.shared.event.EventChannel;
 import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
@@ -53,9 +53,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	@Autowired
 	private GuildUserEventChannelManager guildUserEventChannelManager;
 	
-	private Collection<EventChannelEventHandler> shopChannelEventHandlers;
+	private Collection<EventChannelEventHandler<GuildFlowerShopEventChannel>> shopChannelEventHandlers;
 	
-	private Collection<EventChannelEventHandler> userChannelEventHandlers;
+	private Collection<EventChannelEventHandler<GuildUserEventChannel>> userChannelEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -102,15 +102,16 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	//= Support ========================================================================================================
 	
-	private Collection<EventChannelEventHandler> getShopChannelEventHandlers() {
+	private Collection<EventChannelEventHandler<GuildFlowerShopEventChannel>> getShopChannelEventHandlers() {
 		if (shopChannelEventHandlers == null) {
-			shopChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
+			shopChannelEventHandlers = new ArrayList<EventChannelEventHandler<GuildFlowerShopEventChannel>>();
 			
 			// rfq:delivery_ready handler
-			shopChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "delivery_ready") {
+			shopChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<GuildFlowerShopEventChannel>("rfq", "delivery_ready") {
 				
 				@Override
-				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
 					// TODO stash the event for later reference?
 
 					// enhance event
@@ -133,10 +134,11 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 			});
 			
 			// delivery:picked_up handler
-			shopChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("delivery", "picked_up") {
+			shopChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<GuildFlowerShopEventChannel>("delivery", "picked_up") {
 				
 				@Override
-				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
 					// TODO replace temporary implementation of sending back a delivery:complete event
 					if (   channel != null
 						&& StringUtils.isNotBlank(channel.getSendESL())) {
@@ -163,15 +165,16 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 		return shopChannelEventHandlers;
 	}
 	
-	private Collection<EventChannelEventHandler> getUserChannelEventHandlers() {
+	private Collection<EventChannelEventHandler<GuildUserEventChannel>> getUserChannelEventHandlers() {
 		if (userChannelEventHandlers == null) {
-			userChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
+			userChannelEventHandlers = new ArrayList<EventChannelEventHandler<GuildUserEventChannel>>();
 			
 			// rfq:bid_available handler
-			userChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "bid_available") {
+			userChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<GuildUserEventChannel>("rfq", "bid_available") {
 				
 				@Override
-				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+				protected void handleImpl(Event event, GuildUserEventChannel channel) {
 					Long shopChannelID = Long.parseLong((String) event.getAttribute("shop_key"));
 					GuildFlowerShopEventChannel shopChannel = guildFlowerShopEventChannelManager.retrieve(shopChannelID);
 					assert(shopChannel != null);

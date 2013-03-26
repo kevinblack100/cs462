@@ -22,7 +22,6 @@ import kpbinc.cs462.driver.model.manage.StashedEventManager;
 import kpbinc.cs462.driver.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
-import kpbinc.cs462.shared.event.EventChannel;
 import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
@@ -84,7 +83,7 @@ public class EventDispatchController {
 	@Autowired
 	private DriverGuildEventChannelManager driverGuildEventChannelManager;
 	
-	private Collection<EventChannelEventHandler> guildChannelEventHandlers;
+	private Collection<EventChannelEventHandler<DriverGuildEventChannel>> guildChannelEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -210,102 +209,100 @@ public class EventDispatchController {
 	
 	//= Support ========================================================================================================
 
-	private Collection<EventChannelEventHandler> getGuildChannelEventHandlers() {
+	private Collection<EventChannelEventHandler<DriverGuildEventChannel>> getGuildChannelEventHandlers() {
 		if (guildChannelEventHandlers == null) {
-			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
+			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler<DriverGuildEventChannel>>();
 			
 			// rfq:delivery_ready event handler
-			guildChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "delivery_ready") {
+			guildChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<DriverGuildEventChannel>("rfq", "delivery_ready") {
 				
 				@Override
-				protected void handleImpl(Event event, EventChannel<?, ?> rawChannel) {
-					if (DriverGuildEventChannel.class.isInstance(rawChannel)) {
-						DriverGuildEventChannel channel = (DriverGuildEventChannel) rawChannel;
-						String driverUsername = channel.getLocalEntityId();
-						UserProfile userProfile = userProfileManager.retrieve(driverUsername);
+				protected void handleImpl(Event event, DriverGuildEventChannel channel) {
+					String driverUsername = channel.getLocalEntityId();
+					UserProfile userProfile = userProfileManager.retrieve(driverUsername);
 
-						double distanceInMiles = -1.0; // don't know where the user is
-						if (   userProfile != null
-							&& userProfile.getLastKnownLatitude() != null
-							&& userProfile.getLastKnownLongitude() != null) {
-							
-							distanceInMiles = SphericalUtils.greatCircleVincenty(
-								SphericalUtils.EARTH_RADIUS_mi,
-								40, -111, // TODO remove magic values, extract these from the event
-								userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());	
+					double distanceInMiles = -1.0; // don't know where the user is
+					if (   userProfile != null
+						&& userProfile.getLastKnownLatitude() != null
+						&& userProfile.getLastKnownLongitude() != null) {
+						
+						distanceInMiles = SphericalUtils.greatCircleVincenty(
+							SphericalUtils.EARTH_RADIUS_mi,
+							40, -111, // TODO remove magic values, extract these from the event
+							userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());	
+					}
+					
+					if (	!doDistanceCheck
+						||  (   0.0 <= distanceInMiles
+						     && distanceInMiles <= 5.0)) {
+						BasicEventImpl bidAvailableEvent = null;
+						try {
+							bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
+							bidAvailableEvent.addAttribute("driver_name", driverUsername);
+							bidAvailableEvent.addAttribute("shop_key", event.getAttribute("shop_key"));
+							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
+							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
+							bidAvailableEvent.addAttribute("amount", new Float(5.0f));
+							bidAvailableEvent.addAttribute("amount_units", "USD");
+						}
+						catch (EventRenderingException e) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									String.format("guild channel %s:%s handler", getDomain(), getName()),
+									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e.printStackTrace();
 						}
 						
-						if (	!doDistanceCheck
-							||  (   0.0 <= distanceInMiles
-							     && distanceInMiles <= 5.0)) {
-							BasicEventImpl bidAvailableEvent = null;
-							try {
-								bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-								bidAvailableEvent.addAttribute("driver_name", driverUsername);
-								bidAvailableEvent.addAttribute("shop_key", event.getAttribute("shop_key"));
-								bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
-								bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
-								bidAvailableEvent.addAttribute("amount", new Float(5.0f));
-								bidAvailableEvent.addAttribute("amount_units", "USD");
-							}
-							catch (EventRenderingException e) {
-								logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-										String.format("guild channel %s:%s handler", getDomain(), getName()),
-										e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-								e.printStackTrace();
-							}
-							
-							if (bidAvailableEvent != null) {
-								EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
-							}
+						if (bidAvailableEvent != null) {
+							EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
 						}
-						else if (   userProfile != null
-								 && userProfile.getTextableNumber() != null) {
-							// TODO double check logic here
-							logger.info("EDC: stashing event...");
-							
-							StashedEvent stashed = new StashedEvent();
-							stashed.setEvent(event);
-							stashed.setShopProfileID(1L);
-							stashed.setDriverUsername(driverUsername);
-							stashedEventManager.register(stashed);
-							Long stashID = stashed.getId();
-							
-							logger.info("EDC: event stashed.");
-							
-							// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
-							logger.info("EDC: preparing twilio message");
-							TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
-							
-						    Map<String, String> params = new HashMap<String, String>();
-						    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s",
-						    		stashID,
-						    		event.getAttribute("shop_name"),
-						    		event.getAttribute("pickup_time"),
-						    		event.getAttribute("delivery_address"));
-						    if (event.getAttribute("delivery_time") != null) {
-						    	messageContent += ", time: " + event.getAttribute("delivery_time");
-						    }
-						    params.put("Body", messageContent);
-						    params.put("To", userProfile.getTextableNumber());
-						    params.put("From", TWILIO_PHONE_NUMBER);
-							     
-						    SmsFactory messageFactory = client.getAccount().getSmsFactory();
-						    try {
-						    	logger.info(String.format("EDC: twilio: sending text to %s with message %s",
-						    			userProfile.getTextableNumber(), messageContent));
-						    	Sms message = messageFactory.create(params);
-						    	logger.info("EDC: Sent SMS message: SID " + message.getSid());
-						    }
-						    catch (TwilioRestException e) {
-						    	logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-						    			"EDC: Couldn't send message", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-						    	e.printStackTrace();
-						    }
-						}
-						else {
-							logger.warning("EDC: Either no user, user not within distance, or has no textable number");
-						}
+					}
+					else if (   userProfile != null
+							 && userProfile.getTextableNumber() != null) {
+						// TODO double check logic here
+						logger.info("EDC: stashing event...");
+						
+						StashedEvent stashed = new StashedEvent();
+						stashed.setEvent(event);
+						stashed.setShopProfileID(1L);
+						stashed.setDriverUsername(driverUsername);
+						stashedEventManager.register(stashed);
+						Long stashID = stashed.getId();
+						
+						logger.info("EDC: event stashed.");
+						
+						// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
+						logger.info("EDC: preparing twilio message");
+						TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);
+						
+					    Map<String, String> params = new HashMap<String, String>();
+					    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s",
+					    		stashID,
+					    		event.getAttribute("shop_name"),
+					    		event.getAttribute("pickup_time"),
+					    		event.getAttribute("delivery_address"));
+					    if (event.getAttribute("delivery_time") != null) {
+					    	messageContent += ", time: " + event.getAttribute("delivery_time");
+					    }
+					    params.put("Body", messageContent);
+					    params.put("To", userProfile.getTextableNumber());
+					    params.put("From", TWILIO_PHONE_NUMBER);
+						     
+					    SmsFactory messageFactory = client.getAccount().getSmsFactory();
+					    try {
+					    	logger.info(String.format("EDC: twilio: sending text to %s with message %s",
+					    			userProfile.getTextableNumber(), messageContent));
+					    	Sms message = messageFactory.create(params);
+					    	logger.info("EDC: Sent SMS message: SID " + message.getSid());
+					    }
+					    catch (TwilioRestException e) {
+					    	logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+					    			"EDC: Couldn't send message", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+					    	e.printStackTrace();
+					    }
+					}
+					else {
+						logger.warning("EDC: Either no user, user not within distance, or has no textable number");
 					}
 				}
 				

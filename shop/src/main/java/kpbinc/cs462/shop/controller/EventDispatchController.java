@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.shared.event.Event;
-import kpbinc.cs462.shared.event.EventChannel;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventChannelEventHandler;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeEventChannelEventHandler;
 import kpbinc.cs462.shop.model.DeliveryBid;
+import kpbinc.cs462.shop.model.FlowerShopGuildEventChannel;
 import kpbinc.cs462.shop.model.Order;
 import kpbinc.cs462.shop.model.manage.DeliveryBidManager;
 import kpbinc.cs462.shop.model.manage.FlowerShopGuildEventChannelManager;
@@ -50,7 +50,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 	@Autowired
 	private OrderManager orderManager;
 	
-	Collection<EventChannelEventHandler> guildChannelEventHandlers;
+	Collection<EventChannelEventHandler<FlowerShopGuildEventChannel>> guildChannelEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -81,15 +81,16 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 	
 	//= Support ========================================================================================================
 	
-	private Collection<EventChannelEventHandler> getGuildChannelEventHandlers() {
+	private Collection<EventChannelEventHandler<FlowerShopGuildEventChannel>> getGuildChannelEventHandlers() {
 		if (guildChannelEventHandlers == null) {
-			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler>();
+			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler<FlowerShopGuildEventChannel>>();
 			
 			// rfq:bid_available handler
-			guildChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("rfq", "bid_available") {
+			guildChannelEventHandlers.add(new 
+				SingleEventTypeEventChannelEventHandler<FlowerShopGuildEventChannel>("rfq", "bid_available") {
 				
 				@Override
-				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+				protected void handleImpl(Event event, FlowerShopGuildEventChannel channel) {
 					// TODO validate orderId
 					Long orderID = Long.parseLong((String) event.getAttribute("delivery_id"));
 					String driverId = (String) event.getAttribute("driver_id");
@@ -112,10 +113,11 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 			});
 			
 			// delivery:complete handler
-			guildChannelEventHandlers.add(new SingleEventTypeEventChannelEventHandler("delivery", "complete") {
+			guildChannelEventHandlers.add(new 
+				SingleEventTypeEventChannelEventHandler<FlowerShopGuildEventChannel>("delivery", "complete") {
 				
 				@Override
-				protected void handleImpl(Event event, EventChannel<?, ?> channel) {
+				protected void handleImpl(Event event, FlowerShopGuildEventChannel channel) {
 					Long orderId = Long.parseLong((String) event.getAttribute("delivery_id"));
 					
 					Order order = orderManager.retrieve(orderId);

@@ -7,7 +7,8 @@ import org.apache.commons.lang3.Validate;
 
 import kpbinc.util.logging.GlobalLogUtils;
 
-public abstract class SingleEventTypeEventChannelEventHandler implements EventChannelEventHandler {
+public abstract class SingleEventTypeEventChannelEventHandler<C extends EventChannel<?, ?>>
+	implements EventChannelEventHandler<C> {
 
 	//= Class Data =====================================================================================================
 	
@@ -46,7 +47,7 @@ public abstract class SingleEventTypeEventChannelEventHandler implements EventCh
 	}
 
 	@Override
-	public void handle(Event event, EventChannel<?, ?> channel) {
+	public void handle(Event event, C channel) {
 		if (handles(event)) {
 			String coreMessage = String.format("handling %s:%s event received on channel %d.",
 					getDomain(), getName(), (channel != null ? channel.getId() : -1));
@@ -91,6 +92,6 @@ public abstract class SingleEventTypeEventChannelEventHandler implements EventCh
 	
 	//= Support/Handler Implementation =================================================================================
 	
-	protected abstract void handleImpl(Event event, EventChannel<?, ?> channel);
+	protected abstract void handleImpl(Event event, C channel);
 	
 }

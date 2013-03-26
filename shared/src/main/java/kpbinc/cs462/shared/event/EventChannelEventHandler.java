@@ -1,6 +1,6 @@
 package kpbinc.cs462.shared.event;
 
-public interface EventChannelEventHandler {
+public interface EventChannelEventHandler<C extends EventChannel<?, ?>> {
 
 	/**
 	 * @param event
@@ -17,6 +17,6 @@ public interface EventChannelEventHandler {
 	 * 
 	 * @throws NullPointerException if event is null
 	 */
-	void handle(Event event, EventChannel<?, ?> channel);
+	void handle(Event event, C channel);
 	
 }
