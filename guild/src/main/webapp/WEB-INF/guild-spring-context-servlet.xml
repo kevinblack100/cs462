@@ -54,6 +54,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/guild-user-event-channels.json" />
 	</bean>
+	<bean id="userProfileManager"
+		class="kpbinc.cs462.guild.model.manage.UserProfileManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/user-profiles.json" />
+	</bean>
 	
 	
 	<!-- View Resolution Rules -->
