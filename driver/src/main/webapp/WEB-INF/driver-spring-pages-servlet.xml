@@ -22,6 +22,9 @@
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
+	<context:component-scan base-package="kpbinc.cs462.driver.controller.policy" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
 	<context:component-scan base-package="kpbinc.cs462.shared.controller.context" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 	</context:component-scan>

@@ -15,6 +15,7 @@
 				<tr>
 					<td class="table-header">Delivery ID</td>
 					<td class="table-header">State</td>
+					<td class="table-header">Action</td>
 					<td class="table-header">Shop Delivery ID</td>
 					<td class="table-header">Requested Pickup Time</td>
 					<td class="table-header">Delivery Address</td>
@@ -26,6 +27,20 @@
 				<tr>
 					<td>${deliveryRequest.id}</td>
 					<td>${deliveryRequest.state}</td>
+					<td>
+						<c:choose>
+							<c:when test="${deliveryRequestPolicy.mayCompleteDelivery(loggedInUserContext.signedInUserDetails, deliveryRequest)}">
+								<form method="post" action="${contextPaths.dynamicPath}/delivery-requests/${deliveryRequest.id}/delivered">
+									<fieldset>
+										<input type="submit" value="Delivery Complete" />
+									</fieldset>
+								</form>
+							</c:when>
+							<c:otherwise>
+								NA
+							</c:otherwise>
+						</c:choose>
+					</td>
 					<td>${deliveryRequest.shopDeliveryId}</td>
 					<td>${deliveryRequest.requestedPickupTime}</td>
 					<td>${deliveryRequest.deliveryAddress}</td>
