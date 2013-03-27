@@ -66,7 +66,7 @@
 						</c:when>
 						<c:otherwise>
 							<c:choose>
-								<c:when test="${order.selectedBidID == bid.id}">
+								<c:when test="${order.selectedBidId == bid.id}">
 								Yes
 								</c:when>
 								<c:otherwise>

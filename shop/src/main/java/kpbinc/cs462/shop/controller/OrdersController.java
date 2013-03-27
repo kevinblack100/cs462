@@ -159,7 +159,7 @@ public class OrdersController extends ShopBaseSiteContextController {
 				&& bid.getOrderID().equals(orderId)) {
 				// Update the bid
 				order.setState(Order.State.WAITING_FOR_PICKUP);
-				order.setSelectedBidID(selectedBidId);
+				order.setSelectedBidId(selectedBidId);
 				orderManager.update(order);
 				
 				// Send rfq:bid_awarded event

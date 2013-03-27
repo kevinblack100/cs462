@@ -18,12 +18,13 @@ public class Order extends Delivery {
 	//= Member Data ====================================================================================================
 	
 	private State state;
-	private Long selectedBidID;
+	private Long selectedBidId;
 
 	
 	//= Initialization =================================================================================================
 	
 	public Order() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 
@@ -38,12 +39,12 @@ public class Order extends Delivery {
 		this.state = state;
 	}
 	
-	public Long getSelectedBidID() {
-		return selectedBidID;
+	public Long getSelectedBidId() {
+		return selectedBidId;
 	}
 
-	public void setSelectedBidID(Long selectedBidID) {
-		this.selectedBidID = selectedBidID;
+	public void setSelectedBidId(Long selectedBidId) {
+		this.selectedBidId = selectedBidId;
 	}
 
 }
