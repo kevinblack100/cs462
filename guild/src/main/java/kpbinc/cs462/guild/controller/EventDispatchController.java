@@ -24,6 +24,8 @@ import kpbinc.cs462.shared.event.EventChannelEventHandler;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeEventChannelEventHandler;
+import kpbinc.cs462.shared.model.FlowerShopProfile;
+import kpbinc.cs462.shared.model.manage.FlowerShopProfileManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +52,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private FlowerShopProfileManager flowerShopProfileManager;
 	
 	@Autowired
 	private GuildFlowerShopEventChannelManager guildFlowerShopEventChannelManager;
@@ -127,8 +132,11 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					// enhance event
 					Event enhancedEvent = event.clone();
 					try {
-						// TODO add shop lat/lng coordinates
 						enhancedEvent.addAttribute("shop_key", channel.getId());
+						
+						FlowerShopProfile profile = flowerShopProfileManager.retrieve(channel.getRemoteEntityId());
+						enhancedEvent.addAttribute("shop_latitude", profile.getLatitude());
+						enhancedEvent.addAttribute("shop_longitude", profile.getLongitude());
 					}
 					catch (EventRenderingException e) {
 						logger.warning(GlobalLogUtils.formatHandledExceptionMessage(

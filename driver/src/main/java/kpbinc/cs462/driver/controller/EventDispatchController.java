@@ -235,6 +235,8 @@ public class EventDispatchController {
 					deliveryRequest.setUsername(driverUsername);
 					deliveryRequest.setShopDeliveryId(Long.parseLong((String) event.getAttribute("delivery_id")));
 					deliveryRequest.setShopId(Long.parseLong((String) event.getAttribute("shop_key")));
+					deliveryRequest.setShopLatitude(Double.parseDouble((String) event.getAttribute("shop_latitude")));
+					deliveryRequest.setShopLongitude(Double.parseDouble((String) event.getAttribute("shop_longitude")));
 					deliveryRequest.setDeliveryAddress((String) event.getAttribute("delivery_address"));
 					deliveryRequest.setRequestedPickupTime((String) event.getAttribute("pickup_time"));
 					deliveryRequest.setRequestedDeliveryTime((String) event.getAttribute("delivery_time"));
@@ -249,7 +251,7 @@ public class EventDispatchController {
 						
 						distanceInMiles = SphericalUtils.greatCircleVincenty(
 							SphericalUtils.EARTH_RADIUS_mi,
-							40, -111, // TODO remove magic values, extract these from the event
+							deliveryRequest.getShopLatitude(), deliveryRequest.getShopLongitude(),
 							userProfile.getLastKnownLatitude(), userProfile.getLastKnownLongitude());	
 					}
 					

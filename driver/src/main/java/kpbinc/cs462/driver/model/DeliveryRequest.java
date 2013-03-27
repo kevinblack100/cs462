@@ -30,8 +30,8 @@ public class DeliveryRequest extends Delivery {
 	private Long shopId;
 	private String shopName;
 	private String shopAddress;
-	private Long shopLatitude;
-	private Long shopLongitude;
+	private Double shopLatitude;
+	private Double shopLongitude;
 	
 	private String estimatedDeliveryTime;
 	private Float bidAmount;
@@ -96,19 +96,19 @@ public class DeliveryRequest extends Delivery {
 		this.shopAddress = shopAddress;
 	}
 
-	public Long getShopLatitude() {
+	public Double getShopLatitude() {
 		return shopLatitude;
 	}
 
-	public void setShopLatitude(Long shopLatitude) {
+	public void setShopLatitude(Double shopLatitude) {
 		this.shopLatitude = shopLatitude;
 	}
 
-	public Long getShopLongitude() {
+	public Double getShopLongitude() {
 		return shopLongitude;
 	}
 
-	public void setShopLongitude(Long shopLongitude) {
+	public void setShopLongitude(Double shopLongitude) {
 		this.shopLongitude = shopLongitude;
 	}
 
