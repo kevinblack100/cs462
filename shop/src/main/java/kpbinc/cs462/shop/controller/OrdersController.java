@@ -203,10 +203,13 @@ public class OrdersController extends ShopBaseSiteContextController {
 			orderManager.update(order);
 			
 			// Prepare delivery:picked_up event
+			DeliveryBid selectedBid = deliveryBidManager.retrieve(order.getSelectedBidId());
+			
 			BasicEventImpl event = null;
 			try {
 				event = new BasicEventImpl("delivery", "picked_up");
 				event.addAttribute("delivery_id", orderId);
+				event.addAttribute("driver_id", selectedBid.getDriverId());
 			}
 			catch (EventRenderingException e) {
 				logger.warning(GlobalLogUtils.formatHandledExceptionMessage(

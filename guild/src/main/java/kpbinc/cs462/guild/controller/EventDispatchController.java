@@ -153,25 +153,23 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
-					// TODO replace temporary implementation of sending back a delivery:complete event
-					if (   channel != null
-						&& StringUtils.isNotBlank(channel.getSendESL())) {
-						try {
-							BasicEventImpl deliveryCompleteEvent = new BasicEventImpl("delivery", "complete");
-							deliveryCompleteEvent.addAttribute("driver_id", "guildmaster");
-							deliveryCompleteEvent.addAttribute("driver_name", "Guild Master");
-							deliveryCompleteEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
-							deliveryCompleteEvent.addAttribute("delivery_time_act", "5:10 PM");
-							
-							EventChannelUtils.notify(deliveryCompleteEvent, channel, eventGenerator);
-						}
-						catch (EventRenderingException e) {
-							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-									String.format("shop channel %s:%s handler", getDomain(), getName()),
-									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-							e.printStackTrace();
-						}
+					// Enhance event
+					Event forwardedEvent = event.clone();
+					try {
+						forwardedEvent.addAttribute("shop_key", channel.getId());
 					}
+					catch (EventRenderingException e) {
+						logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+								String.format("Forwarding %s:%s event", getDomain(), getName()),
+								e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+						e.printStackTrace();
+					}
+					
+					// Send Event
+					String driverUsername = (String) event.getAttribute("driver_id");
+					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
+					
+					EventChannelUtils.notify(event, userChannel, eventGenerator);
 				}
 				
 			});

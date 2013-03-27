@@ -331,6 +331,25 @@ public class EventDispatchController {
 				}
 				
 			});
+			
+			// delivery:picked_up handler
+			guildChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<DriverGuildEventChannel>("delivery", "picked_up") {
+				
+				@Override
+				protected void handleImpl(Event event, DriverGuildEventChannel channel) {
+					String username = channel.getLocalEntityId();
+					Long shopDeliveryId = Long.parseLong((String) event.getAttribute("delivery_id"));
+					
+					DeliveryRequest deliveryRequest = 
+							deliveryRequestManager.retrieveByUsernameAndShopDeliveryId(username, shopDeliveryId);
+					if (deliveryRequest != null) {
+						deliveryRequest.setState(DeliveryRequest.State.PICKED_UP);
+						deliveryRequestManager.update(deliveryRequest);
+					}
+				}
+				
+			});
 		}
 		return guildChannelEventHandlers;
 	}
