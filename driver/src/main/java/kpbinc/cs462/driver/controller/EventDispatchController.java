@@ -319,7 +319,15 @@ public class EventDispatchController {
 				
 				@Override
 				protected void handleImpl(Event event, DriverGuildEventChannel channel) {
-					logger.info(String.format("received %s:%s", getDomain(), getName()));
+					String username = channel.getLocalEntityId();
+					Long shopDeliveryId = Long.parseLong((String) event.getAttribute("delivery_id"));
+					
+					DeliveryRequest deliveryRequest = 
+							deliveryRequestManager.retrieveByUsernameAndShopDeliveryId(username, shopDeliveryId);
+					if (deliveryRequest != null) {
+						deliveryRequest.setState(DeliveryRequest.State.AWARDED);
+						deliveryRequestManager.update(deliveryRequest);
+					}
 				}
 				
 			});
