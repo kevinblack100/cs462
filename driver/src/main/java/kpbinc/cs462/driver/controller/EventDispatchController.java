@@ -231,15 +231,15 @@ public class EventDispatchController {
 					UserProfile userProfile = userProfileManager.retrieve(driverUsername);
 
 					// Store the DeliveryRequest
-					DeliveryRequest request = new DeliveryRequest();
-					request.setUsername(driverUsername);
-					request.setShopDeliveryId(Long.parseLong((String) event.getAttribute("delivery_id")));
-					request.setShopId(Long.parseLong((String) event.getAttribute("shop_key")));
-					request.setDeliveryAddress((String) event.getAttribute("delivery_address"));
-					request.setRequestedPickupTime((String) event.getAttribute("pickup_time"));
-					request.setRequestedDeliveryTime((String) event.getAttribute("delivery_time"));
-					request.setState(DeliveryRequest.State.AVAILABLE_FOR_BID);
-					deliveryRequestManager.register(request);
+					DeliveryRequest deliveryRequest = new DeliveryRequest();
+					deliveryRequest.setUsername(driverUsername);
+					deliveryRequest.setShopDeliveryId(Long.parseLong((String) event.getAttribute("delivery_id")));
+					deliveryRequest.setShopId(Long.parseLong((String) event.getAttribute("shop_key")));
+					deliveryRequest.setDeliveryAddress((String) event.getAttribute("delivery_address"));
+					deliveryRequest.setRequestedPickupTime((String) event.getAttribute("pickup_time"));
+					deliveryRequest.setRequestedDeliveryTime((String) event.getAttribute("delivery_time"));
+					deliveryRequest.setState(DeliveryRequest.State.AVAILABLE_FOR_BID);
+					deliveryRequestManager.register(deliveryRequest);
 					
 					// Calculate distance
 					double distanceInMiles = -1.0; // don't know where the user is
@@ -257,7 +257,7 @@ public class EventDispatchController {
 						||  (   0.0 <= distanceInMiles
 						     && distanceInMiles <= 5.0)) {
 						deliveryRequestsController.submitBid(
-								request.getId(),
+								deliveryRequest.getId(),
 								DeliveryRequest.State.QUOTED_AUTOMATICALLY,
 								5.0f,
 								"5:00 PM");
