@@ -32,9 +32,9 @@
 				<tr>
 					<td><a href="${contextPaths.dynamicPath}/orders/${order.id}">${order.id}</a></td>
 					<td>${order.state}</td>
-					<td>${order.pickupTime}</td>
+					<td>${order.requestedPickupTime}</td>
 					<td>${order.deliveryAddress}</td>
-					<td>${order.deliveryTime}</td>
+					<td>${order.requestedDeliveryTime}</td>
 				</tr>
 				</c:forEach>
 			</tbody>

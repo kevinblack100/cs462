@@ -8,10 +8,9 @@ public class Delivery implements HasId<Long> {
 	//= Member Data ====================================================================================================
 	
 	private Long id;
-	private String pickupTime;
 	private String deliveryAddress;
-	private String deliveryTime;
-	private Long selectedBidID;
+	private String requestedPickupTime;
+	private String requestedDeliveryTime;
 	
 	
 	//= Initialization =================================================================================================
@@ -32,15 +31,7 @@ public class Delivery implements HasId<Long> {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getPickupTime() {
-		return pickupTime;
-	}
-
-	public void setPickupTime(String pickupTime) {
-		this.pickupTime = pickupTime;
-	}
-
+	
 	public String getDeliveryAddress() {
 		return deliveryAddress;
 	}
@@ -49,20 +40,20 @@ public class Delivery implements HasId<Long> {
 		this.deliveryAddress = deliveryAddress;
 	}
 
-	public String getDeliveryTime() {
-		return deliveryTime;
+	public String getRequestedPickupTime() {
+		return requestedPickupTime;
 	}
 
-	public void setDeliveryTime(String deliveryTime) {
-		this.deliveryTime = deliveryTime;
+	public void setRequestedPickupTime(String requestedPickupTime) {
+		this.requestedPickupTime = requestedPickupTime;
 	}
 
-	public Long getSelectedBidID() {
-		return selectedBidID;
+	public String getRequestedDeliveryTime() {
+		return requestedDeliveryTime;
 	}
 
-	public void setSelectedBidID(Long selectedBidID) {
-		this.selectedBidID = selectedBidID;
+	public void setRequestedDeliveryTime(String requestedDeliveryTime) {
+		this.requestedDeliveryTime = requestedDeliveryTime;
 	}
 
 }

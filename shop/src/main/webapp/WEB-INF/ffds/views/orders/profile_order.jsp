@@ -14,11 +14,11 @@
 		
 		<span>State: ${order.state}</span>
 		<br>
-		<span>Requested Pickup Time: ${order.pickupTime}</span>
+		<span>Requested Pickup Time: ${order.requestedPickupTime}</span>
 		<br>
 		<span>Delivery Address: ${order.deliveryAddress}</span>
 		<br>
-		<span>Requested Delivery Time: ${order.deliveryTime}</span>
+		<span>Requested Delivery Time: ${order.requestedDeliveryTime}</span>
 		
 		<br>
 		<br>

@@ -18,6 +18,7 @@ public class Order extends Delivery {
 	//= Member Data ====================================================================================================
 	
 	private State state;
+	private Long selectedBidID;
 
 	
 	//= Initialization =================================================================================================
@@ -35,6 +36,14 @@ public class Order extends Delivery {
 	
 	public void setState(State state) {
 		this.state = state;
+	}
+	
+	public Long getSelectedBidID() {
+		return selectedBidID;
+	}
+
+	public void setSelectedBidID(Long selectedBidID) {
+		this.selectedBidID = selectedBidID;
 	}
 
 }

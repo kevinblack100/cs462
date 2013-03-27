@@ -80,9 +80,9 @@ public class OrdersController extends ShopBaseSiteContextController {
 		// Create the Order
 		Order order = new Order();
 		order.setState(Order.State.WAITING_FOR_BIDS);
-		order.setPickupTime(pickupTimeRaw);
+		order.setRequestedPickupTime(pickupTimeRaw);
 		order.setDeliveryAddress(deliveryAddressRaw);
-		order.setDeliveryTime(deliveryTimeRaw);
+		order.setRequestedDeliveryTime(deliveryTimeRaw);
 		
 		orderManager.register(order);
 		Long orderId = order.getId();
