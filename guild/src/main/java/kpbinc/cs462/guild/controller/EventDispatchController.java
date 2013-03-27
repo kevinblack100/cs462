@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.GuildUserEventChannel;
+import kpbinc.cs462.guild.model.manage.DriverRankingEngine;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
@@ -52,6 +53,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	@Autowired
 	private GuildUserEventChannelManager guildUserEventChannelManager;
+	
+	@Autowired
+	private DriverRankingEngine driverRankingEngine;
 	
 	private Collection<EventChannelEventHandler<GuildFlowerShopEventChannel>> shopChannelEventHandlers;
 	
@@ -139,6 +143,10 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 
 				@Override
 				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
+					// Update driver ranking
+					String driverUsername = (String) event.getAttribute("driver_id");
+					driverRankingEngine.updateRanking(driverUsername);
+					
 					// Enhance event
 					Event forwardedEvent = event.clone();
 					try {
@@ -152,7 +160,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					}
 					
 					// Send event
-					String driverUsername = (String) event.getAttribute("driver_id");
 					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
 					
 					EventChannelUtils.notify(forwardedEvent, userChannel, eventGenerator);
@@ -166,6 +173,10 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
+					// Update driver ranking
+					String driverUsername = (String) event.getAttribute("driver_id");
+					driverRankingEngine.updateRanking(driverUsername);
+					
 					// Enhance event
 					Event forwardedEvent = event.clone();
 					try {
@@ -179,7 +190,6 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					}
 					
 					// Send Event
-					String driverUsername = (String) event.getAttribute("driver_id");
 					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
 					
 					EventChannelUtils.notify(forwardedEvent, userChannel, eventGenerator);
@@ -230,6 +240,11 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 				@Override
 				protected void handleImpl(Event event, GuildUserEventChannel channel) {
+					// Update driver ranking
+					String driverUsername = channel.getRemoteEntityId();
+					driverRankingEngine.updateRanking(driverUsername);
+					
+					// Forward the event
 					Long shopChannelID = Long.parseLong((String) event.getAttribute("shop_key"));
 					GuildFlowerShopEventChannel shopChannel = guildFlowerShopEventChannelManager.retrieve(shopChannelID);
 					assert(shopChannel != null);
@@ -238,7 +253,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 						forwardedEvent.removeAttribute("shop_key");
 						
 						try {
-							forwardedEvent.addAttribute("driver_id", channel.getRemoteEntityId());
+							forwardedEvent.addAttribute("driver_id", driverUsername);
 						}
 						catch (EventRenderingException e) {
 							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
