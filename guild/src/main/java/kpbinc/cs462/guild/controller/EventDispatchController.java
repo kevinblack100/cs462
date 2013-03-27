@@ -2,6 +2,7 @@ package kpbinc.cs462.guild.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.guild.model.GuildFlowerShopEventChannel;
 import kpbinc.cs462.guild.model.GuildUserEventChannel;
+import kpbinc.cs462.guild.model.UserProfile;
 import kpbinc.cs462.guild.model.manage.DriverRankingEngine;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
@@ -131,8 +133,11 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 						e.printStackTrace();
 					}
 					
-					// TODO send only to the top three drivers
-					EventChannelUtils.notify(enhancedEvent, guildUserEventChannelManager.retrieveAll(), eventGenerator);
+					List<UserProfile> topDrivers = driverRankingEngine.getTopDrivers(3);
+					for (UserProfile profile : topDrivers) {
+						GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(profile.getUsername());
+						EventChannelUtils.notify(enhancedEvent, userChannel, eventGenerator);
+					}
 				}
 				
 			});

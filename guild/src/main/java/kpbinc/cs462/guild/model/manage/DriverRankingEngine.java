@@ -1,5 +1,9 @@
 package kpbinc.cs462.guild.model.manage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +59,35 @@ public class DriverRankingEngine {
 			profile.setDriverRanking(newRanking);
 			userProfileManager.update(profile);
 		}
+	}
+	
+	public List<UserProfile> getTopDrivers(int numberOfDrivers) {
+		List<UserProfile> allDrivers = new ArrayList<UserProfile>(userProfileManager.retrieveAll());
+		Collections.sort(allDrivers, new Comparator<UserProfile>() {
+
+			@Override
+			public int compare(UserProfile left, UserProfile right) {
+				// higher is better and comes before
+				int order = 0;
+				if (left.getDriverRanking() > right.getDriverRanking()) {
+					order = -1;
+				}
+				else if (left.getDriverRanking() < right.getDriverRanking()) {
+					order = 1;
+				}
+				else {
+					order = 0;
+				}
+				return order;
+			}
+			
+		});
+		
+		List<UserProfile> topDrivers = allDrivers;
+		if (numberOfDrivers < allDrivers.size()) {
+			topDrivers = allDrivers.subList(0, numberOfDrivers);
+		}
+		return topDrivers;
 	}
 	
 }
