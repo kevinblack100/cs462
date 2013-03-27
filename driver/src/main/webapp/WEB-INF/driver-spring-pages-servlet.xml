@@ -75,6 +75,12 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/driver-guild-event-channels.json" />
 	</bean>
+	<bean id="deliveryRequestManager"
+		class="kpbinc.cs462.driver.model.manage.DeliveryRequestManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/delivery-requests.json" />
+	</bean>
+	
 	
 	<!-- View resolution rules -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

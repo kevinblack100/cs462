@@ -12,10 +12,12 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kpbinc.cs462.driver.model.DeliveryRequest;
 import kpbinc.cs462.driver.model.DriverGuildEventChannel;
 import kpbinc.cs462.driver.model.DriverProfile;
 import kpbinc.cs462.driver.model.StashedEvent;
 import kpbinc.cs462.driver.model.UserProfile;
+import kpbinc.cs462.driver.model.manage.DeliveryRequestManager;
 import kpbinc.cs462.driver.model.manage.DriverGuildEventChannelManager;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.driver.model.manage.StashedEventManager;
@@ -83,6 +85,9 @@ public class EventDispatchController {
 	@Autowired
 	private DriverGuildEventChannelManager driverGuildEventChannelManager;
 	
+	@Autowired
+	private DeliveryRequestManager deliveryRequestManager;
+	
 	private Collection<EventChannelEventHandler<DriverGuildEventChannel>> guildChannelEventHandlers;
 	
 	
@@ -128,7 +133,7 @@ public class EventDispatchController {
 			HttpServletResponse response,
 			@PathVariable(value = "channel-id") Long channelId) {
 		EventDispatcher.dispatchEvent(
-				"dispatch shop event",
+				"dispatch guild event",
 				request,
 				response,
 				eventTransformer,
@@ -222,6 +227,17 @@ public class EventDispatchController {
 					String driverUsername = channel.getLocalEntityId();
 					UserProfile userProfile = userProfileManager.retrieve(driverUsername);
 
+					// Store the DeliveryRequest
+					DeliveryRequest request = new DeliveryRequest();
+					request.setUsername(driverUsername);
+					request.setShopDeliveryId(Long.parseLong((String) event.getAttribute("delivery_id")));
+					request.setDeliveryAddress((String) event.getAttribute("delivery_address"));
+					request.setRequestedPickupTime((String) event.getAttribute("pickup_time"));
+					request.setRequestedDeliveryTime((String) event.getAttribute("delivery_time"));
+					request.setState(DeliveryRequest.State.AVAILABLE_FOR_BID);
+					deliveryRequestManager.register(request);
+					
+					// Calculate distance
 					double distanceInMiles = -1.0; // don't know where the user is
 					if (   userProfile != null
 						&& userProfile.getLastKnownLatitude() != null
