@@ -26,6 +26,3 @@ sudo cp ./deploy/driver.war /var/lib/tomcat7/webapps
 echo "> sudo cp ./deploy/guild.war /var/lib/tomcat7/webapps"
 sudo cp ./deploy/guild.war /var/lib/tomcat7/webapps
 
-# Restart Tomcat
-echo "> sudo service tomcat7 start"
-sudo service tomcat7 start
