@@ -1,9 +1,9 @@
 package kpbinc.cs462.shop.model;
 
-import kpbinc.cs462.shared.model.aspect.HasId;
+import kpbinc.cs462.shared.model.Delivery;
 import kpbinc.util.logging.GlobalLogUtils;
 
-public class Order implements HasId<Long> {
+public class Order extends Delivery {
 
 	//= Class Data =====================================================================================================
 	
@@ -17,13 +17,8 @@ public class Order implements HasId<Long> {
 	
 	//= Member Data ====================================================================================================
 	
-	private Long id;
 	private State state;
-	private String pickupTime;
-	private String deliveryAddress;
-	private String deliveryTime;
-	private Long selectedBidID;
-	
+
 	
 	//= Initialization =================================================================================================
 	
@@ -34,54 +29,12 @@ public class Order implements HasId<Long> {
 	
 	//= Interface ======================================================================================================
 	
-	@Override
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public State getState() {
 		return state;
 	}
 	
 	public void setState(State state) {
 		this.state = state;
-	}
-
-	public String getPickupTime() {
-		return pickupTime;
-	}
-
-	public void setPickupTime(String pickupTime) {
-		this.pickupTime = pickupTime;
-	}
-
-	public String getDeliveryAddress() {
-		return deliveryAddress;
-	}
-
-	public void setDeliveryAddress(String deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
-	}
-
-	public String getDeliveryTime() {
-		return deliveryTime;
-	}
-
-	public void setDeliveryTime(String deliveryTime) {
-		this.deliveryTime = deliveryTime;
-	}
-
-	public Long getSelectedBidID() {
-		return selectedBidID;
-	}
-
-	public void setSelectedBidID(Long selectedBidID) {
-		this.selectedBidID = selectedBidID;
 	}
 
 }
