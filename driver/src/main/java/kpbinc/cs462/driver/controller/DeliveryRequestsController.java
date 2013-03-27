@@ -9,6 +9,7 @@ import kpbinc.cs462.driver.model.DriverGuildEventChannel;
 import kpbinc.cs462.driver.model.manage.DeliveryRequestManager;
 import kpbinc.cs462.driver.model.manage.DriverGuildEventChannelManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
+import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventRenderingException;
@@ -82,6 +83,26 @@ public class DeliveryRequestsController extends DriverBaseSiteContextController 
 		if (deliveryRequest != null) {
 			deliveryRequest.setState(DeliveryRequest.State.DELIVERED);
 			deliveryRequestManager.update(deliveryRequest);
+			
+			// Prepare event
+			Event deliveryCompleteEvent = null;
+			try {
+				deliveryCompleteEvent = new BasicEventImpl("delivery", "complete");
+				deliveryCompleteEvent.addAttribute("shop_key", deliveryRequest.getShopId());
+				deliveryCompleteEvent.addAttribute("delivery_id", deliveryRequest.getShopDeliveryId());
+			}
+			catch (EventRenderingException e) {
+				logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+						"completing delivery", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+				e.printStackTrace();
+			}
+			
+			// Send event
+			if (deliveryCompleteEvent != null) {
+				DriverGuildEventChannel channel =
+						driverGuildEventChannelManager.retrieveByUsername(deliveryRequest.getUsername());
+				EventChannelUtils.notify(deliveryCompleteEvent, channel, eventGenerator);
+			}
 		}
 		
 		return "redirect:" + redirectLocation;

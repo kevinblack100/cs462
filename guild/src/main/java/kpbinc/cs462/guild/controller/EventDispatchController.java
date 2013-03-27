@@ -223,6 +223,35 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				}
 				
 			});
+			
+			// delivery:complete handler
+			userChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<GuildUserEventChannel>("delivery", "complete") {
+				
+				@Override
+				protected void handleImpl(Event event, GuildUserEventChannel channel) {
+					Long shopChannelID = Long.parseLong((String) event.getAttribute("shop_key"));
+					GuildFlowerShopEventChannel shopChannel = guildFlowerShopEventChannelManager.retrieve(shopChannelID);
+					assert(shopChannel != null);
+					if (shopChannel != null) {
+						Event forwardedEvent = event.clone();
+						forwardedEvent.removeAttribute("shop_key");
+						
+						try {
+							forwardedEvent.addAttribute("driver_id", channel.getRemoteEntityId());
+						}
+						catch (EventRenderingException e) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									String.format("Forwarding %s:%s event", getDomain(), getName()),
+									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e.printStackTrace();
+						}
+
+						EventChannelUtils.notify(forwardedEvent, shopChannel, eventGenerator);
+					}
+				}
+				
+			});
 		}
 		return userChannelEventHandlers;
 	}
