@@ -68,6 +68,9 @@ public class EventDispatchController {
 	//= Member Data ====================================================================================================
 	
 	@Autowired
+	private DeliveryRequestsController deliveryRequestsController;
+	
+	@Autowired
 	private EventTransformer eventTransformer;
 	
 	@Autowired
@@ -231,6 +234,7 @@ public class EventDispatchController {
 					DeliveryRequest request = new DeliveryRequest();
 					request.setUsername(driverUsername);
 					request.setShopDeliveryId(Long.parseLong((String) event.getAttribute("delivery_id")));
+					request.setShopId(Long.parseLong((String) event.getAttribute("shop_key")));
 					request.setDeliveryAddress((String) event.getAttribute("delivery_address"));
 					request.setRequestedPickupTime((String) event.getAttribute("pickup_time"));
 					request.setRequestedDeliveryTime((String) event.getAttribute("delivery_time"));
@@ -252,26 +256,11 @@ public class EventDispatchController {
 					if (	!doDistanceCheck
 						||  (   0.0 <= distanceInMiles
 						     && distanceInMiles <= 5.0)) {
-						BasicEventImpl bidAvailableEvent = null;
-						try {
-							bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-							bidAvailableEvent.addAttribute("driver_name", driverUsername);
-							bidAvailableEvent.addAttribute("shop_key", event.getAttribute("shop_key"));
-							bidAvailableEvent.addAttribute("delivery_id", event.getAttribute("delivery_id"));
-							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
-							bidAvailableEvent.addAttribute("amount", new Float(5.0f));
-							bidAvailableEvent.addAttribute("amount_units", "USD");
-						}
-						catch (EventRenderingException e) {
-							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
-									String.format("guild channel %s:%s handler", getDomain(), getName()),
-									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-							e.printStackTrace();
-						}
-						
-						if (bidAvailableEvent != null) {
-							EventChannelUtils.notify(bidAvailableEvent, channel, eventGenerator);
-						}
+						deliveryRequestsController.submitBid(
+								request.getId(),
+								DeliveryRequest.State.QUOTED_AUTOMATICALLY,
+								5.0f,
+								"5:00 PM");
 					}
 					else if (   userProfile != null
 							 && userProfile.getTextableNumber() != null) {
@@ -337,4 +326,5 @@ public class EventDispatchController {
 		}
 		return guildChannelEventHandlers;
 	}
+
 }

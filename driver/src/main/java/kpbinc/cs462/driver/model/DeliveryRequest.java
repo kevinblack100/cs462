@@ -9,6 +9,9 @@ public class DeliveryRequest extends Delivery {
 	
 	public enum State {
 		AVAILABLE_FOR_BID,
+		QUOTED_MANUALLY,
+		QUOTED_AUTOMATICALLY,
+		QUOTED_SEMIAUTOMATICALLY,
 		AWARDED,
 		NOT_AWARDED,
 		PICKED_UP,
@@ -19,12 +22,20 @@ public class DeliveryRequest extends Delivery {
 	//= Member Data ====================================================================================================
 	
 	private State state;
+	
 	private String username;
+	
 	private Long shopDeliveryId;
+	
+	private Long shopId;
 	private String shopName;
 	private String shopAddress;
 	private Long shopLatitude;
 	private Long shopLongitude;
+	
+	private String estimatedDeliveryTime;
+	private Float bidAmount;
+	private String bidAmountUnits;
 	
 	
 	//= Initialization =================================================================================================	
@@ -61,6 +72,14 @@ public class DeliveryRequest extends Delivery {
 		this.shopDeliveryId = shopDeliveryId;
 	}
 
+	public Long getShopId() {
+		return shopId;
+	}
+	
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
+	}
+	
 	public String getShopName() {
 		return shopName;
 	}
@@ -91,6 +110,30 @@ public class DeliveryRequest extends Delivery {
 
 	public void setShopLongitude(Long shopLongitude) {
 		this.shopLongitude = shopLongitude;
+	}
+
+	public String getEstimatedDeliveryTime() {
+		return estimatedDeliveryTime;
+	}
+
+	public void setEstimatedDeliveryTime(String estimatedDeliveryTime) {
+		this.estimatedDeliveryTime = estimatedDeliveryTime;
+	}
+
+	public Float getBidAmount() {
+		return bidAmount;
+	}
+
+	public void setBidAmount(Float amount) {
+		this.bidAmount = amount;
+	}
+
+	public String getBidAmountUnits() {
+		return bidAmountUnits;
+	}
+
+	public void setBidAmountUnits(String amountUnits) {
+		this.bidAmountUnits = amountUnits;
 	}
 
 }
