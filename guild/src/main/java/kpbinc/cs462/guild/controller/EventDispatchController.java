@@ -155,7 +155,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					String driverUsername = (String) event.getAttribute("driver_id");
 					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
 					
-					EventChannelUtils.notify(event, userChannel, eventGenerator);
+					EventChannelUtils.notify(forwardedEvent, userChannel, eventGenerator);
 				}
 			
 			});
@@ -182,7 +182,7 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 					String driverUsername = (String) event.getAttribute("driver_id");
 					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
 					
-					EventChannelUtils.notify(event, userChannel, eventGenerator);
+					EventChannelUtils.notify(forwardedEvent, userChannel, eventGenerator);
 				}
 				
 			});
