@@ -70,10 +70,14 @@ public class DeliveryRequestManager
 		return result;
 	}
 	
-	public DeliveryRequest retrieveByUsernameAndShopDeliveryId(String username, Long shopDeliveryId) {
+	public DeliveryRequest retrieveByUsernameShopIdAndShopDeliveryId(
+			String username,
+			Long shopId,
+			Long shopDeliveryId) {
 		DeliveryRequest result = null;
 		for (DeliveryRequest request : retrieveAll()) {
 			if (   StringUtils.equalsIgnoreCase(request.getUsername(), username)
+				&& request.getShopId().equals(shopId)
 				&& request.getShopDeliveryId().equals(shopDeliveryId)) {
 				result = request;
 				break;

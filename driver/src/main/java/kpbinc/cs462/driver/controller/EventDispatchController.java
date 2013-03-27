@@ -320,10 +320,11 @@ public class EventDispatchController {
 				@Override
 				protected void handleImpl(Event event, DriverGuildEventChannel channel) {
 					String username = channel.getLocalEntityId();
+					Long shopId = Long.parseLong((String) event.getAttribute("shop_key"));
 					Long shopDeliveryId = Long.parseLong((String) event.getAttribute("delivery_id"));
 					
 					DeliveryRequest deliveryRequest = 
-							deliveryRequestManager.retrieveByUsernameAndShopDeliveryId(username, shopDeliveryId);
+							deliveryRequestManager.retrieveByUsernameShopIdAndShopDeliveryId(username, shopId, shopDeliveryId);
 					if (deliveryRequest != null) {
 						deliveryRequest.setState(DeliveryRequest.State.AWARDED);
 						deliveryRequestManager.update(deliveryRequest);
@@ -339,10 +340,11 @@ public class EventDispatchController {
 				@Override
 				protected void handleImpl(Event event, DriverGuildEventChannel channel) {
 					String username = channel.getLocalEntityId();
+					Long shopId = Long.parseLong((String) event.getAttribute("shop_key"));
 					Long shopDeliveryId = Long.parseLong((String) event.getAttribute("delivery_id"));
 					
 					DeliveryRequest deliveryRequest = 
-							deliveryRequestManager.retrieveByUsernameAndShopDeliveryId(username, shopDeliveryId);
+							deliveryRequestManager.retrieveByUsernameShopIdAndShopDeliveryId(username, shopId, shopDeliveryId);
 					if (deliveryRequest != null) {
 						deliveryRequest.setState(DeliveryRequest.State.PICKED_UP);
 						deliveryRequestManager.update(deliveryRequest);

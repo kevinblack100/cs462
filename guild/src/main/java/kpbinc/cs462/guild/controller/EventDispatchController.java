@@ -139,6 +139,19 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 
 				@Override
 				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
+					// Enhance event
+					Event forwardedEvent = event.clone();
+					try {
+						forwardedEvent.addAttribute("shop_key", channel.getId());
+					}
+					catch (EventRenderingException e) {
+						logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+								String.format("Forwarding %s:%s event", getDomain(), getName()),
+								e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+						e.printStackTrace();
+					}
+					
+					// Send event
 					String driverUsername = (String) event.getAttribute("driver_id");
 					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
 					
