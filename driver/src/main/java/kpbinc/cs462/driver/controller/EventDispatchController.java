@@ -14,17 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import kpbinc.cs462.driver.model.DeliveryRequest;
 import kpbinc.cs462.driver.model.DriverGuildEventChannel;
-import kpbinc.cs462.driver.model.DriverProfile;
-import kpbinc.cs462.driver.model.StashedEvent;
 import kpbinc.cs462.driver.model.UserProfile;
 import kpbinc.cs462.driver.model.manage.DeliveryRequestManager;
 import kpbinc.cs462.driver.model.manage.DriverGuildEventChannelManager;
 import kpbinc.cs462.driver.model.manage.DriverProfileManager;
 import kpbinc.cs462.driver.model.manage.StashedEventManager;
 import kpbinc.cs462.driver.model.manage.UserProfileManager;
-import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
-import kpbinc.cs462.shared.event.EventChannelUtils;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventChannelEventHandler;
@@ -62,7 +58,7 @@ public class EventDispatchController {
 	public static final String TWILIO_PHONE_NUMBER = "+18014710490";
 	public static final String DEFAULT_SMS_DEST_NUMBER = "+18013618342";
 	
-	public static final boolean doDistanceCheck = false;
+	public static final boolean doDistanceCheck = true;
 	
 	
 	//= Member Data ====================================================================================================
@@ -160,54 +156,40 @@ public class EventDispatchController {
 			responsePayloadWriter.write("received");
 			responsePayloadWriter.flush();
 			
-			UserProfile profile = userProfileManager.getByTextableNumber(fromNumber);
-			
-			if (profile != null) {
-				DriverProfile driverProfile = driverProfileManager.retrieve(profile.getUsername());
+			// TODO validate that the phone number is valid
+//			UserProfile profile = userProfileManager.getByTextableNumber(fromNumber);
+//			
+//			if (profile != null) {
+				StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");
+				String firstToken = tokenizer.nextToken();
+				Long deliveryRequestId = Long.parseLong(firstToken);
+				DeliveryRequest deliveryRequest = deliveryRequestManager.retrieve(deliveryRequestId);
 				
-				if (driverProfile != null) {
-					StringTokenizer tokenizer = new StringTokenizer(messageBody, " ");
-					String firstToken = tokenizer.nextToken();
-					Long eventID = Long.parseLong(firstToken);
-					StashedEvent stashed = stashedEventManager.retrieve(eventID);
+				if (   deliveryRequest != null) {
+//					&& StringUtils.equals(deliveryRequest.getUsername(), profile.getUsername())) {
 					
-					if (   stashed != null
-						&& stashed.getEvent() != null
-						&& StringUtils.equals(stashed.getDriverUsername(), profile.getUsername())
-						&& stashed.getShopProfileID() != null) {
-						Event event = stashed.getEvent();
-						
-						String command = messageBody.substring(messageBody.indexOf(" ") + 1);
-						if (   StringUtils.equalsIgnoreCase(command, "bid anyway")
-							&& event.getDomain().equals("rfq")
-							&& event.getName().equals("delivery_ready")) {
-							
-							BasicEventImpl bidAvailableEvent = new BasicEventImpl("rfq", "bid_available");
-							bidAvailableEvent.addAttribute("driver_name", profile.getUsername());
-							bidAvailableEvent.addAttribute("delivery_id", event.getAttributes().get("delivery_id").get(0));
-							bidAvailableEvent.addAttribute("delivery_time_est", "5:00 PM");
-							bidAvailableEvent.addAttribute("amount", new Float(6.0f));
-							bidAvailableEvent.addAttribute("amount_units", "USD");
-							
-							Long shopProfileID = stashed.getShopProfileID();
-							String bidAvailableESL = driverProfile.getRegisteredESLs().get(shopProfileID).get("rfq:bid_available");
-							eventGenerator.sendEvent(bidAvailableESL, bidAvailableEvent);
-						}
+					String command = messageBody.substring(messageBody.indexOf(" ") + 1);
+					if (   StringUtils.equalsIgnoreCase(command, "bid anyway")
+						&& deliveryRequest.getState().equals(DeliveryRequest.State.AVAILABLE_FOR_BID)) {
+						deliveryRequestsController.submitBid(
+								deliveryRequestId,
+								DeliveryRequest.State.QUOTED_SEMIAUTOMATICALLY,
+								6.0f,
+								"6:00 PM");
 					}
 				}
-			}
-		}
-		catch (EventRenderingException e) {
-			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Can't parse Event", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
-			e.printStackTrace();
+//			}
+			// else non-registered person sent text
 		}
 		catch (NumberFormatException e) {
-			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Can't parse Number", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+					"EDC: Can't parse Number", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
 		catch (IOException e) {
 			// problem in preparing the response
-			logger.warning(GlobalLogUtils.formatHandledExceptionMessage("EDC: Couldn't prepare response", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+			logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+					"EDC: Couldn't prepare response", e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 			e.printStackTrace();
 		}
 		
@@ -267,16 +249,6 @@ public class EventDispatchController {
 					else if (   userProfile != null
 							 && userProfile.getTextableNumber() != null) {
 						// TODO double check logic here
-						logger.info("EDC: stashing event...");
-						
-						StashedEvent stashed = new StashedEvent();
-						stashed.setEvent(event);
-						stashed.setShopProfileID(1L);
-						stashed.setDriverUsername(driverUsername);
-						stashedEventManager.register(stashed);
-						Long stashID = stashed.getId();
-						
-						logger.info("EDC: event stashed.");
 						
 						// Based on Twilio's documentation: http://www.twilio.com/docs/api/rest/sending-sms
 						logger.info("EDC: preparing twilio message");
@@ -284,7 +256,7 @@ public class EventDispatchController {
 						
 					    Map<String, String> params = new HashMap<String, String>();
 					    String messageContent = String.format("Flower Delivery Ready: id: %d, shop: %s, pickup: %s, address: %s",
-					    		stashID,
+					    		deliveryRequest.getId(),
 					    		event.getAttribute("shop_name"),
 					    		event.getAttribute("pickup_time"),
 					    		event.getAttribute("delivery_address"));
