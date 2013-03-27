@@ -133,6 +133,20 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 				
 			});
 			
+			// rfq:bid_awarded handler
+			shopChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<GuildFlowerShopEventChannel>("rfq", "bid_awarded") {
+
+				@Override
+				protected void handleImpl(Event event, GuildFlowerShopEventChannel channel) {
+					String driverUsername = (String) event.getAttribute("driver_id");
+					GuildUserEventChannel userChannel = guildUserEventChannelManager.retrieveByUsername(driverUsername);
+					
+					EventChannelUtils.notify(event, userChannel, eventGenerator);
+				}
+			
+			});
+			
 			// delivery:picked_up handler
 			shopChannelEventHandlers.add(new
 				SingleEventTypeEventChannelEventHandler<GuildFlowerShopEventChannel>("delivery", "picked_up") {

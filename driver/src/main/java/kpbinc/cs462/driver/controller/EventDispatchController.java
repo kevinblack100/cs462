@@ -213,7 +213,7 @@ public class EventDispatchController {
 		if (guildChannelEventHandlers == null) {
 			guildChannelEventHandlers = new ArrayList<EventChannelEventHandler<DriverGuildEventChannel>>();
 			
-			// rfq:delivery_ready event handler
+			// rfq:delivery_ready handler
 			guildChannelEventHandlers.add(new
 				SingleEventTypeEventChannelEventHandler<DriverGuildEventChannel>("rfq", "delivery_ready") {
 				
@@ -304,6 +304,17 @@ public class EventDispatchController {
 					else {
 						logger.warning("EDC: Either no user, user not within distance, or has no textable number");
 					}
+				}
+				
+			});
+			
+			// rfq:bid_awarded handler
+			guildChannelEventHandlers.add(new
+				SingleEventTypeEventChannelEventHandler<DriverGuildEventChannel>("rfq", "bid_awarded") {
+				
+				@Override
+				protected void handleImpl(Event event, DriverGuildEventChannel channel) {
+					logger.info(String.format("received %s:%s", getDomain(), getName()));
 				}
 				
 			});
