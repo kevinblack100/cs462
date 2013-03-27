@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import kpbinc.cs462.guild.model.GuildUserEventChannel;
+import kpbinc.cs462.guild.model.UserProfile;
 import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
+import kpbinc.cs462.guild.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.controller.context.CommonApplicationConstants;
 import kpbinc.cs462.shared.controller.context.LoggedInUserContext;
 import kpbinc.cs462.shared.event.ESLGenerator;
@@ -59,6 +61,9 @@ public class AccountsController extends GuildBaseSiteContextController implement
 	@Autowired
 	private GuildUserEventChannelManager guildUserEventChannelManager;
 
+	@Autowired
+	private UserProfileManager userProfileManager;
+	
 	
 	//= Initialization =================================================================================================
 	
@@ -101,6 +106,12 @@ public class AccountsController extends GuildBaseSiteContextController implement
 			
 			UserDetails newRegistrantDetails = new User(username, defaultPassword, authorities);
 			userDetailsManager.createUser(newRegistrantDetails);
+			
+			// Create a profile for the user
+			UserProfile profile = new UserProfile();
+			profile.setUsername(username);
+			profile.setDriverRanking(new Long(1L));
+			userProfileManager.register(profile);
 			
 			// Create a channel for the user
 			GuildUserEventChannel channel = new GuildUserEventChannel();

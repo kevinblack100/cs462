@@ -11,6 +11,19 @@
 				<dt>Username:</dt>
 				<dd>${username}</dd>
 			</dl>
+			<dl>
+				<dt>Driver ranking:</dt>
+				<dd>
+					<c:choose>
+						<c:when test="${profile.driverRanking ne null}">
+							${profile.driverRanking}
+						</c:when>
+						<c:otherwise>
+							Not Specified
+						</c:otherwise>
+					</c:choose>
+				</dd>
+			</dl>
 			<h4>User Channel Details</h4>
 			<dl>
 				<dt>ID:</dt>
