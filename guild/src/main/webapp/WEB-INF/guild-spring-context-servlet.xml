@@ -59,6 +59,10 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/user-profiles.json" />
 	</bean>
+	<bean id="drivingRankingEngine"
+		class="kpbinc.cs462.guild.model.manage.DriverRankingEngine"
+		scope="singleton">
+	</bean>
 	
 	
 	<!-- View Resolution Rules -->
