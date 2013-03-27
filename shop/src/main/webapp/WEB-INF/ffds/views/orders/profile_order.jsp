@@ -39,6 +39,7 @@
 					<td class="table-header">Bid ID</td>
 					<td class="table-header">Driver ID</td>
 					<td class="table-header">Driver Name</td>
+					<td class="table-header">Driver Ranking</td>
 					<td class="table-header">Estimated Delivery Time</td>
 					<td class="table-header">Amount</td>
 					<td class="table-header">Amount Unit</td>
@@ -51,6 +52,7 @@
 					<td>${bid.id}</td>
 					<td>${bid.driverId}</td>
 					<td>${bid.driverName}</td>
+					<td>${bid.driverRanking}</td>
 					<td>${bid.estimatedDeliveryTime}</td>
 					<td>${bid.amount}</td>
 					<td>${bid.amountUnits}</td>

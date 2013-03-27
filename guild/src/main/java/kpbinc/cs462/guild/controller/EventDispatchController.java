@@ -14,6 +14,7 @@ import kpbinc.cs462.guild.model.UserProfile;
 import kpbinc.cs462.guild.model.manage.DriverRankingEngine;
 import kpbinc.cs462.guild.model.manage.GuildFlowerShopEventChannelManager;
 import kpbinc.cs462.guild.model.manage.GuildUserEventChannelManager;
+import kpbinc.cs462.guild.model.manage.UserProfileManager;
 import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventChannelUtils;
@@ -58,6 +59,9 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 	
 	@Autowired
 	private DriverRankingEngine driverRankingEngine;
+	
+	@Autowired
+	private UserProfileManager userProfileManager;
 	
 	private Collection<EventChannelEventHandler<GuildFlowerShopEventChannel>> shopChannelEventHandlers;
 	
@@ -223,8 +227,11 @@ public class EventDispatchController extends GuildBaseSiteContextController {
 						forwardedEvent.removeAttribute("shop_key");
 						
 						try {
-							forwardedEvent.addAttribute("driver_id", channel.getRemoteEntityId());
-							// TODO enhance with driver ranking
+							String driverUsername = channel.getRemoteEntityId();
+							forwardedEvent.addAttribute("driver_id", driverUsername);
+							
+							UserProfile profile = userProfileManager.retrieve(driverUsername);
+							forwardedEvent.addAttribute("driver_ranking", profile.getDriverRanking());
 						}
 						catch (EventRenderingException e) {
 							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(

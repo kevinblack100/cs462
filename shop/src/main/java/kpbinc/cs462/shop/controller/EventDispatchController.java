@@ -95,6 +95,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 					Long orderID = Long.parseLong((String) event.getAttribute("delivery_id"));
 					String driverId = (String) event.getAttribute("driver_id");
 					String driverName = (String) event.getAttribute("driver_name");
+					Long driverRanking = Long.parseLong((String) event.getAttribute("driver_ranking"));
 					String estimatedDeliveryTime = (String) event.getAttribute("delivery_time_est");
 					Double amount = Double.parseDouble((String) event.getAttribute("amount"));
 					String amountUnits = (String) event.getAttribute("amount_units");
@@ -103,6 +104,7 @@ public class EventDispatchController extends ShopBaseSiteContextController {
 					bid.setOrderID(orderID);
 					bid.setDriverId(driverId);
 					bid.setDriverName(driverName);
+					bid.setDriverRanking(driverRanking);
 					bid.setEstimatedDeliveryTime(estimatedDeliveryTime);
 					bid.setAmount(amount);
 					bid.setAmountUnits(amountUnits);

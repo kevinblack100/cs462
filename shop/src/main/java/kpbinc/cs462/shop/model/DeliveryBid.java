@@ -11,6 +11,7 @@ public class DeliveryBid implements HasId<Long> {
 	public Long orderID;
 	public String driverId;
 	public String driverName;
+	public Long driverRanking;
 	public String estimatedDeliveryTime;
 	public Double amount;
 	public String amountUnits;
@@ -55,6 +56,14 @@ public class DeliveryBid implements HasId<Long> {
 
 	public void setDriverName(String driverName) {
 		this.driverName = driverName;
+	}
+	
+	public Long getDriverRanking() {
+		return driverRanking;
+	}
+
+	public void setDriverRanking(Long driverRanking) {
+		this.driverRanking = driverRanking;
 	}
 
 	public String getEstimatedDeliveryTime() {
