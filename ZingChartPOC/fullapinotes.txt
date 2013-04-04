@@ -1,0 +1,42 @@
+Following ZingChart API Doc tutorial at http://api.zingchart.com/docs/#tutorial-03
+
+Using Chrome's REST Console
+
+
+---
+Step 1 - Get a ZingId storage space
+
+request:
+tutorial says: post to http://api.zingchart.com/put (get 406 with put.php explanation)
+actually have to: post to http://api.zingchart.com/put.php
+
+body content-type has to be application/x-www-form-urlencoded
+
+sample body
+data=%7B%22graphset%22+%3A+%5B%7B%22type%22+%3A+%22line%22%2C%22series%22+%3A+%5B%7B%22values%22+%3A+%5B16%2C12%2C8%2C7%2C6%2C11%2C12%2C11%2C14%2C9%5D%7D%5D%7D%5D%7D&imageformat=jpg&imagequality=80
+
+
+response:
+{"result":1,"error":"","zingid":"515cf5150b3cb","lockcode":"777587af8660e510dd9dc196372e439a"}
+
+
+
+---
+Step 2 - Retrieve info from ZingId storage space
+
+request
+tutorial says: post to http://api.zingchart.com/get (get 406 with get.php explanation)
+actually have to: post to http://api.zingchart.com/get.php
+
+sample body
+zingid=515cf5150b3cb
+
+response w/ post with parameters in body
+{"result":1,"error":"","data":"{\"graphset\" : [{\"type\" : \"line\",\"series\" : [{\"values\" : [16,12,8,7,6,11,12,11,14,9]}]}]}","width":"0","height":"0","provider":"","imageformat":"jpg","imagequality":"80","wmtype":"0","wmposition":"","output":"","fileurl":"","encoding":"","filename":""}
+
+response w/ get/post/put/delete with parameters in query string
+{"result":1,"error":"","data":"{\"graphset\" : [{\"type\" : \"line\",\"series\" : [{\"values\" : [16,12,8,7,6,11,12,11,14,9]}]}]}","width":"0","height":"0","provider":"","imageformat":"jpg","imagequality":"80","wmtype":"0","wmposition":"","output":"","fileurl":"","encoding":"","filename":""}
+
+
+---
+Step 3 -
