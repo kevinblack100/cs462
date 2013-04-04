@@ -22,7 +22,7 @@ response:
 
 
 ---
-Step 2 - Retrieve info from ZingId storage space
+Step 2 - Retrieve data from ZingId storage space
 
 request
 tutorial says: post to http://api.zingchart.com/get (get 406 with get.php explanation)
@@ -38,5 +38,24 @@ response w/ get/post/put/delete with parameters in query string
 {"result":1,"error":"","data":"{\"graphset\" : [{\"type\" : \"line\",\"series\" : [{\"values\" : [16,12,8,7,6,11,12,11,14,9]}]}]}","width":"0","height":"0","provider":"","imageformat":"jpg","imagequality":"80","wmtype":"0","wmposition":"","output":"","fileurl":"","encoding":"","filename":""}
 
 
+
 ---
-Step 3 -
+Step 3 - Update ZingId storage space
+
+request
+tutorial says: post to http://api.zingchart.com/put (get 406 with put.php explanation)
+actually have to: post to http://api.zingchart.com/put.php
+
+sample body (need to specify lockcode)
+zingid=515cf5150b3cb&lockcode=777587af8660e510dd9dc196372e439a&data=%7B%22graphset%22+%3A+%5B%7B%22type%22+%3A+%22line%22%2C%22series%22+%3A+%5B%7B%22values%22+%3A+%5B116%2C112%2C88%2C87%2C86%2C111%2C112%2C111%2C114%2C89%5D%7D%5D%7D%5D%7D&imageformat=png&imagequality=60
+
+response
+- w/ post with parameters in body
+- w/ get/post/put/delete with parameters in query string
+{"result":1,"error":"","zingid":"515cf5150b3cb","lockcode":"777587af8660e510dd9dc196372e439a"}
+
+
+
+---
+Step 4 - Embed rendering reference in an img tag or a dynamic reference in a script tag
+See the tutorial docs.
