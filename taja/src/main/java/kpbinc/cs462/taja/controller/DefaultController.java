@@ -14,6 +14,7 @@ public class DefaultController extends TAJABaseSiteContextController {
 	//= Initialization =================================================================================================
 	
 	public DefaultController() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 

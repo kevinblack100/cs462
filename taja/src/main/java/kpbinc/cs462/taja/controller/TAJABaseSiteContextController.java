@@ -8,6 +8,7 @@ public class TAJABaseSiteContextController extends SharedBaseSiteContextControll
 	//= Initialization =================================================================================================
 	
 	public TAJABaseSiteContextController() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 
