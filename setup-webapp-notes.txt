@@ -9,7 +9,7 @@ got maven for Eclipse (m2e)
 created a maven webapp project in Eclipse
 - GroupId org.apache.maven.archetypes
 - ArtifactId maven-archetype-webapp
-- Vertion RELEASE
+- Version RELEASE
 
 make the project faceted with the follower facets
 - Dynamic Web Module (required to be able to run a dev server)
@@ -54,7 +54,11 @@ update web.xml to have a jsp-file in the servlet spec for /index.jsp, and a serv
 </web-app>
 
 
+create a new Server with the project module
+
 if you can access the webapp then commit the changes
+
+
 
 
 
