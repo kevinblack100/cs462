@@ -39,6 +39,11 @@
 	<context:component-scan base-package="kpbinc.cs462.taja.model.manage" use-default-filters="false">
     	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
+	<bean id="wordCountTaskResultsManager"
+		class="kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/wordcount-task-results.json" />
+	</bean>
 	
 	
 	<!-- View Resolution Rules -->

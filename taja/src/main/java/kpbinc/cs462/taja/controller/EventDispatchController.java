@@ -1,6 +1,7 @@
 package kpbinc.cs462.taja.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventTransformer;
+import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller
@@ -24,6 +26,11 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private WordCountTaskResultsManager wordCountTaskResultsManager;
+	
+	private Collection<EventHandler> publicEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -48,4 +55,18 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 				new ArrayList<EventHandler>());
 	}
 	
+	
+	//= Support ========================================================================================================
+	
+	private Collection<EventHandler> getPublicEventHandlers() {
+		if (publicEventHandlers == null) {
+			publicEventHandlers = new ArrayList<EventHandler>();
+			
+			// job:task_results
+//			publicEventHandlers.add(new SingleEventTypeEventHandler("job", "task_results") {
+//				
+//			});
+		}
+		return publicEventHandlers;
+	}
 }

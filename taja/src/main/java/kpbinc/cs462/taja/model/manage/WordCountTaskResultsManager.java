@@ -1,0 +1,46 @@
+package kpbinc.cs462.taja.model.manage;
+
+import java.io.File;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import kpbinc.cs462.shared.model.aspect.IDGeneratingIDAccessor;
+import kpbinc.cs462.shared.model.aspect.IDGenerator;
+import kpbinc.cs462.shared.model.aspect.IncreasingLongIDGeneratorStrategy;
+import kpbinc.cs462.shared.model.manage.JsonFileStorePersistentMapStorageManager;
+import kpbinc.cs462.taja.model.WordCountTaskResults;
+import kpbinc.io.util.JsonFileStore;
+import kpbinc.util.PropertyAccessor;
+import kpbinc.util.logging.GlobalLogUtils;
+
+public class WordCountTaskResultsManager
+	extends JsonFileStorePersistentMapStorageManager<Long, WordCountTaskResults> {
+
+	//= Initialization =================================================================================================
+	
+	//- Constructor ----------------------------------------------------------------------------------------------------
+	
+	public WordCountTaskResultsManager(String fileStoreRelativePath) {
+		super(fileStoreRelativePath);
+		GlobalLogUtils.logConstruction(this);
+	}
+	
+	//- Support --------------------------------------------------------------------------------------------------------
+	
+	@Override
+	protected JsonFileStore<Map<Long, WordCountTaskResults>> getJsonFileStore(File file) {
+		JsonFileStore<Map<Long, WordCountTaskResults>> jsonFileStore =
+				new JsonFileStore<Map<Long, WordCountTaskResults>>(file,
+						new TypeReference<Map<Long, WordCountTaskResults>>() {});
+		return jsonFileStore;
+	}
+
+	@Override
+	protected PropertyAccessor<? super WordCountTaskResults, Long> initializeKeyAccessor() {
+		PropertyAccessor<? super WordCountTaskResults, Long> keyAccessor =
+				new IDGeneratingIDAccessor<Long>(new IDGenerator<Long>(new IncreasingLongIDGeneratorStrategy(this)));
+		return keyAccessor;
+	}
+
+}
