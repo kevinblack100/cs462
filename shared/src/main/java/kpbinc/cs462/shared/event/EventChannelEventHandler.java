@@ -1,14 +1,6 @@
 package kpbinc.cs462.shared.event;
 
-public interface EventChannelEventHandler<C extends EventChannel<?, ?>> {
-
-	/**
-	 * @param event
-	 * @return
-	 * 
-	 * @throws NullPointerException if event is null
-	 */
-	boolean handles(Event event);
+public interface EventChannelEventHandler<C extends EventChannel<?, ?>> extends EventHandler {
 
 	/**
 	 * @param event

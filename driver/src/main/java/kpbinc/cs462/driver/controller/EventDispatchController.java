@@ -131,7 +131,7 @@ public class EventDispatchController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable(value = "channel-id") Long channelId) {
-		EventDispatcher.dispatchEvent(
+		EventDispatcher.dispatchEventFromChannel(
 				"dispatch guild event",
 				request,
 				response,

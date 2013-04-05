@@ -47,6 +47,11 @@ public abstract class SingleEventTypeEventChannelEventHandler<C extends EventCha
 	}
 
 	@Override
+	public void handle(Event event) {
+		handle(event, null);
+	}
+	
+	@Override
 	public void handle(Event event, C channel) {
 		if (handles(event)) {
 			String coreMessage = String.format("handling %s:%s event received on channel %d.",

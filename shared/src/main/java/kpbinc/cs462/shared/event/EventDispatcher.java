@@ -23,7 +23,16 @@ public class EventDispatcher {
 	
 	//= Interface ======================================================================================================
 	
-	public static <T extends EventChannel<?, ?>> void dispatchEvent(
+	public static void dispatchEvent(
+			String logMessagePrefix,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			EventTransformer eventTransformer,
+			Collection<EventHandler> eventHandlers) {
+		
+	}
+	
+	public static <T extends EventChannel<?, ?>> void dispatchEventFromChannel(
 			String logMessagePrefix,
 			HttpServletRequest request,
 			HttpServletResponse response,
