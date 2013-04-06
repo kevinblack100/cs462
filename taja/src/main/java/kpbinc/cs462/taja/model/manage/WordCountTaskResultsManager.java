@@ -1,6 +1,8 @@
 package kpbinc.cs462.taja.model.manage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -43,4 +45,17 @@ public class WordCountTaskResultsManager
 		return keyAccessor;
 	}
 
+	
+	//= Interface ======================================================================================================
+	
+	public Collection<WordCountTaskResults> retrieveByJobId(Long jobId) {
+		Collection<WordCountTaskResults> result = new ArrayList<WordCountTaskResults>();
+		for (WordCountTaskResults task : this.retrieveAll()) {
+			if (task.getJobId().equals(jobId)) {
+				result.add(task);
+			}
+		}
+		return result;
+	}
+	
 }

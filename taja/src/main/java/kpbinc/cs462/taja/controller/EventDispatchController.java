@@ -74,6 +74,7 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 
 				@Override
 				protected void handleImpl(Event event) {
+					// TODO check the task_type attribute is "wordcount"
 					WordCountTaskResults results = new WordCountTaskResults();
 					results.setJobId(Long.parseLong((String) event.getAttribute("job_id")));
 					results.setTaskId(Long.parseLong((String) event.getAttribute("task_id")));
