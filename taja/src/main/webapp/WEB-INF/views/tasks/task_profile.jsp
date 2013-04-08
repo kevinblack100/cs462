@@ -14,7 +14,7 @@
 			</dl>
 			<dl>
 				<dt>Job ID:</dt>
-				<dd>${task.jobId}</dd>
+				<dd><a href="${contextPaths.dynamicPath}/jobs/${task.jobId}">${task.jobId}</a></dd>
 			</dl>
 			<dl>
 				<dt>Task ID:</dt>

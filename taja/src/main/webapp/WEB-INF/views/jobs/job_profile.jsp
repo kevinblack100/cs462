@@ -42,9 +42,9 @@
 						<tbody>
 							<c:forEach items="${tasks}" var="task">
 								<tr>
-									<td>${task.id}</td>
+									<td><a href="${contextPaths.dynamicPath}/tasks/${task.id}">${task.id}</a></td>
 									<td>${task.jobId}</td>
-									<td>${task.taskId}</td>
+									<td><a href="${contextPaths.dynamicPath}/tasks/${task.id}">${task.taskId}</a></td>
 									<td>${task.wordCounts.size()}</td>
 								</tr>
 							</c:forEach>
