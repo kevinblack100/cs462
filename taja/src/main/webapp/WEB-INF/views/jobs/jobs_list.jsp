@@ -13,7 +13,7 @@
 		<table>
 			<thead>
 				<tr>
-					<td>ID</td>
+					<td>Results ID</td>
 					<td>Job ID</td>
 					<td># Words</td>
 					<td>Chart</td>
@@ -22,8 +22,8 @@
 			<tbody>
 				<c:forEach items="${jobs}" var="job">
 					<tr>
-						<td>${job.id}</td>
-						<td>${job.jobId}</td>
+						<td><a href="${contextPaths.dynamicPath}/jobs/${job.jobId}">${job.id}</a></td>
+						<td><a href="${contextPaths.dynamicPath}/jobs/${job.jobId}">${job.jobId}</a></td>
 						<td>${job.wordCounts.size()}</td>
 						<td>
 							TODO
