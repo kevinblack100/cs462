@@ -12,7 +12,7 @@
 		<br>
 		<div>
 			<dl>
-				<dt>Results ID:</dt>
+				<dt>Job Results ID:</dt>
 				<dd>${job.id}</dd>
 			</dl>
 			<dl>
@@ -26,6 +26,31 @@
 			<dl>
 				<dt>Chart:</dt>
 				<dd>TODO</dd>
+			</dl>
+			<dl>
+				<dt>Tasks:</dt>
+				<dd>
+					<table>
+						<thead>
+							<tr>
+								<td>Task Results ID</td>
+								<td>Job ID</td>
+								<td>Task ID</td>
+								<td># Words</td>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${tasks}" var="task">
+								<tr>
+									<td>${task.id}</td>
+									<td>${task.jobId}</td>
+									<td>${task.taskId}</td>
+									<td>${task.wordCounts.size()}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</dd>
 			</dl>
 		</div>
 	</jsp:body>

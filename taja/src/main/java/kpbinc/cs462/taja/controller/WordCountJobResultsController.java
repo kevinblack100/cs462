@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kpbinc.cs462.taja.model.WordCountJobResults;
+import kpbinc.cs462.taja.model.WordCountTaskResults;
 import kpbinc.cs462.taja.model.manage.WordCountJobResultsManager;
+import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller
@@ -22,6 +24,9 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 	
 	@Autowired
 	private WordCountJobResultsManager wordCountJobResultsManager;
+	
+	@Autowired
+	private WordCountTaskResultsManager wordCountTaskResultsManager;
 	
 	
 	//= Initialization =================================================================================================
@@ -50,6 +55,9 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 			ModelMap model) {
 		WordCountJobResults job = wordCountJobResultsManager.retrieveByJobId(jobId);
 		model.addAttribute("job", job);
+		
+		Collection<WordCountTaskResults> tasks = wordCountTaskResultsManager.retrieveByJobId(jobId);
+		model.addAttribute("tasks", tasks);
 		
 		return "jobs/job_profile";
 	}

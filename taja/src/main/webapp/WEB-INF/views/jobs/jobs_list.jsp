@@ -16,7 +16,6 @@
 					<td>Results ID</td>
 					<td>Job ID</td>
 					<td># Words</td>
-					<td>Chart</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -25,10 +24,6 @@
 						<td><a href="${contextPaths.dynamicPath}/jobs/${job.jobId}">${job.id}</a></td>
 						<td><a href="${contextPaths.dynamicPath}/jobs/${job.jobId}">${job.jobId}</a></td>
 						<td>${job.wordCounts.size()}</td>
-						<td>
-							TODO
-<%-- 						<script type="text/javascript" src="http://api.zingchart.com/html5?${renderingQueryStrings[task.id]}"></script> --%>
-						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
