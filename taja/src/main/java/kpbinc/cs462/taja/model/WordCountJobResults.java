@@ -12,6 +12,7 @@ public class WordCountJobResults extends WordCountResults {
 	//= Initialization =================================================================================================
 	
 	public WordCountJobResults() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 
