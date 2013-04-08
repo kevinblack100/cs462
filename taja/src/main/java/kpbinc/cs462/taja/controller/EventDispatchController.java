@@ -20,7 +20,9 @@ import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeEventHandler;
+import kpbinc.cs462.taja.model.WordCountJobResults;
 import kpbinc.cs462.taja.model.WordCountTaskResults;
+import kpbinc.cs462.taja.model.manage.WordCountJobResultsManager;
 import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -33,6 +35,9 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private WordCountJobResultsManager wordCountJobResultsManager;
 	
 	@Autowired
 	private WordCountTaskResultsManager wordCountTaskResultsManager;
@@ -75,9 +80,10 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 				@Override
 				protected void handleImpl(Event event) {
 					// TODO check the task_type attribute is "wordcount"
-					WordCountTaskResults results = new WordCountTaskResults();
-					results.setJobId(Long.parseLong((String) event.getAttribute("job_id")));
-					results.setTaskId(Long.parseLong((String) event.getAttribute("task_id")));
+					// Parse and store the task
+					WordCountTaskResults taskResults = new WordCountTaskResults();
+					taskResults.setJobId(Long.parseLong((String) event.getAttribute("job_id")));
+					taskResults.setTaskId(Long.parseLong((String) event.getAttribute("task_id")));
 					
 					Map<String, Long> wordCounts = new TreeMap<String, Long>();
 					for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
@@ -92,9 +98,31 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 							wordCounts.put(word, totalCount);
 						}
 					}
-					results.setWordCounts(wordCounts);
+					taskResults.setWordCounts(wordCounts);
 					
-					wordCountTaskResultsManager.register(results);
+					wordCountTaskResultsManager.register(taskResults);
+					
+					// Update job
+					WordCountJobResults jobResults = wordCountJobResultsManager.retrieveByJobId(taskResults.getJobId());
+					if (jobResults == null) {
+						jobResults = new WordCountJobResults();
+						jobResults.setJobId(taskResults.getJobId());
+						jobResults.setWordCounts(new TreeMap<String, Long>());
+						wordCountJobResultsManager.register(jobResults);
+					}
+					Map<String, Long> jobWordCounts = jobResults.getWordCounts();
+					for (Map.Entry<String, Long> wordCountEntry : taskResults.getWordCounts().entrySet()) {
+						String word = wordCountEntry.getKey();
+						Long taskWordCount = wordCountEntry.getValue();
+						if (!jobWordCounts.containsKey(word)) {
+							jobWordCounts.put(word, taskWordCount);
+						}
+						else {
+							Long updatedJobWordCount = jobWordCounts.get(word) + taskWordCount;
+							jobWordCounts.put(word, updatedJobWordCount);
+						}
+					}
+					wordCountJobResultsManager.update(jobResults);
 				}
 				
 			});

@@ -44,6 +44,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/wordcount-task-results.json" />
 	</bean>
+	<bean id="wordCountJobResultsManager"
+		class="kpbinc.cs462.taja.model.manage.WordCountJobResultsManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/wordcount-job-results.json" />
+	</bean>
 	
 	
 	<!-- View Resolution Rules -->
