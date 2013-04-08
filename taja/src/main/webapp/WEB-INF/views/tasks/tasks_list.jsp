@@ -17,17 +17,15 @@
 					<td>Job ID</td>
 					<td>Task ID</td>
 					<td># Words</td>
-					<td>Chart</td>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${tasks}" var="task">
 					<tr>
-						<td>${task.id}</td>
+						<td><a href="${contextPaths.dynamicPath}/tasks/${task.id}">${task.id}</a></td>
 						<td><a href="${contextPaths.dynamicPath}/jobs/${task.jobId}">${task.jobId}</a></td>
-						<td>${task.taskId}</td>
+						<td><a href="${contextPaths.dynamicPath}/tasks/${task.id}">${task.taskId}</a></td>
 						<td>${task.wordCounts.size()}</td>
-						<td><script type="text/javascript" src="http://api.zingchart.com/html5?${renderingQueryStrings[task.id]}"></script></td>
 					</tr>
 				</c:forEach>
 			</tbody>

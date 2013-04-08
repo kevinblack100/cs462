@@ -58,4 +58,15 @@ public class WordCountTaskResultsManager
 		return result;
 	}
 	
+	public WordCountTaskResults retrieveByTaskId(Long taskId) {
+		WordCountTaskResults result = null;
+		for (WordCountTaskResults task : this.retrieveAll()) {
+			if (task.getTaskId().equals(taskId)) {
+				result = task;
+				break;
+			}
+		}
+		return result;
+	}
+	
 }

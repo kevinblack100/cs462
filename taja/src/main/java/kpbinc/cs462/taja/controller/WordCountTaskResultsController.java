@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Scope(value = "request")
+@RequestMapping(value = "/tasks")
 public class WordCountTaskResultsController extends TAJABaseSiteContextController {
 	
 	//= Member Data ====================================================================================================
@@ -38,7 +39,7 @@ public class WordCountTaskResultsController extends TAJABaseSiteContextControlle
 	
 	//- Web API --------------------------------------------------------------------------------------------------------
 	
-	@RequestMapping(value = "/tasks")
+	@RequestMapping
 	public String getTaskList(ModelMap model) {		
 		Collection<WordCountTaskResults> tasks = wordCountTaskResultsManager.retrieveAll();
 		model.addAttribute("tasks", tasks);
@@ -49,6 +50,18 @@ public class WordCountTaskResultsController extends TAJABaseSiteContextControlle
 		return "tasks/tasks_list";
 	}
 	
+	@RequestMapping(value = "/{task-results-id}")
+	public String getTaskProfile(
+			@PathVariable(value = "task-results-id") Long taskResultsId,
+			ModelMap model) {
+		WordCountTaskResults task = wordCountTaskResultsManager.retrieve(taskResultsId);
+		model.addAttribute("task", task);
+		
+		String renderingQueryString = getZingChartRenderingQueryString(task);
+		model.addAttribute("renderingQueryString", renderingQueryString);
+		
+		return "tasks/task_profile";
+	}
 	
 	//= Support ========================================================================================================
 	
