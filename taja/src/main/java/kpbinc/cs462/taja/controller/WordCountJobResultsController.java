@@ -13,6 +13,7 @@ import kpbinc.cs462.taja.model.WordCountJobResults;
 import kpbinc.cs462.taja.model.WordCountTaskResults;
 import kpbinc.cs462.taja.model.manage.WordCountJobResultsManager;
 import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
+import kpbinc.cs462.taja.model.util.WordCountResultsZingChartRenderer;
 import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller
@@ -58,6 +59,10 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 		
 		Collection<WordCountTaskResults> tasks = wordCountTaskResultsManager.retrieveByJobId(jobId);
 		model.addAttribute("tasks", tasks);
+		
+		WordCountResultsZingChartRenderer renderer = new WordCountResultsZingChartRenderer();
+		String renderingQueryString = renderer.getQueryString(job);
+		model.addAttribute("renderingQueryString", renderingQueryString);
 		
 		return "jobs/job_profile";
 	}

@@ -1,13 +1,10 @@
 package kpbinc.cs462.taja.controller;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import kpbinc.cs462.taja.model.WordCountTaskResults;
 import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
 import kpbinc.cs462.taja.model.util.WordCountResultsZingChartRenderer;
-import kpbinc.net.UTF8URLEncoder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;

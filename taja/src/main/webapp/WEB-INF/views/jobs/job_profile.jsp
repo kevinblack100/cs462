@@ -25,7 +25,10 @@
 			</dl>
 			<dl>
 				<dt>Chart:</dt>
-				<dd>TODO</dd>
+				<dd>
+					<script type="text/javascript" src="http://api.zingchart.com/html5?${renderingQueryString}">
+					</script>
+				</dd>
 			</dl>
 			<dl>
 				<dt>Tasks:</dt>
