@@ -1,36 +1,24 @@
 package kpbinc.cs462.taja.model;
 
-import java.util.Map;
-
-import kpbinc.cs462.shared.model.aspect.HasId;
 import kpbinc.util.logging.GlobalLogUtils;
 
-public class WordCountTaskResults implements HasId<Long> {
+public class WordCountTaskResults extends WordCountResults {
 
 	//= Member Data ====================================================================================================
 	
-	private Long id;
 	private Long jobId;
 	private Long taskId;
-	private Map<String, Long> wordCounts;
 	
 	
 	//= Initialization =================================================================================================
 	
 	public WordCountTaskResults() {
+		super();
 		GlobalLogUtils.logConstruction(this);
 	}
 
 
 	//= Interface ======================================================================================================
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getJobId() {
 		return jobId;
@@ -48,12 +36,10 @@ public class WordCountTaskResults implements HasId<Long> {
 		this.taskId = taskId;
 	}
 
-	public Map<String, Long> getWordCounts() {
-		return wordCounts;
+	@Override
+	public String getTextIdentifier() {
+		String result = String.format("Job %d, Task %d", jobId, taskId);
+		return result;
 	}
-
-	public void setWordCounts(Map<String, Long> wordCounts) {
-		this.wordCounts = wordCounts;
-	}
-		
+	
 }
