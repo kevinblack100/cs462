@@ -13,7 +13,7 @@
 		<table>
 			<thead>
 				<tr>
-					<td>Results ID</td>
+					<td>Job Results ID</td>
 					<td>Job ID</td>
 					<td># Words</td>
 				</tr>

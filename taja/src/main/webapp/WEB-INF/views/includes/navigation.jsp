@@ -5,4 +5,6 @@
 	<a href="${contextPaths.dynamicPath}/">Home</a>
 	|
 	<a href="${contextPaths.dynamicPath}/jobs">Jobs</a>
+	|
+	<a href="${contextPaths.dynamicPath}/tasks">Tasks</a>
 </div>

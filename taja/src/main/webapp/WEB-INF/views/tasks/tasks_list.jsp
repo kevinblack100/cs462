@@ -9,22 +9,11 @@
 	<jsp:attribute name="title">Task List</jsp:attribute>
 	<jsp:body>
 		<h1>Tasks</h1>
-		
-		<div>
-		<c:choose>
-			<c:when test="${filteredByJob}">
-				For job ${jobId}.
-			</c:when>
-			<c:otherwise>
-				For all jobs.
-			</c:otherwise>
-		</c:choose>
-		</div>
 		<br>
 		<table>
 			<thead>
 				<tr>
-					<td>ID</td>
+					<td>Task Results ID</td>
 					<td>Job ID</td>
 					<td>Task ID</td>
 					<td># Words</td>
@@ -35,7 +24,7 @@
 				<c:forEach items="${tasks}" var="task">
 					<tr>
 						<td>${task.id}</td>
-						<td>${task.jobId}</td>
+						<td><a href="${contextPaths.dynamicPath}/jobs/${task.jobId}">${task.jobId}</a></td>
 						<td>${task.taskId}</td>
 						<td>${task.wordCounts.size()}</td>
 						<td><script type="text/javascript" src="http://api.zingchart.com/html5?${renderingQueryStrings[task.id]}"></script></td>

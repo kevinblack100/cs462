@@ -39,26 +39,8 @@ public class WordCountTaskResultsController extends TAJABaseSiteContextControlle
 	//- Web API --------------------------------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/tasks")
-	public String getTaskList(ModelMap model) {
-		model.addAttribute("filteredByJob", false);
-		
+	public String getTaskList(ModelMap model) {		
 		Collection<WordCountTaskResults> tasks = wordCountTaskResultsManager.retrieveAll();
-		model.addAttribute("tasks", tasks);
-		
-		Map<Long, String> renderingQueryStrings = getZingChartRenderingQueryStrings(tasks);
-		model.addAttribute("renderingQueryStrings", renderingQueryStrings);
-		
-		return "tasks/tasks_list";
-	}
-	
-	@RequestMapping(value = "/jobs/{job-id}/tasks")
-	public String getJobTaskList(
-			@PathVariable("job-id") Long jobId,
-			ModelMap model) {
-		model.addAttribute("filteredByJob", true);
-		model.addAttribute("jobId", jobId);
-		
-		Collection<WordCountTaskResults> tasks = wordCountTaskResultsManager.retrieveByJobId(jobId);
 		model.addAttribute("tasks", tasks);
 		
 		Map<Long, String> renderingQueryStrings = getZingChartRenderingQueryStrings(tasks);
