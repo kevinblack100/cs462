@@ -28,6 +28,9 @@
 				<dd>
 					<script type="text/javascript" src="http://api.zingchart.com/html5?${renderingQueryString}">
 					</script>
+					<br>
+					<script type="text/javascript" src="http://api.zingchart.com/html5?${componentRenderingQueryString}">
+					</script>
 				</dd>
 			</dl>
 			<dl>

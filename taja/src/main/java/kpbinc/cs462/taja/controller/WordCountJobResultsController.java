@@ -72,6 +72,9 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 		String renderingQueryString = renderer.getQueryString(job, wordsOfTopNRank);
 		model.addAttribute("renderingQueryString", renderingQueryString);
 		
+		String componentRenderingQueryString = renderer.getQueryString(tasks, wordsOfTopNRank);
+		model.addAttribute("componentRenderingQueryString", componentRenderingQueryString);
+		
 		return "jobs/job_profile";
 	}
 	

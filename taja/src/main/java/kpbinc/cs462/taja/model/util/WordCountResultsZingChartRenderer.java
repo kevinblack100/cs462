@@ -1,6 +1,8 @@
 package kpbinc.cs462.taja.model.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.Validate;
@@ -94,6 +96,13 @@ public class WordCountResultsZingChartRenderer {
 	public String getQueryString(WordCountResults results, List<String> words) {
 		Validate.notNull(results, "results must not be null");
 		Validate.notNull(results.getWordCounts(), "results.wordCounts must not be null");
+		
+		String queryString = getQueryString(Arrays.asList(results), words);
+		return queryString;	
+	}
+	
+	public String getQueryString(Collection<? extends WordCountResults> resultsCollection, List<String> words) {
+		Validate.notNull(resultsCollection, "results must not be null");
 		Validate.notNull(words, "words must not be null");
 		Validate.isTrue(!words.isEmpty(), "words must not be empty");
 		
@@ -107,7 +116,27 @@ public class WordCountResultsZingChartRenderer {
 			builder.append(String.format("\"%s\"", word));
 			firstWord = false;
 		}
-		builder.append("]},\"series\":[{\"values\":[");
+		builder.append("]},\"series\":[");
+		boolean firstSeries = true;
+		for (WordCountResults results : resultsCollection) {
+			if (!firstSeries) {
+				builder.append(",");
+			}
+			builder.append(getSeriesValues(results, words));
+			firstSeries = false;
+		}
+		builder.append("]}]}");
+		
+		String dataUrlEncoding = UTF8URLEncoder.encode(builder.toString());
+		
+		String queryString = String.format("d=%s", dataUrlEncoding);
+		
+		return queryString;
+	}
+	
+	private String getSeriesValues(WordCountResults results, List<String> words) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\"values\":[");
 		boolean firstCount = true;
 		for (String word : words) {
 			Long count = results.getWordCounts().get(word);
@@ -118,13 +147,9 @@ public class WordCountResultsZingChartRenderer {
 			builder.append(count);
 			firstCount = false;
 		}
-		builder.append("]}]}]}");
+		builder.append("]}");
 		
-		String dataUrlEncoding = UTF8URLEncoder.encode(builder.toString());
-		
-		String queryString = String.format("d=%s", dataUrlEncoding);
-		
-		return queryString;
+		return builder.toString();
 	}
 	
 }
