@@ -11,6 +11,8 @@ import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BasicEventImpl implements Event {
 
 	//= Class Data =====================================================================================================
@@ -33,7 +35,9 @@ public class BasicEventImpl implements Event {
 	 * 
 	 * @throws EventRenderingException if domain or name are blank.
 	 */
-	public BasicEventImpl(String domain, String name) throws EventRenderingException {
+	public BasicEventImpl(
+			@JsonProperty(value = "domain") String domain,
+			@JsonProperty(value = "name") String name) throws EventRenderingException {
 		// Preconditions
 		if (StringUtils.isBlank(domain)) {
 			throw new EventRenderingException("domain must not be blank");
@@ -46,7 +50,7 @@ public class BasicEventImpl implements Event {
 		this.name = name;
 		this.attributes = new TreeMap<String, List<Object>>();
 	}
-		
+
 	
 	//= Interface ======================================================================================================
 

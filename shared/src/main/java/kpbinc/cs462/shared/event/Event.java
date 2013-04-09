@@ -3,6 +3,9 @@ package kpbinc.cs462.shared.event;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonDeserialize(as = BasicEventImpl.class)
 public interface Event {
 
 	Event clone();
