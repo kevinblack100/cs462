@@ -8,8 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
+import kpbinc.cs462.shared.model.LoggedEvent;
+import kpbinc.cs462.shared.model.manage.LoggedEventManager;
 import kpbinc.util.logging.GlobalLogUtils;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -99,4 +102,28 @@ public class EventGenerator {
 		return wasSuccessful;
 	}
 
+	public  boolean sendAndLogEvent(String eventSignalURL, Event event, LoggedEventManager loggedEventManager) {
+		Validate.notNull(eventSignalURL, "eventSignalURL must not be null");
+		Validate.notNull(event, "event must not be null");
+		Validate.notNull(loggedEventManager, "loggedEventManager must not be null");
+		
+		// Create log before sending
+		LoggedEvent loggedEvent = new LoggedEvent();
+		loggedEvent.setEvent(event);
+		loggedEvent.setTransmissionType(LoggedEvent.TransmissionType.TRIED_TO_SEND);
+		loggedEvent.setEsl(eventSignalURL);
+		loggedEventManager.register(loggedEvent);
+		
+		// Now send
+		boolean sentSuccessfully = sendEvent(eventSignalURL, event);
+		
+		// Update log
+		if (sentSuccessfully) {
+			loggedEvent.setTransmissionType(LoggedEvent.TransmissionType.SENT);
+			loggedEventManager.update(loggedEvent);
+		}
+		
+		return sentSuccessfully;
+	}
+	
 }

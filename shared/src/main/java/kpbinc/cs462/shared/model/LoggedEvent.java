@@ -9,7 +9,8 @@ public class LoggedEvent implements HasId<Long> {
 	//= Class Data =====================================================================================================
 	
 	public enum TransmissionType {
-		SENT,
+		SENT, // successful
+		TRIED_TO_SEND, // tried but not successful
 		RECEIVED;
 	}
 	

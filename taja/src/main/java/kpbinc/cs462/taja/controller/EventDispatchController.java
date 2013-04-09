@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +16,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventDispatcher;
+import kpbinc.cs462.shared.event.EventGenerator;
 import kpbinc.cs462.shared.event.EventHandler;
+import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeEventHandler;
 import kpbinc.cs462.shared.model.manage.LoggedEventManager;
@@ -32,10 +36,18 @@ import kpbinc.util.logging.GlobalLogUtils;
 @RequestMapping(value = "/esl")
 public class EventDispatchController extends TAJABaseSiteContextController {
 
+	//= Class Data =====================================================================================================
+	
+	private static final Logger logger = Logger.getLogger(EventDispatchController.class.getName());
+	
+	
 	//= Member Data ====================================================================================================
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private EventGenerator eventGenerator;
 	
 	@Autowired
 	private LoggedEventManager loggedEventManager;
@@ -95,7 +107,8 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 					for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
 						String word = attribute.getKey();
 						if (   !StringUtils.equals(word, "job_id")
-							&& !StringUtils.equals(word, "task_id")) {
+							&& !StringUtils.equals(word, "task_id")
+							&& !StringUtils.equals(word, "analysis_available_esl")) {
 							Long totalCount = 0L;
 							for (Object countRaw : attribute.getValue()) {
 								Long count = Long.parseLong((String) countRaw);
@@ -129,6 +142,29 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 						}
 					}
 					wordCountJobResultsManager.update(jobResults);
+					
+					// Prepare job:analysis_available
+					String analysisAvailableESL = (String) event.getAttribute("analysis_available_esl");
+					if (analysisAvailableESL != null) {
+						Event analysisAvailableEvent = null;
+						
+						try {
+							analysisAvailableEvent = new BasicEventImpl("job", "analysis_available");
+							analysisAvailableEvent.addAttribute("job_id", jobResults.getJobId());
+							String analysisURL = "todo";
+							analysisAvailableEvent.addAttribute("rendering_query_string", analysisURL);
+						}
+						catch (EventRenderingException e) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									String.format("preparing %s:%s", getDomain(), getName()),
+									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e.printStackTrace();
+						}
+						
+						if (analysisAvailableEvent != null) {
+							eventGenerator.sendAndLogEvent(analysisAvailableESL, analysisAvailableEvent, loggedEventManager);
+						}
+					}
 				}
 				
 			});
