@@ -1,6 +1,7 @@
 package kpbinc.cs462.taja.controller;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,6 +14,7 @@ import kpbinc.cs462.taja.model.WordCountJobResults;
 import kpbinc.cs462.taja.model.WordCountTaskResults;
 import kpbinc.cs462.taja.model.manage.WordCountJobResultsManager;
 import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
+import kpbinc.cs462.taja.model.util.WordCountResultsSampleCalculator;
 import kpbinc.cs462.taja.model.util.WordCountResultsZingChartRenderer;
 import kpbinc.util.logging.GlobalLogUtils;
 
@@ -21,6 +23,11 @@ import kpbinc.util.logging.GlobalLogUtils;
 @RequestMapping(value = "/jobs")
 public class WordCountJobResultsController extends TAJABaseSiteContextController {
 
+	//= Class Data =====================================================================================================
+	
+	private static final int DEFAULT_TOP_RANKS = 10;
+	
+	
 	//= Member Data ====================================================================================================
 	
 	@Autowired
@@ -61,7 +68,8 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 		model.addAttribute("tasks", tasks);
 		
 		WordCountResultsZingChartRenderer renderer = new WordCountResultsZingChartRenderer();
-		String renderingQueryString = renderer.getQueryString(job);
+		List<String> wordsOfTopNRank = new WordCountResultsSampleCalculator().getWordsOfTopNRank(job, DEFAULT_TOP_RANKS);
+		String renderingQueryString = renderer.getQueryString(job, wordsOfTopNRank);
 		model.addAttribute("renderingQueryString", renderingQueryString);
 		
 		return "jobs/job_profile";
