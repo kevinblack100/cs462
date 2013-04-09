@@ -49,6 +49,11 @@
 		scope="singleton">
 		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/wordcount-job-results.json" />
 	</bean>
+	<bean id="loggedEventManager"
+		class="kpbinc.cs462.shared.model.manage.LoggedEventManager"
+		scope="singleton">
+		<constructor-arg name="fileStoreRelativePath" value="/WEB-INF/stores/logged-events.json" />
+	</bean>
 	
 	
 	<!-- View Resolution Rules -->

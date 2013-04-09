@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import kpbinc.cs462.shared.model.LoggedEvent;
+import kpbinc.cs462.shared.model.manage.LoggedEventManager;
 import kpbinc.cs462.shared.model.manage.StorageManager;
 import kpbinc.util.ValueResult;
 import kpbinc.util.logging.GlobalLogUtils;
@@ -30,10 +32,40 @@ public class EventDispatcher {
 			HttpServletResponse response,
 			EventTransformer eventTransformer,
 			Collection<EventHandler> eventHandlers) {
+		dispatchEvent(
+				logMessagePrefix,
+				request,
+				response,
+				eventTransformer,
+				eventHandlers,
+				null,
+				null);
+	}
+	
+	/**
+	 * 
+	 * @param logMessagePrefix
+	 * @param request
+	 * @param response
+	 * @param eventTransformer
+	 * @param eventHandlers
+	 * @param loggedEventManager may be null
+	 */
+	public static void dispatchEvent(
+			String logMessagePrefix,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			EventTransformer eventTransformer,
+			Collection<EventHandler> eventHandlers,
+			LoggedEventManager loggedEventManager,
+			String receiveEsl) {
 		// Render Event and Prepare the Response
 		ValueResult<Event> result = renderEvent(logMessagePrefix, request, eventTransformer);
 		String responseString = result.getMessage();
 		Event event = result.getValue();
+		
+		// Log reception of the Event
+		logEvent(event, loggedEventManager, receiveEsl);
 		
 		// Send response
 		sendResponse(logMessagePrefix, response, responseString);
@@ -54,6 +86,26 @@ public class EventDispatcher {
 			Long channelId,
 			StorageManager<Long, T> channelManager,
 			Collection<EventChannelEventHandler<T>> channelEventHandlers) {
+		dispatchEventFromChannel(
+				logMessagePrefix,
+				request,
+				response,
+				eventTransformer,
+				channelId,
+				channelManager,
+				channelEventHandlers,
+				null);
+	}
+	
+	public static <T extends EventChannel<?, ?>> void dispatchEventFromChannel(
+			String logMessagePrefix,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			EventTransformer eventTransformer,
+			Long channelId,
+			StorageManager<Long, T> channelManager,
+			Collection<EventChannelEventHandler<T>> channelEventHandlers,
+			LoggedEventManager loggedEventManager) {
 		// Parse/Render Event and Prepare the Response
 		Event event = null;
 		String responseString = null;
@@ -72,6 +124,9 @@ public class EventDispatcher {
 		else {
 			responseString = "Channel invalid.";
 		}
+		
+		// Log reception of the Event
+		logEvent(event, loggedEventManager, channel.getReceiveESL());
 		
 		// Send the response
 		sendResponse(logMessagePrefix, response, responseString);
@@ -110,6 +165,16 @@ public class EventDispatcher {
 			e.printStackTrace();
 			
 			return new ValueResult<Event>(message);
+		}
+	}
+	
+	private static void logEvent(Event event, LoggedEventManager loggedEventManager, String receiveESL) {
+		if (loggedEventManager != null) {
+			LoggedEvent loggedEvent = new LoggedEvent();
+			loggedEvent.setEvent(event);
+			loggedEvent.setTransmissionType(LoggedEvent.TransmissionType.RECEIVED);
+			loggedEvent.setEsl(receiveESL);
+			loggedEventManager.register(loggedEvent);
 		}
 	}
 	

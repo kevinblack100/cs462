@@ -20,6 +20,7 @@ import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeEventHandler;
+import kpbinc.cs462.shared.model.manage.LoggedEventManager;
 import kpbinc.cs462.taja.model.WordCountJobResults;
 import kpbinc.cs462.taja.model.WordCountTaskResults;
 import kpbinc.cs462.taja.model.manage.WordCountJobResultsManager;
@@ -35,6 +36,9 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	
 	@Autowired
 	private EventTransformer eventTransformer;
+	
+	@Autowired
+	private LoggedEventManager loggedEventManager;
 	
 	@Autowired
 	private WordCountJobResultsManager wordCountJobResultsManager;
@@ -64,7 +68,9 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 				request,
 				response,
 				eventTransformer,
-				getPublicEventHandlers());
+				getPublicEventHandlers(),
+				loggedEventManager,
+				request.getRequestURL().toString());
 	}
 	
 	
