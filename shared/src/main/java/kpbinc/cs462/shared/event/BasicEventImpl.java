@@ -1,7 +1,6 @@
 package kpbinc.cs462.shared.event;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -97,7 +96,9 @@ public class BasicEventImpl implements Event {
 	
 	@Override
 	public Map<String, List<Object>> getAttributes() {
-		return Collections.unmodifiableMap(attributes);
+		// TODO change back to Collections.unmodifiableMap(attributes); ? Had to loosen to be able to render attributes
+		// in JSP without writing a custom map iterator that could work with read-only maps.
+		return attributes;
 	}
 	
 	@Override

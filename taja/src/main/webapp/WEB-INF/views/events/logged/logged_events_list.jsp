@@ -27,9 +27,11 @@
 							<div>
 								<span>${loggedEvent.event.domain}:${loggedEvent.event.name}</span>
 								<br>
-<%-- 								<c:forEach items="${loggedEvent.event.attributes.entrySet()}" var="attribute"> --%>
-<%-- 									<span>${attribute.key}: ${attribute.value}</span> --%>
-<%-- 								</c:forEach> --%>
+								<ul>
+								<c:forEach items="${loggedEvent.event.attributes.entrySet()}" var="attribute">
+									<li>${attribute.key}: ${attribute.value}</li>
+								</c:forEach>
+								</ul>
 							</div>
 						</td>
 						<td>${loggedEvent.transmissionType}</td>
