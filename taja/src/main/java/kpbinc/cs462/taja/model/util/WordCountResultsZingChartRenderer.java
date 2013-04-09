@@ -76,6 +76,12 @@ import kpbinc.util.logging.GlobalLogUtils;
 */
 public class WordCountResultsZingChartRenderer {
 
+	//= Class Data =====================================================================================================
+	
+	private static final int DEFAULT_WIDTH = 1000;
+	private static final int DEFAULT_HEIGHT = 500;
+	
+	
 	//= Initialization =================================================================================================
 	
 	public WordCountResultsZingChartRenderer() {
@@ -129,7 +135,7 @@ public class WordCountResultsZingChartRenderer {
 		
 		String dataUrlEncoding = UTF8URLEncoder.encode(builder.toString());
 		
-		String queryString = String.format("d=%s", dataUrlEncoding);
+		String queryString = String.format("d=%s&w=%d&h=%d", dataUrlEncoding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		
 		return queryString;
 	}
