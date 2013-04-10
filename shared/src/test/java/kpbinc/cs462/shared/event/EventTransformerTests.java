@@ -101,6 +101,56 @@ public class EventTransformerTests {
 		assertFalse("has " + reservedAttribName, event.getAttributes().containsKey(reservedAttribName));
 	}
 	
+	@Test
+	public void testNonStandardDomain() throws EventRenderingException {
+		// ARRANGE
+		String name = "non-standard-domain-transform";
+		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
+		nameMultiValuePairs.put(NON_STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
+		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
+		List<Object> expectedValueStructure = new ArrayList<Object>();
+		expectedValueStructure.add(attrib1Value);
+		
+		EventTransformer transformer = new EventTransformer();
+		
+		// ACT
+		Event event = transformer.transform(nameMultiValuePairs);
+		
+		// ASSERT
+		assertEquals("domain", DEFAULT_DOMAIN, event.getDomain());
+		assertEquals("name", name, event.getName());
+		assertTrue("has attrib1", event.getAttributes().containsKey(attrib1Name));
+		assertEquals("attrib1", expectedValueStructure, event.getAttributes().get(attrib1Name));
+	}
+	
+	@Test
+	public void testNonStandardName() throws EventRenderingException {
+		// ARRANGE
+		String name = "non-standard-name-transform";
+		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(NON_STANDARD_NAME_KEY, ArrayUtils.toArray(name));
+		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
+		List<Object> expectedValueStructure = new ArrayList<Object>();
+		expectedValueStructure.add(attrib1Value);
+		
+		EventTransformer transformer = new EventTransformer();
+		
+		// ACT
+		Event event = transformer.transform(nameMultiValuePairs);
+		
+		// ASSERT
+		assertEquals("domain", DEFAULT_DOMAIN, event.getDomain());
+		assertEquals("name", name, event.getName());
+		assertTrue("has attrib1", event.getAttributes().containsKey(attrib1Name));
+		assertEquals("attrib1", expectedValueStructure, event.getAttributes().get(attrib1Name));
+	}
+	
 	@Test(expected = EventRenderingException.class) //< ASSERT
 	public void testMissingDomain() throws EventRenderingException {
 		// ARRANGE

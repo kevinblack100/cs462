@@ -1,9 +1,11 @@
 package kpbinc.cs462.shared.event;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import static kpbinc.cs462.shared.event.CommonEventSerializationConstants.*;
+import kpbinc.util.MapUtils;
 import kpbinc.util.logging.GlobalLogUtils;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,21 +38,25 @@ public class EventTransformer {
 
 		Validate.notNull(nameMultiValuePairs, "nameMultiValuePairs must not be null");
 		
-		if (!nameMultiValuePairs.containsKey(STANDARD_DOMAIN_KEY)) {
-			throw new EventRenderingException(String.format("domain attribute '%s' not specified", STANDARD_DOMAIN_KEY));
+		String domainKey = MapUtils.containsOneOf(nameMultiValuePairs,
+				Arrays.asList(STANDARD_DOMAIN_KEY, NON_STANDARD_DOMAIN_KEY));
+		if (domainKey == null) {
+			throw new EventRenderingException(String.format("domain attribute not specified"));
 		}
-		if (1 < nameMultiValuePairs.get(STANDARD_DOMAIN_KEY).length) {
-			throw new EventRenderingException(String.format("domain attribute '%s' has more than one value", STANDARD_DOMAIN_KEY));
+		if (1 < nameMultiValuePairs.get(domainKey).length) {
+			throw new EventRenderingException(String.format("domain attribute '%s' has more than one value", domainKey));
 		}
-		String domain = nameMultiValuePairs.get(STANDARD_DOMAIN_KEY)[0];
+		String domain = nameMultiValuePairs.get(domainKey)[0];
 		
-		if (!nameMultiValuePairs.containsKey(STANDARD_NAME_KEY)) {
-			throw new EventRenderingException(String.format("name attribute '%s' not specified", STANDARD_NAME_KEY));
+		String nameKey = MapUtils.containsOneOf(nameMultiValuePairs,
+				Arrays.asList(STANDARD_NAME_KEY, NON_STANDARD_NAME_KEY));
+		if (nameKey == null) {
+			throw new EventRenderingException(String.format("name attribute not specified"));
 		}
-		if (1 < nameMultiValuePairs.get(STANDARD_NAME_KEY).length) {
-			throw new EventRenderingException(String.format("name attribute '%s' has more than one value", STANDARD_NAME_KEY));
+		if (1 < nameMultiValuePairs.get(nameKey).length) {
+			throw new EventRenderingException(String.format("name attribute '%s' has more than one value", nameKey));
 		}
-		String name = nameMultiValuePairs.get(STANDARD_NAME_KEY)[0];
+		String name = nameMultiValuePairs.get(nameKey)[0];
 		
 		// construct event container
 		BasicEventImpl event = new BasicEventImpl(domain, name);
@@ -58,8 +64,8 @@ public class EventTransformer {
 		for (Map.Entry<String, String[]> attribute : nameMultiValuePairs.entrySet()) {
 			String attribName = attribute.getKey();
 			if (isReservedAttributeName(attribName)) {
-				if (   !StringUtils.equals(attribName, STANDARD_DOMAIN_KEY)
-					&& !StringUtils.equals(attribName, STANDARD_NAME_KEY)) {
+				if (   !StringUtils.equals(attribName, domainKey)
+					&& !StringUtils.equals(attribName, nameKey)) {
 					logger.warning(String.format("ignoring reserved attribute '%s'", attribName));
 				}
 			}
