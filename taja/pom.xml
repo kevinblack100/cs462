@@ -7,14 +7,14 @@
   	<modelVersion>4.0.0</modelVersion>
   	
   	<groupId>kpbinc.cs462</groupId>
-  	<artifactId>guild</artifactId>
+  	<artifactId>taja</artifactId>
   	<version>0</version>
 	<name>Kevin Black's CS 462 Task Aggregator &amp; Job Analysis Web Service</name>
 
 	<packaging>war</packaging>
 
   	<build>
-		<finalName>guild</finalName>
+		<finalName>taja</finalName>
   	</build>
   
 	<properties>
