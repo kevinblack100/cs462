@@ -169,6 +169,33 @@ public class EventTransformerTests {
 		Event event = transformer.transform(nameMultiValuePairs);
 	}
 	
+	
+	@Test
+	public void testMissingDomainWithLeniency() throws EventRenderingException {
+		// ARRANGE
+		String name = "missing-domain-with-leniency";
+		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
+		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
+		List<Object> expectedValueStructure = new ArrayList<Object>();
+		expectedValueStructure.add(attrib1Value);
+		
+		EventTransformer transformer = new EventTransformer();
+		
+		// ACT
+		boolean domainAndNameMustBeExplicit = false;
+		Event event = transformer.transform(nameMultiValuePairs, domainAndNameMustBeExplicit);
+		
+		// ASSERT
+		assertEquals("domain", EventTransformer.DEFAULT_DOMAIN_VALUE_WHEN_NOT_EXPLICIT, event.getDomain());
+		assertEquals("name", name, event.getName());
+		assertTrue("has attrib1", event.getAttributes().containsKey(attrib1Name));
+		assertEquals("attrib1", expectedValueStructure, event.getAttributes().get(attrib1Name));
+	}
+	
+	
 	@Test(expected = EventRenderingException.class) //< ASSERT
 	public void testMultiValuedDomain() throws EventRenderingException {
 		// ARRANGE
@@ -203,6 +230,33 @@ public class EventTransformerTests {
 		@SuppressWarnings("unused")
 		Event event = transformer.transform(nameMultiValuePairs);
 	}
+	
+	
+	@Test
+	public void testMissingNameWithLeniency() throws EventRenderingException {
+		// ARRANGE
+		//String name = "missing-name-with-leniency";
+		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>();
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		String attrib1Name = "attrib1";
+		String attrib1Value = "Hello World";
+		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
+		List<Object> expectedValueStructure = new ArrayList<Object>();
+		expectedValueStructure.add(attrib1Value);
+		
+		EventTransformer transformer = new EventTransformer();
+		
+		// ACT
+		boolean domainAndNameMustBeExplicit = false;
+		Event event = transformer.transform(nameMultiValuePairs, domainAndNameMustBeExplicit);
+		
+		// ASSERT
+		assertEquals("domain", DEFAULT_DOMAIN, event.getDomain());
+		assertEquals("name", EventTransformer.DEFAULT_NAME_VALUE_WHEN_NOT_EXPLICIT, event.getName());
+		assertTrue("has attrib1", event.getAttributes().containsKey(attrib1Name));
+		assertEquals("attrib1", expectedValueStructure, event.getAttributes().get(attrib1Name));
+	}
+	
 	
 	@Test(expected = EventRenderingException.class) //< ASSERT
 	public void testMultiValuedName() throws EventRenderingException {
