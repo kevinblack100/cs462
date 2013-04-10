@@ -25,8 +25,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "basic-transform";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
 		String attrib1Name = "attrib1";
 		String attrib1Value = "Hello World";
 		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
@@ -50,8 +50,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "multi-valued-attribute-transform";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
 		String attrib1Name = "attrib1";
 		String attrib1Value1 = "Hello World";
 		String attrib1Value2 = "Goodbye";
@@ -77,8 +77,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "exclude-not-wellknown-attributes";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
 		String reservedAttribName = "_attrib";
 		String reservedAttribValue = "should not be in transformed event";
 		nameMultiValuePairs.put(reservedAttribName, ArrayUtils.toArray(reservedAttribValue));
@@ -107,7 +107,7 @@ public class EventTransformerTests {
 		String name = "missing-domain";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
 		// NB no domain
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
 		String attrib1Name = "attrib1";
 		String attrib1Value = "Hello World";
 		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
@@ -124,8 +124,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "multi-valued-domain";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>();
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN, "alternate"));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN, "alternate"));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name));
 		String attrib1Name = "attrib1";
 		String attrib1Value = "Hello World";
 		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
@@ -141,7 +141,7 @@ public class EventTransformerTests {
 	public void testMissingName() throws EventRenderingException {
 		// ARRANGE
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
 		// NB no name
 		String attrib1Name = "attrib1";
 		String attrib1Value = "Hello World";
@@ -159,8 +159,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "multi-valued-name";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name, "alternate"));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name, "alternate"));
 		String attrib1Name = "attrib1";
 		String attrib1Value = "Hello World";
 		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray(attrib1Value));
@@ -177,8 +177,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "attribute-with-no-values";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name, "alternate"));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name, "alternate"));
 		String attrib1Name = "attrib1";
 		nameMultiValuePairs.put(attrib1Name, new String[] {});
 		
@@ -194,8 +194,8 @@ public class EventTransformerTests {
 		// ARRANGE
 		String name = "attribute-with-no-values";
 		Map<String, String[]> nameMultiValuePairs = new TreeMap<String, String[]>(); 
-		nameMultiValuePairs.put(DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
-		nameMultiValuePairs.put(NAME_KEY, ArrayUtils.toArray(name, "alternate"));
+		nameMultiValuePairs.put(STANDARD_DOMAIN_KEY, ArrayUtils.toArray(DEFAULT_DOMAIN));
+		nameMultiValuePairs.put(STANDARD_NAME_KEY, ArrayUtils.toArray(name, "alternate"));
 		String attrib1Name = "attrib1";
 		nameMultiValuePairs.put(attrib1Name, ArrayUtils.toArray((String) null));
 		

@@ -32,8 +32,8 @@ public class URLEncodeEventSerializerTests {
 		String name = "encode-domain-and-name";
 		Event event = new BasicEventImpl(DEFAULT_DOMAIN, name);
 		String expectedSerialization = String.format("%s=%s&%s=%s",
-				DOMAIN_KEY, event.getDomain(),
-				NAME_KEY, event.getName());
+				STANDARD_DOMAIN_KEY, event.getDomain(),
+				STANDARD_NAME_KEY, event.getName());
 		
 		actAndAssert(event, expectedSerialization);
 	}
@@ -49,8 +49,8 @@ public class URLEncodeEventSerializerTests {
 		event.addAttribute(attrib1Name, attrib1Value);
 		
 		String expectedSerialization = String.format("%s=%s&%s=%s&%s=%s",
-				DOMAIN_KEY, event.getDomain(),
-				NAME_KEY, event.getName(),
+				STANDARD_DOMAIN_KEY, event.getDomain(),
+				STANDARD_NAME_KEY, event.getName(),
 				// TODO create a URLEncoder wrapper that will not throw UnsupportedEncodingExceptions and use it here
 				attrib1Name, "Hello+World");
 		
@@ -75,8 +75,8 @@ public class URLEncodeEventSerializerTests {
 		event.addAttribute(attrib2Name, attrib2Value);
 		
 		String expectedSerialization = String.format("%s=%s&%s=%s&%s=%s&%s=%s",
-				DOMAIN_KEY, event.getDomain(),
-				NAME_KEY, event.getName(),
+				STANDARD_DOMAIN_KEY, event.getDomain(),
+				STANDARD_NAME_KEY, event.getName(),
 				// TODO create a URLEncoder wrapper that will not throw UnsupportedEncodingExceptions and use it here
 				attrib1Name, "Hello+World",	
 				attrib2Name, attrib2Value);
@@ -101,8 +101,8 @@ public class URLEncodeEventSerializerTests {
 		event.addAttribute(attrib1Name, attrib1Value2);
 		
 		String expectedSerialization = String.format("%s=%s&%s=%s&%s=%s&%s=%s",
-				DOMAIN_KEY, event.getDomain(),
-				NAME_KEY, event.getName(),
+				STANDARD_DOMAIN_KEY, event.getDomain(),
+				STANDARD_NAME_KEY, event.getName(),
 				// TODO create a URLEncoder wrapper that will not throw UnsupportedEncodingExceptions and use it here
 				attrib1Name, "Hello+World",	
 				attrib1Name, attrib1Value2);

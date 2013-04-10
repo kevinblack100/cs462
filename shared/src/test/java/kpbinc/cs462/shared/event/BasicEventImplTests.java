@@ -88,7 +88,7 @@ public class BasicEventImplTests {
 		BasicEventImpl event = new BasicEventImpl(DEFAULT_DOMAIN, name);
 		
 		// ACT -> ASSERT
-		event.addAttribute(DOMAIN_KEY, "alternate");
+		event.addAttribute(STANDARD_DOMAIN_KEY, "alternate");
 	}
 	
 	@Test(expected = EventRenderingException.class) //< ASSERT

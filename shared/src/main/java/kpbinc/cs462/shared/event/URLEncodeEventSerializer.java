@@ -46,8 +46,8 @@ public class URLEncodeEventSerializer implements EventSerializer {
 		}
 		
 		StringBuilder builder = new StringBuilder();
-		appendKeyValuePair(builder, DOMAIN_KEY, event.getDomain());
-		appendKeyValuePair(builder, NAME_KEY, event.getName());
+		appendKeyValuePair(builder, STANDARD_DOMAIN_KEY, event.getDomain());
+		appendKeyValuePair(builder, STANDARD_NAME_KEY, event.getName());
 		for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
 			for (Object value : attribute.getValue()) {
 				String serializedValue = UTF8URLEncoder.encode(value);

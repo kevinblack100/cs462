@@ -13,8 +13,8 @@ public class CommonEventSerializationConstantsTests {
 		// ARRANGE nothing
 		
 		// ACT/ASSERT
-		assertTrue(isReservedAttributeName(DOMAIN_KEY));
-		assertTrue(isReservedAttributeName(NAME_KEY));
+		assertTrue(isReservedAttributeName(STANDARD_DOMAIN_KEY));
+		assertTrue(isReservedAttributeName(STANDARD_NAME_KEY));
 		assertTrue(isReservedAttributeName("_timestamp"));
 		assertFalse(isReservedAttributeName("test"));
 	}
