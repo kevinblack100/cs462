@@ -1,5 +1,6 @@
 package kpbinc.cs462.taja.controller;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kpbinc.cs462.shared.event.BasicEventImpl;
+import kpbinc.cs462.shared.event.ESLGenerator;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
@@ -29,6 +31,7 @@ import kpbinc.cs462.taja.model.WordCountJobResults;
 import kpbinc.cs462.taja.model.WordCountTaskResults;
 import kpbinc.cs462.taja.model.manage.WordCountJobResultsManager;
 import kpbinc.cs462.taja.model.manage.WordCountTaskResultsManager;
+import kpbinc.net.URLPathBuilder;
 import kpbinc.util.logging.GlobalLogUtils;
 
 @Controller
@@ -48,6 +51,9 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	
 	@Autowired
 	private EventGenerator eventGenerator;
+
+	@Autowired
+	private ESLGenerator eslGenerator;
 	
 	@Autowired
 	private LoggedEventManager loggedEventManager;
@@ -150,16 +156,23 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 						Event analysisAvailableEvent = null;
 						
 						try {
+							Long jobId = jobResults.getJobId();
 							analysisAvailableEvent = new BasicEventImpl("job", "analysis_available");
-							analysisAvailableEvent.addAttribute("job_id", jobResults.getJobId());
-							String analysisURL = "todo";
-							analysisAvailableEvent.addAttribute("rendering_query_string", analysisURL);
+							analysisAvailableEvent.addAttribute("job_id", jobId);
+							String filePath = URLPathBuilder.build("jobs", jobId.toString());
+							String analysisURL = eslGenerator.generate(context, filePath).toString();
+							analysisAvailableEvent.addAttribute("analysis_url", analysisURL);
 						}
 						catch (EventRenderingException e) {
 							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
 									String.format("preparing %s:%s", getDomain(), getName()),
 									e, GlobalLogUtils.DO_PRINT_STACKTRACE));
 							e.printStackTrace();
+						}
+						catch (MalformedURLException e1) {
+							logger.warning(GlobalLogUtils.formatHandledExceptionMessage(
+									"preparing analysis URL", e1, GlobalLogUtils.DO_PRINT_STACKTRACE));
+							e1.printStackTrace();
 						}
 						
 						if (analysisAvailableEvent != null) {
