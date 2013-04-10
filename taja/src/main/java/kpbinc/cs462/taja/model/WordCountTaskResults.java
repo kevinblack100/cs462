@@ -6,8 +6,8 @@ public class WordCountTaskResults extends WordCountResults {
 
 	//= Member Data ====================================================================================================
 	
-	private Long jobId;
-	private Long taskId;
+	private String jobId;
+	private String taskId;
 	
 	
 	//= Initialization =================================================================================================
@@ -20,25 +20,25 @@ public class WordCountTaskResults extends WordCountResults {
 
 	//= Interface ======================================================================================================
 
-	public Long getJobId() {
+	public String getJobId() {
 		return jobId;
 	}
 
-	public void setJobId(Long jobId) {
+	public void setJobId(String jobId) {
 		this.jobId = jobId;
 	}
 
-	public Long getTaskId() {
+	public String getTaskId() {
 		return taskId;
 	}
 
-	public void setTaskId(Long taskId) {
+	public void setTaskId(String taskId) {
 		this.taskId = taskId;
 	}
 
 	@Override
 	public String getTextIdentifier() {
-		String result = String.format("Job %d, Task %d", jobId, taskId);
+		String result = String.format("Job %s, Task %s", jobId, taskId);
 		return result;
 	}
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import kpbinc.cs462.shared.model.aspect.IDGeneratingIDAccessor;
@@ -48,20 +50,20 @@ public class WordCountTaskResultsManager
 	
 	//= Interface ======================================================================================================
 	
-	public Collection<WordCountTaskResults> retrieveByJobId(Long jobId) {
+	public Collection<WordCountTaskResults> retrieveByJobId(String jobId) {
 		Collection<WordCountTaskResults> result = new ArrayList<WordCountTaskResults>();
 		for (WordCountTaskResults task : this.retrieveAll()) {
-			if (task.getJobId().equals(jobId)) {
+			if (StringUtils.equals(task.getJobId(), jobId)) {
 				result.add(task);
 			}
 		}
 		return result;
 	}
 	
-	public WordCountTaskResults retrieveByTaskId(Long taskId) {
+	public WordCountTaskResults retrieveByTaskId(String taskId) {
 		WordCountTaskResults result = null;
 		for (WordCountTaskResults task : this.retrieveAll()) {
-			if (task.getTaskId().equals(taskId)) {
+			if (StringUtils.equals(task.getTaskId(), taskId)) {
 				result = task;
 				break;
 			}

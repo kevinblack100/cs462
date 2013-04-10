@@ -59,7 +59,7 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 	
 	@RequestMapping(value = "/{job-id}")
 	public String getJobProfile(
-			@PathVariable(value = "job-id") Long jobId,
+			@PathVariable(value = "job-id") String jobId,
 			ModelMap model) {
 		WordCountJobResults job = wordCountJobResultsManager.retrieveByJobId(jobId);
 		model.addAttribute("job", job);

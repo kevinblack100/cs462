@@ -107,8 +107,8 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 					// TODO check the task_type attribute is "wordcount"
 					// Parse and store the task
 					WordCountTaskResults taskResults = new WordCountTaskResults();
-					taskResults.setJobId(Long.parseLong((String) event.getAttribute("job_id")));
-					taskResults.setTaskId(Long.parseLong((String) event.getAttribute("task_id")));
+					taskResults.setJobId((String) event.getAttribute("job_id"));
+					taskResults.setTaskId((String) event.getAttribute("task_id"));
 					
 					Map<String, Long> wordCounts = new TreeMap<String, Long>();
 					for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
@@ -156,10 +156,10 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 						Event analysisAvailableEvent = null;
 						
 						try {
-							Long jobId = jobResults.getJobId();
+							String jobId = jobResults.getJobId();
 							analysisAvailableEvent = new BasicEventImpl("job", "analysis_available");
 							analysisAvailableEvent.addAttribute("job_id", jobId);
-							String filePath = URLPathBuilder.build("jobs", jobId.toString());
+							String filePath = URLPathBuilder.build("jobs", jobId);
 							String analysisURL = eslGenerator.generate(context, filePath).toString();
 							analysisAvailableEvent.addAttribute("analysis_url", analysisURL);
 						}

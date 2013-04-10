@@ -3,6 +3,8 @@ package kpbinc.cs462.taja.model.manage;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import kpbinc.cs462.shared.model.aspect.IDGeneratingIDAccessor;
@@ -46,10 +48,10 @@ public class WordCountJobResultsManager
 	
 	//= Interface ======================================================================================================
 	
-	public WordCountJobResults retrieveByJobId(Long jobId) {
+	public WordCountJobResults retrieveByJobId(String jobId) {
 		WordCountJobResults result = null;
 		for (WordCountJobResults job : retrieveAll()) {
-			if (job.getJobId().equals(jobId)) {
+			if (StringUtils.equals(job.getJobId(), jobId)) {
 				result = job;
 				break;
 			}
