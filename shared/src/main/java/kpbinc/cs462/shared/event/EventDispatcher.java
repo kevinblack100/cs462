@@ -197,7 +197,8 @@ public class EventDispatcher {
 			@SuppressWarnings("unchecked")
 			Map<String, String[]> parameters = request.getParameterMap();
 			
-			Event event = eventTransformer.transform(parameters);
+			boolean domainAndNameMustBeExplicit = false;
+			Event event = eventTransformer.transform(parameters, domainAndNameMustBeExplicit);
 			
 			logger.info(String.format("%s: parsed %s:%s event",
 					logMessagePrefix, event.getDomain(), event.getName()));
