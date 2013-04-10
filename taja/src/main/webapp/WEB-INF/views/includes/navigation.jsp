@@ -7,4 +7,6 @@
 	<a href="${contextPaths.dynamicPath}/jobs">Jobs</a>
 	|
 	<a href="${contextPaths.dynamicPath}/tasks">Tasks</a>
+	|
+	<a href="${contextPaths.dynamicPath}/events/logged">Event Log</a>
 </div>
