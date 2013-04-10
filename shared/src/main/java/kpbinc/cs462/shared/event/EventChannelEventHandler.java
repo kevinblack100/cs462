@@ -1,6 +1,6 @@
 package kpbinc.cs462.shared.event;
 
-public interface EventChannelEventHandler<C extends EventChannel<?, ?>> extends EventHandler {
+public interface EventChannelEventHandler<C extends EventChannel<?, ?>> extends EventHandlerWithContext<C> {
 
 	/**
 	 * @param event

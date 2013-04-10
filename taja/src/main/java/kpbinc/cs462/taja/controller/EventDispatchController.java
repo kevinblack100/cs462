@@ -24,6 +24,7 @@ import kpbinc.cs462.shared.event.EventHandler;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
 import kpbinc.cs462.shared.event.SingleEventTypeEventHandler;
+import kpbinc.cs462.shared.event.SingleEventTypeEventHandlerWithContext;
 import kpbinc.cs462.shared.model.manage.LoggedEventManager;
 import kpbinc.cs462.taja.model.WordCountJobResults;
 import kpbinc.cs462.taja.model.WordCountTaskResults;
@@ -93,10 +94,10 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 			publicEventHandlers = new ArrayList<EventHandler>();
 			
 			// job:task_results
-			publicEventHandlers.add(new SingleEventTypeEventHandler("job", "task_results") {
+			publicEventHandlers.add(new SingleEventTypeEventHandlerWithContext<HttpServletRequest>("job", "task_results") {
 
 				@Override
-				protected void handleImpl(Event event) {
+				protected void handleImpl(Event event, HttpServletRequest context) {
 					// TODO check the task_type attribute is "wordcount"
 					// Parse and store the task
 					WordCountTaskResults taskResults = new WordCountTaskResults();
