@@ -77,6 +77,53 @@ public class EventDispatcher {
 			}
 		}
 	}
+
+	public static <C> void dispatchEventWithContext(
+			String logMessagePrefix,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			EventTransformer eventTransformer,
+			Collection<EventHandlerWithContext<C>> eventHandlers,
+			C context) {
+		dispatchEventWithContext(
+				logMessagePrefix,
+				request,
+				response,
+				eventTransformer,
+				eventHandlers,
+				context,
+				null,
+				null);
+	}
+
+	public static <C> void dispatchEventWithContext(
+			String logMessagePrefix,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			EventTransformer eventTransformer,
+			Collection<EventHandlerWithContext<C>> eventHandlers,
+			C context,
+			LoggedEventManager loggedEventManager,
+			String receiveEsl) {
+		// Render Event and Prepare the Response
+		ValueResult<Event> result = renderEvent(logMessagePrefix, request, eventTransformer);
+		String responseString = result.getMessage();
+		Event event = result.getValue();
+		
+		// Log reception of the Event
+		logEvent(event, loggedEventManager, receiveEsl);
+		
+		// Send response
+		sendResponse(logMessagePrefix, response, responseString);
+		
+		// Process Event
+		if (event != null) {
+			for (EventHandlerWithContext<C> handler : eventHandlers) {
+				handler.handle(event, context);
+			}
+		}
+	}
+
 	
 	public static <T extends EventChannel<?, ?>> void dispatchEventFromChannel(
 			String logMessagePrefix,

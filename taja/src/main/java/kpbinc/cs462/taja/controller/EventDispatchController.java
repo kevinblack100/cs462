@@ -20,10 +20,9 @@ import kpbinc.cs462.shared.event.BasicEventImpl;
 import kpbinc.cs462.shared.event.Event;
 import kpbinc.cs462.shared.event.EventDispatcher;
 import kpbinc.cs462.shared.event.EventGenerator;
-import kpbinc.cs462.shared.event.EventHandler;
+import kpbinc.cs462.shared.event.EventHandlerWithContext;
 import kpbinc.cs462.shared.event.EventRenderingException;
 import kpbinc.cs462.shared.event.EventTransformer;
-import kpbinc.cs462.shared.event.SingleEventTypeEventHandler;
 import kpbinc.cs462.shared.event.SingleEventTypeEventHandlerWithContext;
 import kpbinc.cs462.shared.model.manage.LoggedEventManager;
 import kpbinc.cs462.taja.model.WordCountJobResults;
@@ -59,7 +58,7 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	@Autowired
 	private WordCountTaskResultsManager wordCountTaskResultsManager;
 	
-	private Collection<EventHandler> publicEventHandlers;
+	private Collection<EventHandlerWithContext<HttpServletRequest>> publicEventHandlers;
 	
 	
 	//= Initialization =================================================================================================
@@ -76,12 +75,13 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	public void dispatchEvent(
 		HttpServletRequest request,
 		HttpServletResponse response) {
-		EventDispatcher.dispatchEvent(
+		EventDispatcher.dispatchEventWithContext(
 				"dispatch public channel event",
 				request,
 				response,
 				eventTransformer,
 				getPublicEventHandlers(),
+				request,
 				loggedEventManager,
 				request.getRequestURL().toString());
 	}
@@ -89,9 +89,9 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	
 	//= Support ========================================================================================================
 	
-	private Collection<EventHandler> getPublicEventHandlers() {
+	private Collection<EventHandlerWithContext<HttpServletRequest>> getPublicEventHandlers() {
 		if (publicEventHandlers == null) {
-			publicEventHandlers = new ArrayList<EventHandler>();
+			publicEventHandlers = new ArrayList<EventHandlerWithContext<HttpServletRequest>>();
 			
 			// job:task_results
 			publicEventHandlers.add(new SingleEventTypeEventHandlerWithContext<HttpServletRequest>("job", "task_results") {
