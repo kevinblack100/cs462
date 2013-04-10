@@ -43,6 +43,8 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 	
 	private static final Logger logger = Logger.getLogger(EventDispatchController.class.getName());
 	
+	private static final String JobEventsJobIDAttributeName = "request_id";
+	
 	
 	//= Member Data ====================================================================================================
 	
@@ -107,13 +109,13 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 					// TODO check the task_type attribute is "wordcount"
 					// Parse and store the task
 					WordCountTaskResults taskResults = new WordCountTaskResults();
-					taskResults.setJobId((String) event.getAttribute("job_id"));
+					taskResults.setJobId((String) event.getAttribute(JobEventsJobIDAttributeName));
 					taskResults.setTaskId((String) event.getAttribute("task_id"));
 					
 					Map<String, Long> wordCounts = new TreeMap<String, Long>();
 					for (Map.Entry<String, List<Object>> attribute : event.getAttributes().entrySet()) {
 						String word = attribute.getKey();
-						if (   !StringUtils.equals(word, "job_id")
+						if (   !StringUtils.equals(word, JobEventsJobIDAttributeName)
 							&& !StringUtils.equals(word, "task_id")
 							&& !StringUtils.equals(word, "analysis_available_esl")) {
 							Long totalCount = 0L;
@@ -158,7 +160,7 @@ public class EventDispatchController extends TAJABaseSiteContextController {
 						try {
 							String jobId = jobResults.getJobId();
 							analysisAvailableEvent = new BasicEventImpl("job", "analysis_available");
-							analysisAvailableEvent.addAttribute("job_id", jobId);
+							analysisAvailableEvent.addAttribute(JobEventsJobIDAttributeName, jobId);
 							String filePath = URLPathBuilder.build("jobs", jobId);
 							String analysisURL = eslGenerator.generate(context, filePath).toString();
 							analysisAvailableEvent.addAttribute("analysis_url", analysisURL);
