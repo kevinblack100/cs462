@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
 
@@ -78,6 +79,8 @@ public class WordCountResultsZingChartRenderer {
 
 	//= Class Data =====================================================================================================
 	
+	private static final Logger logger = Logger.getLogger(WordCountResultsZingChartRenderer.class.getName());
+	
 	private static final int DEFAULT_WIDTH = 1000;
 	private static final int DEFAULT_HEIGHT = 500;
 	
@@ -113,7 +116,7 @@ public class WordCountResultsZingChartRenderer {
 		Validate.isTrue(!words.isEmpty(), "words must not be empty");
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append("{\"graphset\":[{\"type\":\"bar\",\"scale-x\":{\"values\":[");
+		builder.append("{\"graphset\":[{\"type\":\"hbar\",\"scale-x\":{\"values\":[");
 		boolean firstWord = true;
 		for (String word : words) {
 			if (!firstWord) {
@@ -133,7 +136,10 @@ public class WordCountResultsZingChartRenderer {
 		}
 		builder.append("]}]}");
 		
-		String dataUrlEncoding = UTF8URLEncoder.encode(builder.toString());
+		String dataValue = builder.toString();
+		logger.info(String.format("Prepared ZingChart data: %s", dataValue));
+		
+		String dataUrlEncoding = UTF8URLEncoder.encode(dataValue);
 		
 		String queryString = String.format("d=%s&w=%d&h=%d", dataUrlEncoding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		

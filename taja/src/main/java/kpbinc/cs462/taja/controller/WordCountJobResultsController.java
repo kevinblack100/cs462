@@ -26,6 +26,7 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 	//= Class Data =====================================================================================================
 	
 	private static final int DEFAULT_TOP_RANKS = 10;
+	private static final Long DEFAULT_MIN_RANK = 4L;
 	
 	
 	//= Member Data ====================================================================================================
@@ -68,7 +69,8 @@ public class WordCountJobResultsController extends TAJABaseSiteContextController
 		model.addAttribute("tasks", tasks);
 		
 		WordCountResultsZingChartRenderer renderer = new WordCountResultsZingChartRenderer();
-		List<String> wordsOfTopNRank = new WordCountResultsSampleCalculator().getWordsOfTopNRank(job, DEFAULT_TOP_RANKS);
+		List<String> wordsOfTopNRank =
+				new WordCountResultsSampleCalculator().getWordsOfTopNRank(job, DEFAULT_TOP_RANKS, DEFAULT_MIN_RANK);
 		String renderingQueryString = renderer.getQueryString(job, wordsOfTopNRank);
 		model.addAttribute("renderingQueryString", renderingQueryString);
 		
