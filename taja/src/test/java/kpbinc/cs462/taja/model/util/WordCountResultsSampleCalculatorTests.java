@@ -50,6 +50,16 @@ public class WordCountResultsSampleCalculatorTests {
 	}
 	
 	@Test
+	public void testGetWordsOfTopNRankNMinRank() {
+		// ARRANGE
+		WordCountResults results = getStandardResults();
+		int N = 3; 
+		List<String> expectedWordsOfTopNRank = Arrays.asList(TOP_RANK_ITEM, MID_RANK_ITEM);
+		
+		actAndAssertGetWordsOfTopNRankWithMinRank(results, N, MID_RANK, expectedWordsOfTopNRank);
+	}
+	
+	@Test
 	public void testGetWordsOfTopNRankWithTies() {
 		// ARRANGE
 		WordCountResults results = getTiedResults();
@@ -82,7 +92,20 @@ public class WordCountResultsSampleCalculatorTests {
 				TIED_BOTTOM_RANK_ITEM, BOTTOM_RANK_ITEM);
 		
 		actAndAssertGetWordsOfTopNRank(results, N, expectedWordsOfTopNRank);
-	} 
+	}
+	
+	
+	@Test
+	public void testGetWordsOfTopNRankWithTiesNWithMinRank() {
+		// ARRANGE
+		WordCountResults results = getTiedResults();
+		int N = 3;
+		List<String> expectedWordsOfTopNRank = Arrays.asList(
+				TIED_TOP_RANK_ITEM, TOP_RANK_ITEM,
+				TIED_MID_RANK_ITEM,	MID_RANK_ITEM);
+		
+		actAndAssertGetWordsOfTopNRankWithMinRank(results, N, MID_RANK, expectedWordsOfTopNRank);
+	}
 	
 	
 	//= Support ========================================================================================================
@@ -133,6 +156,19 @@ public class WordCountResultsSampleCalculatorTests {
 		
 		// ACT/ASSERT
 		List<String> actualWordsOfTopNRank = calculator.getWordsOfTopNRank(results, N);
+		assertEquals(expectedWordsOfTopNRank, actualWordsOfTopNRank);
+	}
+	
+	private void actAndAssertGetWordsOfTopNRankWithMinRank(
+			WordCountResults results,
+			int N,
+			Long minRank,
+			List<String> expectedWordsOfTopNRank) {
+		// ARRANGE
+		WordCountResultsSampleCalculator calculator = new WordCountResultsSampleCalculator();
+		
+		// ACT/ASSERT
+		List<String> actualWordsOfTopNRank = calculator.getWordsOfTopNRank(results, N, minRank);
 		assertEquals(expectedWordsOfTopNRank, actualWordsOfTopNRank);
 	}
 

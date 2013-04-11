@@ -56,8 +56,13 @@ public class WordCountResultsSampleCalculator {
 	//= Interface ======================================================================================================
 	
 	public List<String> getWordsOfTopNRank(WordCountResults results, int numberOfTopRanks) {
+		return getWordsOfTopNRank(results, numberOfTopRanks, new Long(1L));
+	}
+	
+	public List<String> getWordsOfTopNRank(WordCountResults results, int numberOfTopRanks, Long minRank) {
 		Validate.notNull(results, "results must not be null");
 		Validate.notNull(results.getWordCounts(), "results.wordCounts must not be null");
+		Validate.notNull(minRank, "minRank must not be null");
 		
 		Map<Long, List<String>> invertedWordCounts = new TreeMap<Long, List<String>>(new InvertedRankComparator());
 		for (Map.Entry<String, Long> wordCount : results.getWordCounts().entrySet()) {
@@ -74,8 +79,13 @@ public class WordCountResultsSampleCalculator {
 		while (   ranksAdded < numberOfTopRanks
 			   && rankIterator.hasNext()) {
 			Long rank = rankIterator.next();
-			wordsOfTopNRank.addAll(wordsOfTopNRank.size(), invertedWordCounts.get(rank));
-			++ranksAdded;
+			if (minRank <= rank) { 
+				wordsOfTopNRank.addAll(wordsOfTopNRank.size(), invertedWordCounts.get(rank));
+				++ranksAdded;
+			}
+			else {
+				break;
+			}
 		}
 		
 		return wordsOfTopNRank;
