@@ -1,0 +1,29 @@
+CS 462 Winter 2013
+Lab 5
+Kevin Black, James Gurr, Willard Hagen
+
+Task Aggregator and Job Analyzer agent
+
+This archive contains the code for the Task Aggregator and Job Analyzer
+(TAJA) agent used in the Twitter Feed Analysis project. The code can also
+be found on github at https://github.com/kevinblack100/cs462/tree/dev.
+
+The archive file should contain the following files and directories:
+
+lab5.README.txt (this file)
+shared/ (common code)
+taja/ (Task Aggregator and Job Analyzer specific code)
+
+The shared and taja directories should contain Eclipse .project files. The
+shared and taja projects are also Maven projects (see the pom.xml files).
+
+You can start the taja server in Tomcat by copying taja/target/taja.war to
+the appropriate Tomcat webapps directory.
+
+The TAJA site can be accessed at http://<your.domain>/taja/dynamic/.
+
+Events should be sent to
+http://<your.domain>/taja/dynamic/esl/public/channel.
+
+The received and sent events can be viewed on the Event Log tab of the
+site.
